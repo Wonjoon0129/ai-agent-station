@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientModelConfigDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientModelConfig">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="model_id" property="modelId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+
+
+    <!-- 查询所有客户端模型配置 -->
+    <select id="queryAllModelConfig" resultMap="dataMap">
+        SELECT id, client_id, model_id, create_time
+        FROM ai_client_model_config
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询客户端模型配置 -->
+    <select id="queryModelConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, model_id, create_time
+        FROM ai_client_model_config
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据客户端ID查询模型配置 -->
+    <select id="queryModelConfigByClientId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, model_id, create_time
+        FROM ai_client_model_config
+        WHERE client_id = #{clientId}
+    </select>
+
+    <!-- 插入客户端模型配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModelConfig">
+        INSERT INTO ai_client_model_config (
+            client_id, model_id, create_time
+        ) VALUES (
+                     #{clientId}, #{modelId}, #{createTime}
+                 )
+    </insert>
+
+    <!-- 更新客户端模型配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModelConfig">
+        UPDATE ai_client_model_config
+        SET client_id = #{clientId},
+            model_id = #{modelId}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除客户端模型配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_model_config
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据客户端ID列表查询模型配置 -->
+    <select id="queryModelConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT id, client_id, model_id, create_time
+        FROM ai_client_model_config
+        WHERE client_id IN
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </select>
+
+    <!-- 根据模型ID查询客户端模型配置列表 -->
+    <select id="queryModelConfigByModelId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, model_id, create_time
+        FROM ai_client_model_config
+        WHERE model_id = #{modelId}
+    </select>
+
+    <!-- 根据条件查询客户端模型配置列表 -->
+    <select id="queryModelConfigList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModelConfig" resultMap="dataMap">
+        SELECT
+        id, client_id, model_id, create_time
+        FROM
+        ai_client_model_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="clientId != null">
+                AND client_id = #{clientId}
+            </if>
+            <if test="modelId != null">
+                AND model_id = #{modelId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryAiClientModelIdByAgentId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT model_id
+        FROM ai_client_model_config
+        WHERE client_id = (select client_id from ai_agent_client where agent_id = #{aiAgentId} limit 1)
+        LIMIT 1
+    </select>
+
+</mapper>

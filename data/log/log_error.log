@@ -1,0 +1,640 @@
+25-05-24.00:44:04.643 [ForkJoinPool.commonPool-worker-1] WARN  RequestMappingHandlerAdapter - !!!
+Performing asynchronous handling through the default Spring MVC SimpleAsyncTaskExecutor.
+This executor is not suitable for production use under load.
+Please, configure an AsyncTaskExecutor through the WebMvc config.
+-------------------------------
+!!!
+25-05-24.00:45:15.009 [http-nio-8091-exec-6] ERROR AiAgentController      - AiAgent 智能体对话，异常 3 帮我生成一个员工年龄的文件，命名为 aaa 存储到 /Desktop 中
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'ChatClient_3' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:951)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getMergedLocalBeanDefinition(AbstractBeanFactory.java:1382)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1272)
+	at top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory.chatClient(DefaultArmoryStrategyFactory.java:45)
+	at top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.aiAgentChat(AiAgentChatService.java:47)
+	at top.kimwonjoon.trigger.http.AiAgentController.chatAgent(AiAgentController.java:76)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+25-05-24.00:45:15.029 [http-nio-8091-exec-6] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:45:58.529 [http-nio-8091-exec-9] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:47:11.374 [http-nio-8091-exec-6] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:47:36.330 [http-nio-8091-exec-5] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:48:34.817 [http-nio-8091-exec-1] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:52:39.165 [http-nio-8091-exec-2] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:53:40.981 [http-nio-8091-exec-8] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:53:57.333 [http-nio-8091-exec-9] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:54:21.409 [http-nio-8091-exec-3] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:54:41.251 [http-nio-8091-exec-7] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:55:42.608 [http-nio-8091-exec-3] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:57:59.734 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.00:59:57.622 [http-nio-8091-exec-5] ERROR AiAgentController      - AiAgent 智能体对话，异常 3 员工的年龄
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'ChatClient_3' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:951)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getMergedLocalBeanDefinition(AbstractBeanFactory.java:1382)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1272)
+	at top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory.chatClient(DefaultArmoryStrategyFactory.java:45)
+	at top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.aiAgentChat(AiAgentChatService.java:47)
+	at top.kimwonjoon.trigger.http.AiAgentController.chatAgent(AiAgentController.java:76)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+25-05-24.00:59:57.639 [http-nio-8091-exec-5] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:00:42.410 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:01:16.022 [ForkJoinPool.commonPool-worker-1] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.01:02:28.771 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m3s284ms).
+25-05-24.01:03:16.395 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=47s628ms).
+25-05-24.01:05:16.181 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m59s785ms).
+25-05-24.01:05:38.111 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=46s742ms).
+25-05-24.01:06:29.777 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=51s667ms).
+25-05-24.01:07:38.776 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m8s999ms).
+25-05-24.01:07:38.777 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m8s999ms).
+25-05-24.01:10:05.028 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m42s368ms).
+25-05-24.01:10:05.029 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m42s368ms).
+25-05-24.01:11:26.605 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m21s576ms).
+25-05-24.01:11:26.605 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m21s576ms).
+25-05-24.01:11:26.629 [http-nio-8091-exec-5] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:11:26.765 [parallel-4      ] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.01:15:05.060 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=2m18s48ms).
+25-05-24.01:15:05.060 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=2m22s885ms).
+25-05-24.01:15:05.099 [http-nio-8091-exec-2] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:15:05.235 [parallel-4      ] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.01:16:22.622 [http-nio-8091-exec-3] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'modelId' for method parameter type Long is present but converted to null]
+25-05-24.01:19:15.124 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=2m9s958ms).
+25-05-24.01:19:15.128 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=2m21s682ms).
+25-05-24.01:19:48.731 [http-nio-8091-exec-6] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:20:23.646 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:20:54.231 [http-nio-8091-exec-1] ERROR AiAgentController      - AiAgent 智能体对话，异常 3 员工的年龄
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'ChatClient_3' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:951)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getMergedLocalBeanDefinition(AbstractBeanFactory.java:1382)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1272)
+	at top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory.chatClient(DefaultArmoryStrategyFactory.java:45)
+	at top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.aiAgentChat(AiAgentChatService.java:47)
+	at top.kimwonjoon.trigger.http.AiAgentController.chatAgent(AiAgentController.java:76)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+25-05-24.01:20:54.251 [http-nio-8091-exec-1] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:21:30.164 [http-nio-8091-exec-5] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:21:30.277 [parallel-4      ] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.01:23:34.137 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m34s645ms).
+25-05-24.01:23:34.137 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m25s683ms).
+25-05-24.01:24:08.976 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:26:08.985 [http-nio-8091-exec-7] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:27:17.602 [http-nio-8091-exec-8] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:27:50.151 [http-nio-8091-exec-9] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:28:49.490 [http-nio-8091-exec-10] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:29:30.229 [http-nio-8091-exec-2] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:30:14.928 [http-nio-8091-exec-1] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:34:28.570 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:35:22.195 [http-nio-8091-exec-6] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:36:35.539 [http-nio-8091-exec-8] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:40:31.735 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:41:53.273 [ForkJoinPool.commonPool-worker-1] WARN  StdioClientTransport   - Process terminated with code 143
+25-05-24.01:42:02.152 [http-nio-8091-exec-5] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:42:16.799 [ForkJoinPool.commonPool-worker-1] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.01:42:32.465 [http-nio-8091-exec-2] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:43:45.660 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m6s998ms).
+25-05-24.01:43:47.630 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:45:57.483 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m15s404ms).
+25-05-24.01:45:57.484 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=55s558ms).
+25-05-24.01:46:07.601 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:47:47.629 [http-nio-8091-exec-7] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:51:21.718 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m54s208ms).
+25-05-24.01:51:21.718 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m54s197ms).
+25-05-24.01:51:24.139 [http-nio-8091-exec-9] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:51:32.908 [http-nio-8091-exec-10] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:54:27.855 [http-nio-8091-exec-8] ERROR AiAgentController      - AiAgent 智能体对话，异常 3 员工的年龄
+java.lang.IllegalArgumentException: content and messages cannot be set at the same time
+	at org.springframework.ai.chat.prompt.Prompt$Builder.build(Prompt.java:305)
+	at top.kimwonjoon.domain.agent.service.armory.factory.element.RagAnswerAdvisor.before(RagAnswerAdvisor.java:116)
+	at top.kimwonjoon.domain.agent.service.armory.factory.element.RagAnswerAdvisor.adviseCall(RagAnswerAdvisor.java:137)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.lambda$nextCall$1(DefaultAroundAdvisorChain.java:110)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.nextCall(DefaultAroundAdvisorChain.java:110)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.lambda$doGetObservableChatClientResponse$1(DefaultChatClient.java:469)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.doGetObservableChatClientResponse(DefaultChatClient.java:467)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.doGetObservableChatClientResponse(DefaultChatClient.java:446)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.content(DefaultChatClient.java:441)
+	at top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.aiAgentChat(AiAgentChatService.java:54)
+	at top.kimwonjoon.trigger.http.AiAgentController.chatAgent(AiAgentController.java:76)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+25-05-24.01:54:27.858 [http-nio-8091-exec-8] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:54:52.298 [parallel-4      ] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.01:55:17.836 [http-nio-8091-exec-1] ERROR AiAgentController      - AiAgent 智能体对话，异常 3 员工的年龄
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'ChatClient_3' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:951)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getMergedLocalBeanDefinition(AbstractBeanFactory.java:1382)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1272)
+	at top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory.chatClient(DefaultArmoryStrategyFactory.java:45)
+	at top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.aiAgentChat(AiAgentChatService.java:47)
+	at top.kimwonjoon.trigger.http.AiAgentController.chatAgent(AiAgentController.java:76)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+25-05-24.01:55:17.856 [http-nio-8091-exec-1] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:55:31.426 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.01:57:12.160 [http-nio-8091-exec-8] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.12:23:54.136 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'modelId' for method parameter type Long is present but converted to null]
+25-05-24.12:24:12.072 [http-nio-8091-exec-1] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.12:24:55.461 [http-nio-8091-exec-3] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.12:25:55.058 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=52s30ms).
+25-05-24.12:26:36.152 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.12:27:23.140 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=50s63ms).
+25-05-24.12:27:23.141 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=55s840ms).
+25-05-24.12:29:07.434 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m4s980ms).
+25-05-24.12:29:07.434 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m4s981ms).
+25-05-24.12:29:10.728 [http-nio-8091-exec-6] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.12:29:10.894 [parallel-4      ] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.12:31:17.233 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m24s533ms).
+25-05-24.12:34:12.220 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=2m6s232ms).
+25-05-24.12:34:12.219 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=2m4s433ms).
+25-05-24.12:35:28.017 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=45s797ms).
+25-05-24.12:35:28.018 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=45s793ms).
+25-05-24.12:35:28.035 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.12:40:09.604 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=4m41s586ms).
+25-05-24.12:40:09.604 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=4m41s586ms).
+25-05-24.12:40:16.287 [http-nio-8091-exec-6] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.13:12:45.938 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m6s909ms).
+25-05-24.13:14:41.418 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m55s483ms).
+25-05-24.13:14:41.419 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m51s707ms).
+25-05-24.13:21:28.510 [MainHikariPool housekeeper] WARN  HikariPool             - MainHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m48s930ms).
+25-05-24.13:21:28.510 [PgVectorHikariPool housekeeper] WARN  HikariPool             - PgVectorHikariPool - Thread starvation or clock leap detected (housekeeper delta=1m55s623ms).
+25-05-24.13:22:16.675 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.13:22:24.609 [parallel-4      ] WARN  StdioClientTransport   - Process terminated with code 130
+25-05-24.13:25:48.988 [http-nio-8091-exec-4] ERROR AiAgentController      - AiAgent 智能体对话，异常 3 把员工的年龄写入到 aaa.txt 文件保存到桌面
+java.lang.IllegalStateException: Error calling tool: [TextContent[audience=null, priority=null, text=Error: Access denied - path outside allowed directories: /桌面/aaa.txt not in /Users/kimwonjoon/Desktop, /Users/kimwonjoon/Desktop]]
+	at org.springframework.ai.mcp.SyncMcpToolCallback.call(SyncMcpToolCallback.java:118)
+	at org.springframework.ai.mcp.SyncMcpToolCallback.call(SyncMcpToolCallback.java:126)
+	at org.springframework.ai.model.tool.DefaultToolCallingManager.lambda$executeToolCall$5(DefaultToolCallingManager.java:224)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.model.tool.DefaultToolCallingManager.executeToolCall(DefaultToolCallingManager.java:221)
+	at org.springframework.ai.model.tool.DefaultToolCallingManager.executeToolCalls(DefaultToolCallingManager.java:137)
+	at org.springframework.ai.openai.OpenAiChatModel.internalCall(OpenAiChatModel.java:244)
+	at org.springframework.ai.openai.OpenAiChatModel.call(OpenAiChatModel.java:181)
+	at org.springframework.ai.chat.client.advisor.ChatModelCallAdvisor.adviseCall(ChatModelCallAdvisor.java:54)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.lambda$nextCall$1(DefaultAroundAdvisorChain.java:110)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.nextCall(DefaultAroundAdvisorChain.java:110)
+	at top.kimwonjoon.domain.agent.service.armory.factory.element.RagAnswerAdvisor.adviseCall(RagAnswerAdvisor.java:122)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.lambda$nextCall$1(DefaultAroundAdvisorChain.java:110)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.advisor.DefaultAroundAdvisorChain.nextCall(DefaultAroundAdvisorChain.java:110)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.lambda$doGetObservableChatClientResponse$1(DefaultChatClient.java:469)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.doGetObservableChatClientResponse(DefaultChatClient.java:467)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.doGetObservableChatClientResponse(DefaultChatClient.java:446)
+	at org.springframework.ai.chat.client.DefaultChatClient$DefaultCallResponseSpec.content(DefaultChatClient.java:441)
+	at top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.aiAgentChat(AiAgentChatService.java:54)
+	at top.kimwonjoon.trigger.http.AiAgentController.chatAgent(AiAgentController.java:76)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+25-05-24.13:25:48.992 [http-nio-8091-exec-4] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-24.13:26:15.573 [http-nio-8091-exec-5] WARN  DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+25-05-27.22:19:21.449 [main            ] WARN  DnsServerAddressStreamProviders - Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'
+25-05-27.22:19:24.521 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'application': Injection of resource dependencies failed
+25-05-27.22:19:24.538 [main            ] ERROR SpringApplication      - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'application': Injection of resource dependencies failed
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessProperties(CommonAnnotationBeanPostProcessor.java:372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1445)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at top.kimwonjoon.Application.main(Application.java:21)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'aiAgentPreheatService': Injection of resource dependencies failed
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessProperties(CommonAnnotationBeanPostProcessor.java:372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1445)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1664)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1552)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.autowireResource(CommonAnnotationBeanPostProcessor.java:599)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.getResource(CommonAnnotationBeanPostProcessor.java:577)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor$ResourceElement.getResourceToInject(CommonAnnotationBeanPostProcessor.java:739)
+	at org.springframework.beans.factory.annotation.InjectionMetadata$InjectedElement.inject(InjectionMetadata.java:272)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessProperties(CommonAnnotationBeanPostProcessor.java:369)
+	... 19 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'agentRepository': Injection of resource dependencies failed
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessProperties(CommonAnnotationBeanPostProcessor.java:372)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1445)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1664)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1552)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.autowireResource(CommonAnnotationBeanPostProcessor.java:599)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.getResource(CommonAnnotationBeanPostProcessor.java:577)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor$ResourceElement.getResourceToInject(CommonAnnotationBeanPostProcessor.java:739)
+	at org.springframework.beans.factory.annotation.InjectionMetadata$InjectedElement.inject(InjectionMetadata.java:272)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessProperties(CommonAnnotationBeanPostProcessor.java:369)
+	... 35 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redissonClient' defined in class path resource [top/kimwonjoon/config/RedisClientConfig.class]: Failed to instantiate [org.redisson.api.RedissonClient]: Factory method 'redissonClient' threw exception with message: java.util.concurrent.ExecutionException: org.redisson.client.RedisConnectionException: Unable to connect to Redis server: localhost/127.0.0.1:16379
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeanByName(AbstractAutowireCapableBeanFactory.java:462)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.autowireResource(CommonAnnotationBeanPostProcessor.java:606)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.getResource(CommonAnnotationBeanPostProcessor.java:577)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor$ResourceElement.getResourceToInject(CommonAnnotationBeanPostProcessor.java:739)
+	at org.springframework.beans.factory.annotation.InjectionMetadata$InjectedElement.inject(InjectionMetadata.java:272)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessProperties(CommonAnnotationBeanPostProcessor.java:369)
+	... 51 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.redisson.api.RedissonClient]: Factory method 'redissonClient' threw exception with message: java.util.concurrent.ExecutionException: org.redisson.client.RedisConnectionException: Unable to connect to Redis server: localhost/127.0.0.1:16379
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:199)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 67 common frames omitted
+Caused by: org.redisson.client.RedisConnectionException: java.util.concurrent.ExecutionException: org.redisson.client.RedisConnectionException: Unable to connect to Redis server: localhost/127.0.0.1:16379
+	at org.redisson.connection.MasterSlaveConnectionManager.doConnect(MasterSlaveConnectionManager.java:229)
+	at org.redisson.connection.MasterSlaveConnectionManager.connect(MasterSlaveConnectionManager.java:196)
+	at org.redisson.config.ConfigSupport.createConnectionManager(ConfigSupport.java:220)
+	at org.redisson.Redisson.<init>(Redisson.java:71)
+	at org.redisson.Redisson.create(Redisson.java:116)
+	at top.kimwonjoon.config.RedisClientConfig.redissonClient(RedisClientConfig.java:50)
+	at top.kimwonjoon.config.RedisClientConfig$$SpringCGLIB$$0.CGLIB$redissonClient$0(<generated>)
+	at top.kimwonjoon.config.RedisClientConfig$$SpringCGLIB$$FastClass$$1.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:258)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:372)
+	at top.kimwonjoon.config.RedisClientConfig$$SpringCGLIB$$0.redissonClient(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
+	... 70 common frames omitted
+Caused by: java.util.concurrent.ExecutionException: org.redisson.client.RedisConnectionException: Unable to connect to Redis server: localhost/127.0.0.1:16379
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:396)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.redisson.connection.MasterSlaveConnectionManager.doConnect(MasterSlaveConnectionManager.java:225)
+	... 85 common frames omitted
+Caused by: org.redisson.client.RedisConnectionException: Unable to connect to Redis server: localhost/127.0.0.1:16379
+	at org.redisson.connection.ConnectionsHolder.lambda$createConnection$1(ConnectionsHolder.java:183)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162)
+	at org.redisson.connection.ConnectionsHolder.promiseFailure(ConnectionsHolder.java:218)
+	at org.redisson.connection.ConnectionsHolder.lambda$createConnection$4(ConnectionsHolder.java:204)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2162)
+	at org.redisson.client.RedisClient$1$2.run(RedisClient.java:308)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.util.concurrent.CompletionException: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/127.0.0.1:16379
+	at java.base/java.util.concurrent.CompletableFuture.encodeRelay(CompletableFuture.java:368)
+	at java.base/java.util.concurrent.CompletableFuture.completeRelay(CompletableFuture.java:377)
+	at java.base/java.util.concurrent.CompletableFuture$UniRelay.tryFire(CompletableFuture.java:1097)
+	... 11 common frames omitted
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: localhost/127.0.0.1:16379
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946)
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:336)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:339)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:784)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+25-05-27.22:19:57.470 [main            ] WARN  DnsServerAddressStreamProviders - Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'
+25-05-27.22:23:13.047 [main            ] WARN  DnsServerAddressStreamProviders - Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'

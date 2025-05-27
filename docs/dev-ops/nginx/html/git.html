@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解析仓库</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', '微软雅黑', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #4169E1;
+        }
+        #status {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen bg-gray-50 font-sans">
+<div class="bg-white p-8 rounded-xl shadow-lg w-[450px] relative transition-all duration-300 hover:shadow-xl">
+    <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800 flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        解析Git仓库
+    </h2>
+    <form id="uploadForm" class="space-y-4">
+        <div class="space-y-1">
+            <label for="repoUrl" class="block text-sm font-medium text-gray-700">仓库地址</label>
+            <input type="text" id="repoUrl" placeholder="https://github.com/username/repo.git" 
+                   class="w-full p-3 border border-gray-300 rounded-lg form-input-focus transition-all duration-200" required>
+        </div>
+        <div class="space-y-1">
+            <label for="userName" class="block text-sm font-medium text-gray-700">用户名</label>
+            <input type="text" id="userName" placeholder="Git用户名" 
+                   class="w-full p-3 border border-gray-300 rounded-lg form-input-focus transition-all duration-200" required>
+        </div>
+        <div class="space-y-1">
+            <label for="token" class="block text-sm font-medium text-gray-700">密码/Token</label>
+            <input type="password" id="token" placeholder="密码或访问令牌" 
+                   class="w-full p-3 border border-gray-300 rounded-lg form-input-focus transition-all duration-200" required>
+        </div>
+        <div class="pt-4">
+            <button type="submit" class="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors duration-200 font-medium shadow-sm hover:shadow flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                </svg>
+                提交解析
+            </button>
+        </div>
+    </form>
+    <div id="status" class="mt-4 text-center font-medium text-primary-600"></div>
+</div>
+
+<div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center" id="loadingOverlay">
+    <div class="bg-white p-6 rounded-xl shadow-xl flex flex-col items-center">
+        <div class="loading-spinner mb-4">
+            <svg class="h-10 w-10 text-primary-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <p class="text-gray-600">正在解析仓库，请稍候...</p>
+    </div>
+</div>
+
+<script>
+    // 添加表单输入样式
+    document.querySelectorAll('.form-input-focus').forEach(input => {
+        // 聚焦时添加样式
+        input.addEventListener('focus', () => {
+            input.classList.add('ring-2', 'ring-primary-300', 'border-primary-500');
+        });
+        
+        // 失焦时移除样式
+        input.addEventListener('blur', () => {
+            input.classList.remove('ring-2', 'ring-primary-300', 'border-primary-500');
+        });
+    });
+    
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const statusElement = document.getElementById('status');
+    const form = document.getElementById('uploadForm');
+    
+    // 表单验证函数
+    function validateForm() {
+        const repoUrl = document.getElementById('repoUrl').value.trim();
+        const userName = document.getElementById('userName').value.trim();
+        const token = document.getElementById('token').value.trim();
+        
+        let isValid = true;
+        let errorMessage = '';
+        
+        if (!repoUrl) {
+            errorMessage = '请输入Git仓库地址';
+            isValid = false;
+        } else if (!repoUrl.startsWith('http://') && !repoUrl.startsWith('https://')) {
+            errorMessage = '仓库地址必须以http://或https://开头';
+            isValid = false;
+        } else if (!userName) {
+            errorMessage = '请输入用户名';
+            isValid = false;
+        } else if (!token) {
+            errorMessage = '请输入密码或Token';
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            statusElement.textContent = errorMessage;
+            statusElement.classList.remove('text-primary-600');
+            statusElement.classList.add('text-red-500');
+        } else {
+            statusElement.textContent = '';
+            statusElement.classList.remove('text-red-500');
+            statusElement.classList.add('text-primary-600');
+        }
+        
+        return isValid;
+    }
+    
+    // 添加输入事件监听，实时验证
+    form.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', validateForm);
+    });
+
+    // 提交事件处理
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+        
+        const repoUrl = document.getElementById('repoUrl').value.trim();
+        const userName = document.getElementById('userName').value.trim();
+        const token = document.getElementById('token').value.trim();
+
+        loadingOverlay.style.display = 'flex';
+        statusElement.textContent = '';
+
+        fetch('http://localhost:8090/api/v1/rag/analyze_git_repository', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `repoUrl=${encodeURIComponent(repoUrl)}&userName=${encodeURIComponent(userName)}&token=${encodeURIComponent(token)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingOverlay.style.display = 'none';
+            if (data.code === '0000') {
+                statusElement.textContent = '解析成功';
+                statusElement.classList.add('text-green-600');
+                
+                // 成功提示并关闭窗口
+                setTimeout(() => {
+                    // 使用更现代的成功提示
+                    const successOverlay = document.createElement('div');
+                    successOverlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center';
+                    successOverlay.innerHTML = `
+                        <div class="bg-white p-6 rounded-xl shadow-xl flex flex-col items-center animate-fade-in">
+                            <div class="text-green-500 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 text-lg font-medium mb-4">仓库解析成功</p>
+                            <p class="text-gray-500 mb-4">窗口即将关闭</p>
+                        </div>
+                    `;
+                    document.body.appendChild(successOverlay);
+                    
+                    setTimeout(() => {
+                        window.close();
+                    }, 1500);
+                }, 500);
+            } else {
+                statusElement.textContent = data.info || '解析失败';
+                statusElement.classList.remove('text-primary-600');
+                statusElement.classList.add('text-red-500');
+            }
+        })
+        .catch(error => {
+            loadingOverlay.style.display = 'none';
+            statusElement.textContent = '解析仓库时出错，请检查网络连接';
+            statusElement.classList.remove('text-primary-600');
+            statusElement.classList.add('text-red-500');
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+<style>
+    /* 添加动画 */
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fade-in 0.3s ease-out;
+    }
+</style>
+</script>
+</body>
+</html>

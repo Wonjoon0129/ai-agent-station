@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientToolConfigDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientToolConfig">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="tool_type" property="toolType"/>
+        <result column="tool_id" property="toolId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 查询所有客户端工具配置 -->
+    <select id="queryAllToolConfig" resultMap="dataMap">
+        SELECT id, client_id, tool_type, tool_id, create_time
+        FROM ai_client_tool_config
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询客户端工具配置 -->
+    <select id="queryToolConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, tool_type, tool_id, create_time
+        FROM ai_client_tool_config
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据客户端ID查询工具配置列表 -->
+    <select id="queryToolConfigByClientId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, tool_type, tool_id, create_time
+        FROM ai_client_tool_config
+        WHERE client_id = #{clientId}
+    </select>
+
+    <!-- 插入客户端工具配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolConfig">
+        INSERT INTO ai_client_tool_config (
+            client_id, tool_type, tool_id, create_time
+        ) VALUES (
+                     #{clientId}, #{toolType}, #{toolId}, #{createTime}
+                 )
+    </insert>
+
+    <!-- 更新客户端工具配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolConfig">
+        UPDATE ai_client_tool_config
+        SET client_id = #{clientId},
+            tool_type = #{toolType},
+            tool_id = #{toolId}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除客户端工具配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_tool_config
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据客户端ID和工具ID删除客户端工具配置 -->
+    <delete id="deleteByClientIdAndToolId">
+        DELETE FROM ai_client_tool_config
+        WHERE client_id = #{clientId} AND tool_id = #{toolId}
+    </delete>
+
+    <!-- 根据客户端ID列表查询工具配置 -->
+    <select id="queryToolConfigByClientIds" resultMap="dataMap">
+        SELECT id, client_id, tool_type, tool_id, create_time
+        FROM ai_client_tool_config
+        WHERE client_id IN
+        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </select>
+
+    <!-- 根据工具ID查询客户端工具配置列表 -->
+    <select id="queryToolConfigByToolId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, tool_type, tool_id, create_time
+        FROM ai_client_tool_config
+        WHERE tool_id = #{toolId}
+    </select>
+
+    <!-- 根据工具类型查询客户端工具配置列表 -->
+    <select id="queryToolConfigByToolType" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, client_id, tool_type, tool_id, create_time
+        FROM ai_client_tool_config
+        WHERE tool_type = #{toolType}
+    </select>
+
+    <!-- 根据条件查询客户端工具配置列表 -->
+    <select id="queryToolConfigList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolConfig" resultMap="dataMap">
+        SELECT
+        id, client_id, tool_type, tool_id, create_time
+        FROM
+        ai_client_tool_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="clientId != null">
+                AND client_id = #{clientId}
+            </if>
+            <if test="toolType != null and toolType != ''">
+                AND tool_type = #{toolType}
+            </if>
+            <if test="toolId != null">
+                AND tool_id = #{toolId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+
+
+
+</mapper>

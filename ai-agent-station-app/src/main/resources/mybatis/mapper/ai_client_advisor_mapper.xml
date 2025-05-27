@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientAdvisorDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisor">
+        <id column="id" property="id"/>
+        <result column="advisor_name" property="advisorName"/>
+        <result column="advisor_type" property="advisorType"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="ext_param" property="extParam"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 查询所有顾问配置 -->
+    <select id="queryAllAdvisorConfig" resultMap="dataMap">
+        SELECT id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        FROM ai_client_advisor
+        ORDER BY order_num, id
+    </select>
+
+    <!-- 根据ID查询顾问配置 -->
+    <select id="queryAdvisorConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        FROM ai_client_advisor
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据顾问名称查询配置 -->
+    <select id="queryAdvisorConfigByName" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        FROM ai_client_advisor
+        WHERE advisor_name = #{advisorName}
+    </select>
+
+    <!-- 插入顾问配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisor">
+        INSERT INTO ai_client_advisor (
+            advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        ) VALUES (
+                     #{advisorName}, #{advisorType}, #{orderNum}, #{extParam}, #{status}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 更新顾问配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisor">
+        UPDATE ai_client_advisor
+        SET advisor_name = #{advisorName},
+            advisor_type = #{advisorType},
+            order_num = #{orderNum},
+            ext_param = #{extParam},
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除顾问配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_advisor
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据客户端ID列表查询顾问配置 -->
+    <select id="queryAdvisorConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT a.id, a.advisor_name, a.advisor_type, a.order_num, a.ext_param,
+        a.status, a.create_time, a.update_time
+        FROM ai_client_advisor a
+        WHERE a.id IN (
+        SELECT DISTINCT c.advisor_id
+        FROM ai_client_advisor_config c
+        WHERE c.client_id IN
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+        )
+        ORDER BY a.order_num, a.id
+    </select>
+
+    <!-- 根据条件查询顾问列表 -->
+    <select id="queryClientAdvisorList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisor" resultMap="dataMap">
+        SELECT
+        id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        FROM
+        ai_client_advisor
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="advisorName != null and advisorName != ''">
+                AND advisor_name LIKE CONCAT('%', #{advisorName}, '%')
+            </if>
+            <if test="advisorType != null and advisorType != ''">
+                AND advisor_type = #{advisorType}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY order_num, create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+</mapper>

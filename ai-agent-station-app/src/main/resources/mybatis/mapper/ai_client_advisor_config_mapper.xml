@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientAdvisorConfigDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisorConfig">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="advisor_id" property="advisorId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 查询所有客户端-顾问关联配置 -->
+    <select id="queryAllClientAdvisorConfig" resultMap="dataMap">
+        SELECT id, client_id, advisor_id, create_time
+        FROM ai_client_advisor_config
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询客户端-顾问关联配置 -->
+    <select id="queryClientAdvisorConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, advisor_id, create_time
+        FROM ai_client_advisor_config
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据客户端ID查询关联配置 -->
+    <select id="queryClientAdvisorConfigByClientId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, advisor_id, create_time
+        FROM ai_client_advisor_config
+        WHERE client_id = #{clientId}
+    </select>
+
+    <!-- 根据顾问ID查询关联配置 -->
+    <select id="queryClientAdvisorConfigByAdvisorId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, client_id, advisor_id, create_time
+        FROM ai_client_advisor_config
+        WHERE advisor_id = #{advisorId}
+    </select>
+
+    <!-- 根据条件查询客户端-顾问关联配置列表 -->
+    <select id="queryClientAdvisorConfigList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisorConfig" resultMap="dataMap">
+        SELECT
+        id, client_id, advisor_id, create_time
+        FROM
+        ai_client_advisor_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="clientId != null">
+                AND client_id = #{clientId}
+            </if>
+            <if test="advisorId != null">
+                AND advisor_id = #{advisorId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!-- 插入客户端-顾问关联配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisorConfig">
+        INSERT INTO ai_client_advisor_config (
+            client_id, advisor_id, create_time
+        ) VALUES (
+                     #{clientId}, #{advisorId}, #{createTime}
+                 )
+    </insert>
+
+    <!-- 更新客户端-顾问关联配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisorConfig">
+        UPDATE ai_client_advisor_config
+        SET client_id = #{clientId},
+            advisor_id = #{advisorId}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除客户端-顾问关联配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_advisor_config
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据客户端ID和顾问ID删除关联配置 -->
+    <delete id="deleteByClientIdAndAdvisorId">
+        DELETE FROM ai_client_advisor_config
+        WHERE client_id = #{clientId} AND advisor_id = #{advisorId}
+    </delete>
+
+    <!-- 根据客户端ID列表查询关联配置 -->
+    <select id="queryClientAdvisorConfigByClientIds" resultMap="dataMap">
+        SELECT id, client_id, advisor_id, create_time
+        FROM ai_client_advisor_config
+        WHERE client_id IN
+        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </select>
+
+    <!-- 根据客户端ID列表查询顾问ID列表 -->
+    <select id="queryAdvisorIdsByClientIds" resultType="java.lang.Long">
+        SELECT DISTINCT advisor_id
+        FROM ai_client_advisor_config
+        WHERE client_id IN
+        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </select>
+</mapper>

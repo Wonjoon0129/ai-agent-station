@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientModelDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientModel">
+        <id column="id" property="id"/>
+        <result column="model_name" property="modelName"/>
+        <result column="base_url" property="baseUrl"/>
+        <result column="api_key" property="apiKey"/>
+        <result column="completions_path" property="completionsPath"/>
+        <result column="embeddings_path" property="embeddingsPath"/>
+        <result column="model_type" property="modelType"/>
+        <result column="model_version" property="modelVersion"/>
+        <result column="timeout" property="timeout"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 查询所有模型配置 -->
+    <select id="queryAllModelConfig" resultMap="dataMap">
+        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+        FROM ai_client_model
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询模型配置 -->
+    <select id="queryModelConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+        FROM ai_client_model
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据模型名称查询模型配置 -->
+    <select id="queryModelConfigByName" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+        FROM ai_client_model
+        WHERE model_name = #{modelName}
+    </select>
+
+    <!-- 插入模型配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModel">
+        INSERT INTO ai_client_model (
+            model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+        ) VALUES (
+                     #{modelName}, #{baseUrl}, #{apiKey}, #{completionsPath}, #{embeddingsPath}, #{modelType}, #{modelVersion}, #{timeout}, #{status}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 更新模型配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModel">
+        UPDATE ai_client_model
+        SET model_name = #{modelName},
+            base_url = #{baseUrl},
+            api_key = #{apiKey},
+            completions_path = #{completionsPath},
+            embeddings_path = #{embeddingsPath},
+            model_type = #{modelType},
+            model_version = #{modelVersion},
+            timeout = #{timeout},
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除模型配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_model
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据客户端ID列表查询模型配置 -->
+    <select id="queryModelConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT m.id, m.model_name, m.base_url, m.api_key, m.completions_path, m.embeddings_path,
+        m.model_type, m.model_version, m.timeout, m.status, m.create_time, m.update_time
+        FROM ai_client_model m
+        WHERE m.id IN (
+        SELECT DISTINCT c.model_id
+        FROM ai_client_model_config c
+        WHERE c.client_id IN
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+        )
+    </select>
+
+    <select id="queryClientModelList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModel" resultMap="dataMap">
+        SELECT
+        id, model_name, base_url, api_key, completions_path, embeddings_path,
+        model_type, model_version, timeout, status, create_time, update_time
+        FROM
+        ai_client_model
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="modelName != null and modelName != ''">
+                AND model_name LIKE CONCAT('%', #{modelName}, '%')
+            </if>
+            <if test="modelType != null and modelType != ''">
+                AND model_type = #{modelType}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+</mapper>

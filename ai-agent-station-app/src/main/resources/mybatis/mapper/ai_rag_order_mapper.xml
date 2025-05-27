@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiRagOrderDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiRagOrder">
+        <id column="id" property="id"/>
+        <result column="rag_name" property="ragName"/>
+        <result column="knowledge_tag" property="knowledgeTag"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <!-- 查询所有知识库配置 -->
+    <select id="queryAllRagOrder" resultMap="dataMap">
+        SELECT id, rag_name, knowledge_tag, status, create_time, update_time
+        FROM ai_rag_order
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询知识库配置 -->
+    <select id="queryRagOrderById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, rag_name, knowledge_tag, status, create_time, update_time
+        FROM ai_rag_order
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据知识库名称查询配置 -->
+    <select id="queryRagOrderByName" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, rag_name, knowledge_tag, status, create_time, update_time
+        FROM ai_rag_order
+        WHERE rag_name = #{ragName}
+    </select>
+
+    <!-- 根据知识标签查询配置 -->
+    <select id="queryRagOrderByTag" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, rag_name, knowledge_tag, status, create_time, update_time
+        FROM ai_rag_order
+        WHERE knowledge_tag = #{knowledgeTag}
+    </select>
+
+    <!-- 根据条件查询知识库配置列表 -->
+    <select id="queryRagOrderList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiRagOrder" resultMap="dataMap">
+        SELECT
+        id, rag_name, knowledge_tag, status, create_time, update_time
+        FROM
+        ai_rag_order
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="ragName != null and ragName != ''">
+                AND rag_name LIKE CONCAT('%', #{ragName}, '%')
+            </if>
+            <if test="knowledgeTag != null and knowledgeTag != ''">
+                AND knowledge_tag = #{knowledgeTag}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!-- 插入知识库配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiRagOrder">
+        INSERT INTO ai_rag_order (
+            rag_name, knowledge_tag, status, create_time, update_time
+        ) VALUES (
+                     #{ragName}, #{knowledgeTag}, #{status}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 更新知识库配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiRagOrder">
+        UPDATE ai_rag_order
+        SET rag_name = #{ragName},
+            knowledge_tag = #{knowledgeTag},
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除知识库配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_rag_order
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 查询所有有效的知识库配置 -->
+    <select id="queryAllValidRagOrder" resultMap="dataMap">
+        SELECT id, rag_name, knowledge_tag, status, create_time, update_time
+        FROM ai_rag_order
+        WHERE status = 1
+        ORDER BY id
+    </select>
+</mapper>

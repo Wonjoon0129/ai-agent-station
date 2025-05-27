@@ -1,0 +1,83 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /ai-agent-station
+
+# 线程池配置
+thread:
+  pool:
+    executor:
+      config:
+        core-pool-size: 20
+        max-pool-size: 50
+        keep-alive-time: 5000
+        block-queue-size: 5000
+        policy: CallerRunsPolicy
+
+# 数据库配置；启动时配置数据库资源信息
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:13306/ai-agent-station?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+  main:
+    allow-bean-definition-overriding: true
+  #  main:
+  #    banner-mode: off
+  #    web-application-type: none
+  ai:
+    #    mcp:
+    #      client:
+    #        request-time: 180
+    #        sse:
+    #          connections:
+    #            server1:
+    #              url: http://localhost:8082
+    #            server2:
+    #              url: http://localhost:8081
+
+    #        stdio:
+    #          servers-configuration: classpath:/mcp-servers-config-2.json
+    # 个人配置，通过 http://127.0.0.1:8090 代理出去
+    vectorstore:
+      pgvector:
+        datasource:
+          driver-class-name: org.postgresql.Driver
+          username: postgres
+          password: postgres
+          url: jdbc:postgresql://localhost:15432/ai-rag-knowledge
+          type: com.zaxxer.hikari.HikariDataSource
+    ollama:
+      base-url: http://localhost:11434
+
+# MyBatis 配置
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  config-location: classpath:/mybatis/config/mybatis-config.xml
+
+# Redis
+redis:
+  sdk:
+    config:
+      host: localhost
+      port: 16379
+      pool-size: 10
+      min-idle-size: 5
+      idle-timeout: 30000
+      connect-timeout: 5000
+      retry-attempts: 3
+      retry-interval: 1000
+      ping-interval: 60000
+      keep-alive: true
+# 日志
+logging:
+  level:
+    root: info
+  config: classpath:logback-spring.xml

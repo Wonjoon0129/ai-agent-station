@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientToolMcpDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientToolMcp">
+        <id column="id" property="id"/>
+        <result column="mcp_name" property="mcpName"/>
+        <result column="transport_type" property="transportType"/>
+        <result column="transport_config" property="transportConfig"/>
+        <result column="request_timeout" property="requestTimeout"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 查询所有MCP配置 -->
+    <select id="queryAllMcpConfig" resultMap="dataMap">
+        SELECT id, mcp_name, transport_type, transport_config, request_timeout, status, create_time, update_time
+        FROM ai_client_tool_mcp
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询MCP配置 -->
+    <select id="queryMcpConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, mcp_name, transport_type, transport_config, request_timeout, status, create_time, update_time
+        FROM ai_client_tool_mcp
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据MCP名称查询配置 -->
+    <select id="queryMcpConfigByName" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, mcp_name, transport_type, transport_config, request_timeout, status, create_time, update_time
+        FROM ai_client_tool_mcp
+        WHERE mcp_name = #{mcpName}
+    </select>
+
+    <!-- 根据条件查询MCP配置列表 -->
+    <select id="queryMcpList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolMcp" resultMap="dataMap">
+        SELECT
+        id, mcp_name, transport_type, transport_config, request_timeout, status, create_time, update_time
+        FROM
+        ai_client_tool_mcp
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="mcpName != null and mcpName != ''">
+                AND mcp_name LIKE CONCAT('%', #{mcpName}, '%')
+            </if>
+            <if test="transportType != null and transportType != ''">
+                AND transport_type = #{transportType}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!-- 插入MCP配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolMcp">
+        INSERT INTO ai_client_tool_mcp (
+            mcp_name, transport_type, transport_config, request_timeout, status, create_time, update_time
+        ) VALUES (
+                     #{mcpName}, #{transportType}, #{transportConfig}, #{requestTimeout}, #{status}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 更新MCP配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolMcp">
+        UPDATE ai_client_tool_mcp
+        SET mcp_name = #{mcpName},
+            transport_type = #{transportType},
+            transport_config = #{transportConfig},
+            request_timeout = #{requestTimeout},
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除MCP配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_tool_mcp
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据客户端ID列表查询MCP配置 -->
+    <select id="queryMcpConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT m.id, m.mcp_name, m.transport_type, m.transport_config,
+        m.request_timeout, m.status, m.create_time, m.update_time
+        FROM ai_client_tool_mcp m
+        WHERE m.id IN (
+        SELECT DISTINCT c.tool_id
+        FROM ai_client_tool_config c
+        WHERE c.client_id IN
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+        AND c.tool_type = 'mcp'
+        )
+    </select>
+
+
+</mapper>

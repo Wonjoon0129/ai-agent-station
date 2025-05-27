@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientSystemPromptDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientSystemPrompt">
+        <id column="id" property="id"/>
+        <result column="prompt_name" property="promptName"/>
+        <result column="prompt_content" property="promptContent"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 查询所有系统提示词配置 -->
+    <select id="queryAllSystemPromptConfig" resultMap="dataMap">
+        SELECT id, prompt_name, prompt_content, description, status, create_time, update_time
+        FROM ai_client_system_prompt
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询系统提示词配置 -->
+    <select id="querySystemPromptConfigById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, prompt_name, prompt_content, description, status, create_time, update_time
+        FROM ai_client_system_prompt
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据提示词名称查询配置 -->
+    <select id="querySystemPromptConfigByName" parameterType="java.lang.String" resultMap="dataMap">
+        SELECT id, prompt_name, prompt_content, description, status, create_time, update_time
+        FROM ai_client_system_prompt
+        WHERE prompt_name = #{promptName}
+    </select>
+
+    <!-- 根据条件查询系统提示词列表 -->
+    <select id="querySystemPromptList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientSystemPrompt" resultMap="dataMap">
+        SELECT
+        id, prompt_name, prompt_content, description, status, create_time, update_time
+        FROM
+        ai_client_system_prompt
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="promptName != null and promptName != ''">
+                AND prompt_name LIKE CONCAT('%', #{promptName}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!-- 插入系统提示词配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientSystemPrompt">
+        INSERT INTO ai_client_system_prompt (
+            prompt_name, prompt_content, description, status, create_time, update_time
+        ) VALUES (
+                     #{promptName}, #{promptContent}, #{description}, #{status}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 更新系统提示词配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientSystemPrompt">
+        UPDATE ai_client_system_prompt
+        SET prompt_name = #{promptName},
+            prompt_content = #{promptContent},
+            description = #{description},
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除系统提示词配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_client_system_prompt
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据客户端ID查询系统提示词配置（只返回一条记录） -->
+    <select id="querySystemPromptConfigByClientId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT p.id, p.prompt_name, p.prompt_content, p.description,
+               p.status, p.create_time, p.update_time
+        FROM ai_client_system_prompt p
+        WHERE p.id = (
+            SELECT system_prompt_id
+            FROM ai_client_system_prompt_config
+            WHERE client_id = #{clientId}
+            LIMIT 1
+        )
+    </select>
+
+    <!-- 根据多个客户端ID查询系统提示词配置（返回多条记录） -->
+    <select id="querySystemPromptConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT p.id, p.prompt_name, p.prompt_content, p.description,
+        p.status, p.create_time, p.update_time
+        FROM ai_client_system_prompt p
+        WHERE p.id IN (
+        SELECT system_prompt_id
+        FROM ai_client_system_prompt_config
+        WHERE client_id IN
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+        )
+    </select>
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiAgentTaskScheduleDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiAgentTaskSchedule">
+        <id column="id" property="id"/>
+        <result column="agent_id" property="agentId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="description" property="description"/>
+        <result column="cron_expression" property="cronExpression"/>
+        <result column="task_param" property="taskParam"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 查询所有任务调度配置 -->
+    <select id="queryAllTaskSchedule" resultMap="dataMap">
+        SELECT id, agent_id, task_name, description, cron_expression, task_param, status, create_time, update_time
+        FROM ai_agent_task_schedule
+        ORDER BY id
+    </select>
+
+    <!-- 根据ID查询任务调度配置 -->
+    <select id="queryTaskScheduleById" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, agent_id, task_name, description, cron_expression, task_param, status, create_time, update_time
+        FROM ai_agent_task_schedule
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据智能体ID查询任务调度配置 -->
+    <select id="queryTaskScheduleByAgentId" parameterType="java.lang.Long" resultMap="dataMap">
+        SELECT id, agent_id, task_name, description, cron_expression, task_param, status, create_time, update_time
+        FROM ai_agent_task_schedule
+        WHERE agent_id = #{agentId}
+    </select>
+
+    <!-- 根据条件查询任务调度配置列表 -->
+    <select id="queryTaskScheduleList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentTaskSchedule" resultMap="dataMap">
+        SELECT
+        id, agent_id, task_name, description, cron_expression, task_param, status, create_time, update_time
+        FROM
+        ai_agent_task_schedule
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="agentId != null">
+                AND agent_id = #{agentId}
+            </if>
+            <if test="taskName != null and taskName != ''">
+                AND task_name LIKE CONCAT('%', #{taskName}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        <if test="pageSize != null and pageSize > 0">
+            LIMIT #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!-- 查询所有有效的任务调度配置 -->
+    <select id="queryAllValidTaskSchedule" resultMap="dataMap">
+        SELECT id, agent_id, task_name, description, cron_expression, task_param, status, create_time, update_time
+        FROM ai_agent_task_schedule
+        WHERE status = 1
+        ORDER BY id
+    </select>
+
+    <!-- 查询无效任务ID -->
+    <select id="queryAllInvalidTaskScheduleIds" resultType="java.lang.Long">
+        SELECT id from ai_agent_task_schedule
+        WHERE status = 0
+    </select>
+
+    <!-- 插入任务调度配置 -->
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentTaskSchedule">
+        INSERT INTO ai_agent_task_schedule (
+            agent_id, task_name, description, cron_expression, task_param, status, create_time, update_time
+        ) VALUES (
+                     #{agentId}, #{taskName}, #{description}, #{cronExpression}, #{taskParam}, #{status}, #{createTime}, #{updateTime}
+                 )
+    </insert>
+
+    <!-- 更新任务调度配置 -->
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentTaskSchedule">
+        UPDATE ai_agent_task_schedule
+        SET agent_id = #{agentId},
+            task_name = #{taskName},
+            description = #{description},
+            cron_expression = #{cronExpression},
+            task_param = #{taskParam},
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除客户端-顾问关联配置 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM ai_agent_task_schedule
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据智能体ID删除任务调度配置 -->
+    <delete id="deleteByAgentId">
+        DELETE FROM ai_agent_task_schedule
+        WHERE agent_id = #{agentId}
+    </delete>
+</mapper>

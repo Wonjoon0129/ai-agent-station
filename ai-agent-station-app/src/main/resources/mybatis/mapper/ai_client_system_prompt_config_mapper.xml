@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientSystemPromptConfigDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientSystemPromptConfig">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId"/>
+        <result column="system_prompt_id" property="systemPromptId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+
+    <!-- 根据客户端ID列表查询系统提示词配置关联 -->
+    <select id="querySystemPromptConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT id, client_id, system_prompt_id, create_time
+        FROM ai_client_system_prompt_config
+        WHERE client_id IN
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </select>
+
+
+
+</mapper>

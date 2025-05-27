@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiClientModelToolConfigDao">
+
+    <resultMap id="aiClientModelToolConfigMap" type="top.kimwonjoon.infrastructure.dao.po.AiClientModelToolConfig">
+        <id column="id" property="id"/>
+        <result column="model_id" property="modelId"/>
+        <result column="tool_type" property="toolType"/>
+        <result column="tool_id" property="toolId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="queryModelToolConfigByModelIds" parameterType="java.util.List" resultMap="aiClientModelToolConfigMap">
+        SELECT  id, model_id, tool_type, tool_id, create_time
+        FROM
+        ai_client_model_tool_config
+        WHERE
+        model_id IN
+        <foreach collection="list" item="modelId" open="(" separator="," close=")">
+            #{modelId}
+        </foreach>
+    </select>
+
+</mapper>

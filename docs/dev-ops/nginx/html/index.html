@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiAgent 智能体 - By KimWonjoon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/modern.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-screen flex flex-col bg-gray-50 font-sans">
+<!-- 移动端菜单遮罩层 -->
+<div id="sidebarOverlay" class="overlay hidden md:hidden"></div>
+<!-- Top Navigation -->
+<nav class="border-b bg-white px-4 py-3 flex items-center gap-3 shadow-sm sticky top-0 z-30">
+    <button id="toggleSidebar" class="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sidebar-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path id="sidebarIconPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <button id="newChatBtn" class="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        新建聊天
+    </button>
+    <button id="clearAllChatsBtn" class="flex items-center gap-1 px-3 py-2 text-sm font-medium text-red-600 bg-white border border-red-300 rounded-lg hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+        清空聊天
+    </button>
+
+    <div class="flex-1 flex items-center gap-4">
+        <select id="aiAgent" class="px-4 py-2 border border-gray-300 rounded-lg flex-1 max-w-xs focus:ring-2 focus:ring-primary-300 focus:border-primary-500 outline-none transition-all duration-200">
+            <option value="">选择一个Agent</option>
+        </select>
+
+        <select id="ragSelect" class="px-4 py-2 border border-gray-300 rounded-lg flex-1 max-w-xs focus:ring-2 focus:ring-primary-300 focus:border-primary-500 outline-none transition-all duration-200">
+            <option value="">选择一个知识库</option>
+        </select>
+    </div>
+
+
+    <div class="flex items-center gap-2">
+        <input type="file" id="fileInput" multiple class="hidden" />
+
+        <div class="relative group">
+            <button id="uploadMenuButton" class="px-4 py-2 bg-primary-600 text-white hover:bg-primary-700 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                上传知识
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+
+            <!-- 下拉菜单 -->
+            <div class="absolute right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg z-50 overflow-hidden hidden" id="uploadMenu">
+                <a href="upload.html" target="_blank" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors duration-200 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    上传文件
+                </a>
+                <a href="git.html" target="_blank" class="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors duration-200 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    解析仓库（Git）
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 添加管理后台按钮 -->
+    <a href="admin/index.html" target="_blank" class="px-4 py-2 bg-gray-600 text-white hover:bg-gray-700 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        管理后台
+    </a>
+</nav>
+
+<div class="flex-1 flex overflow-hidden">
+    <!-- 侧边栏结构 -->
+    <aside id="sidebar" class="w-64 bg-white border-r overflow-y-auto transition-all duration-300 ease-in-out shadow-sm">
+        <div class="p-4">
+            <h2 class="font-bold mb-3 text-lg text-gray-800 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                聊天列表
+            </h2>
+            <ul id="chatList" class="space-y-2">
+                <!-- 聊天列表项结构修改 -->
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden bg-gray-50">
+        <!-- Chat Area -->
+        <main class="flex-1 overflow-auto p-4 md:p-6" id="chatArea">
+            <div id="welcomeMessage" class="flex items-center justify-center h-full">
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center max-w-md transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1">
+                    <div class="flex items-center gap-3 justify-center text-gray-600 mb-6">
+                        <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="font-medium">Ai Agent 正在运行</span>
+                        <span class="text-xl">🐏</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">欢迎使用 AI 智能体</h3>
+                    <p class="text-gray-600 mb-4">选择一个知识库或开始一个新的对话</p>
+                    <button onclick="createNewChat()" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200 flex items-center gap-2 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        开始新对话
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div class="p-4 md:p-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="input-container border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="flex flex-col">
+                            <textarea
+                                    id="messageInput"
+                                    class="w-full px-4 py-3 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-primary-300 rounded-t-xl resize-none text-gray-700 placeholder-gray-400"
+                                    placeholder="输入您的问题或指令..." autofocus></textarea>
+                        <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+                            <div class="flex items-center gap-2">
+                                <select id="promptSelect" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-300 focus:border-primary-500 outline-none transition-all duration-200">
+                                    <option value="">选择提示词模板</option>
+                                </select>
+                                <select id="modelSelect" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-300 focus:border-primary-500 outline-none transition-all duration-200">
+                                    <option value="">选择模型</option>
+                                </select>
+                            </div>
+
+                            <div class="flex items-center gap-2 ml-auto">
+                                <input type="file" id="imageInput" accept="image/*" multiple class="hidden" />
+                                <button id="imageUploadBtn" type="button" class="cursor-pointer p-2 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </button>
+                                <button
+                                    id="submitBtn"
+                                    class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+
+                                <svg id="loadingSpinner" class="hidden w-4 h-4 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>发送</span>
+                            </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/index.js"></script>
+<script src="js/ui-enhancements.js"></script>
+</body>
+</html>
