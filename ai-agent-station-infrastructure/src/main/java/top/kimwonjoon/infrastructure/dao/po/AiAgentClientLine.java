@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class AiAgentClient extends Page {
+public class AiAgentClientLine extends Page {
 
     /**
      * 主键ID
@@ -26,15 +26,11 @@ public class AiAgentClient extends Page {
     /**
      * 客户端ID
      */
-    private Long clientId;
+    private Long clientIdFrom;
 
+    private Long clientIdTo;
 
-    private Long clientName;
-
-    /**
-     * 序列号(执行顺序)
-     */
-    private Integer sequence;
+    private  String condition;
 
     /**
      * 创建时间

@@ -56,11 +56,12 @@
     </delete>
 
     <!-- 根据客户端ID列表查询模型配置 -->
+    <!-- 根据客户端ID列表查询模型配置 -->
     <select id="queryModelConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
         SELECT id, client_id, model_id, create_time
         FROM ai_client_model_config
         WHERE client_id IN
-        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
             #{clientId}
         </foreach>
     </select>
@@ -98,7 +99,7 @@
     <select id="queryAiClientModelIdByAgentId" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT model_id
         FROM ai_client_model_config
-        WHERE client_id = (select client_id from ai_agent_client where agent_id = #{aiAgentId} limit 1)
+        WHERE client_id = (select client_id_from from ai_agent_client_line where agent_id = #{aiAgentId} limit 1)
         LIMIT 1
     </select>
 

@@ -45,9 +45,10 @@ public class AiAgentPreheatService extends AiClientModelNode implements IAiAgent
     @Override
     public void preheat(Long aiClientId) throws Exception {
 
+        List<Long> list = repository.queryAiClientIdsByAiAgentId(aiClientId);
         StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> handler = defaultArmoryStrategyFactory.strategyHandler();
         handler.apply(AiAgentEngineStarterEntity.builder()
-                .clientIdList(Collections.singletonList(aiClientId))
+                .clientIdList(list)
                 .build(), new DefaultArmoryStrategyFactory.DynamicContext());
     }
 

@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Mapper
 public interface IAiClientModelConfigDao {
+
     List<AiClientModelConfig> queryModelConfigByClientIds(List<Long> clientIdList);
 
     Long queryAiClientModelIdByAgentId(Long aiAgentId);

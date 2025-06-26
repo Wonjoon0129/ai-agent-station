@@ -8,16 +8,18 @@
         <result column="description" property="description"/>
         <result column="channel" property="channel"/>
         <result column="status" property="status"/>
+        <result column="head_client_id" property="headClientId"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+
     </resultMap>
 
     <!-- 插入智能体配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgent">
         INSERT INTO ai_agent (
-            agent_name, channel, description, status, create_time, update_time
+            agent_name, channel, description, status, create_time, update_time,head_client_id
         ) VALUES (
-                     #{agentName}, #{description}, #{status}, #{createTime}, #{updateTime}
+                     #{agentName}, #{description}, #{status}, #{createTime}, #{updateTime},#{headClientId}
                  )
     </insert>
 
@@ -40,23 +42,34 @@
     <!-- 根据智能体ID查询关联的客户端ID列表 -->
     <select id="queryClientIdsByAgentId" resultType="java.lang.Long">
         SELECT
-            client_id
+            client_id_to AS client_id
         FROM
-            ai_agent_client
+            ai_agent_client_line
         WHERE
             agent_id = #{agentId}
+
+        UNION ALL
+
+        SELECT
+            head_client_id AS client_id
+        FROM
+            ai_agent
+        WHERE
+            id = #{agentId}
+          AND head_client_id IS NOT NULL
+
         ORDER BY
-            sequence
+            client_id
     </select>
 
     <!-- 查询所有有效的智能体关联的客户端ID -->
     <select id="queryValidClientIds" resultType="java.lang.Long">
         SELECT DISTINCT
-            ac.client_id
+            ac.client_id_from
         FROM
             ai_agent a
                 JOIN
-            ai_agent_client ac ON a.id = ac.agent_id
+            ai_agent_client_line ac ON a.id = ac.agent_id
         WHERE
             a.status = 1
     </select>
@@ -92,6 +105,12 @@
     <!-- 根据ID查询智能体配置 -->
     <select id="queryAgentConfigById" parameterType="java.lang.Long" resultMap="dataMap">
         SELECT id, agent_name, channel, description, status, create_time, update_time
+        FROM ai_agent
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryHeadClientByAgentId" parameterType="java.lang.Long" resultType="java.lang.Long" >
+        SELECT head_client_id
         FROM ai_agent
         WHERE id = #{id}
     </select>

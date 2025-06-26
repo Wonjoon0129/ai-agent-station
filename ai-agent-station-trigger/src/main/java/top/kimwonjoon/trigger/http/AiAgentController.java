@@ -14,6 +14,7 @@ import top.kimwonjoon.api.response.Response;
 import top.kimwonjoon.domain.agent.service.IAiAgentChatService;
 import top.kimwonjoon.domain.agent.service.IAiAgentPreheatService;
 import top.kimwonjoon.domain.agent.service.IAiAgentRagService;
+import top.kimwonjoon.domain.agent.service.chat.FlowExecutorService;
 import top.kimwonjoon.types.common.Constants;
 
 import java.util.ArrayList;
@@ -33,6 +34,10 @@ public class AiAgentController implements IAiAgentService {
     private IAiAgentChatService aiAgentChatService;
     @Resource
     private IAiAgentRagService aiAgentRagService;
+
+
+    @Resource
+    FlowExecutorService flowExecutorService;
     /**
      * AI代理预热
      * curl --request GET \
@@ -40,7 +45,7 @@ public class AiAgentController implements IAiAgentService {
      */
     @RequestMapping(value = "preheat", method = RequestMethod.GET)
     @Override
-    public Response<Boolean> preheat(Long aiAgentId) {
+    public Response<Boolean> preheat(@RequestParam("aiAgentId") Long aiAgentId) {
         try {
             log.info("预热装配 AiAgent {}", aiAgentId);
             aiAgentPreheatService.preheat(aiAgentId);
@@ -72,10 +77,10 @@ public class AiAgentController implements IAiAgentService {
      */
     @RequestMapping(value = "chat_agent", method = RequestMethod.GET)
     @Override
-    public Response<String> chatAgent(@RequestParam("aiAgentId") Long aiAgentId, @RequestParam("message") String message) {
+    public Response<String> chatAgent(@RequestParam("aiAgentId") Long aiAgentId, @RequestParam("message") String message, @RequestParam("chatId") String chatId) {
         try {
             log.info("AiAgent 智能体对话，请求 {} {}", aiAgentId, message);
-            String content = aiAgentChatService.aiAgentChat(aiAgentId, message);
+            String content = flowExecutorService.executeAgentFlow(aiAgentId, message,chatId);
             Response<String> response = Response.<String>builder()
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())

@@ -164,7 +164,7 @@ public class AgentTaskJob implements DisposableBean {
             String taskParam = task.getTaskParam();
 
             // 执行任务
-            aiAgentChatService.aiAgentChat(task.getAgentId(), taskParam);
+            aiAgentChatService.aiAgentChat(task.getAgentId(), taskParam,null);
 
             log.info("任务执行完成，ID: {}", task.getId());
         } catch (Exception e) {

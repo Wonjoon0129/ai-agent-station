@@ -90,11 +90,11 @@
     </delete>
 
     <!-- 根据客户端ID列表查询关联配置 -->
-    <select id="queryClientAdvisorConfigByClientIds" resultMap="dataMap">
+    <select id="queryClientAdvisorConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
         SELECT id, client_id, advisor_id, create_time
         FROM ai_client_advisor_config
         WHERE client_id IN
-        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
             #{clientId}
         </foreach>
     </select>

@@ -1,7 +1,7 @@
 package top.kimwonjoon.infrastructure.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import top.kimwonjoon.infrastructure.dao.po.AiAgentClient;
+import top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine;
 
 import java.util.List;
 
@@ -16,17 +16,17 @@ import java.util.List;
 public interface IAiAgentClientDao {
 
 
-    List<AiAgentClient> queryAgentClientList(AiAgentClient aiAgentClient);
+    List<AiAgentClientLine> queryAgentClientList(AiAgentClientLine aiAgentClientLine);
 
-    AiAgentClient queryAgentClientConfigById(Long id);
+    AiAgentClientLine queryAgentClientConfigById(Long id);
 
-    List<AiAgentClient> queryAgentClientConfigByAgentId(Long agentId);
+    List<AiAgentClientLine> queryAgentClientConfigByAgentId(Long agentId);
 
-    List<AiAgentClient> queryAgentClientConfigByClientId(Long clientId);
+    List<AiAgentClientLine> queryAgentClientConfigByClientId(Long clientId);
 
-    int insert(AiAgentClient aiAgentClient);
+    int insert(AiAgentClientLine aiAgentClientLine);
 
-    int update(AiAgentClient aiAgentClient);
+    int update(AiAgentClientLine aiAgentClientLine);
 
     int deleteById(Long id);
 }

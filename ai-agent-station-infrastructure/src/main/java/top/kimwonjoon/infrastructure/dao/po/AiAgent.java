@@ -48,4 +48,7 @@ public class AiAgent extends Page {
      */
     private Date updateTime;
 
+    private Long headClientId;
+
+
 }

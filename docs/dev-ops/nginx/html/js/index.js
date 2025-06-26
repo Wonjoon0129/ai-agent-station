@@ -426,16 +426,16 @@ function startEventStream(message) {
     }
     else if (isAgentChat) {
         // 处理智能体对话（普通HTTP请求）
-        handleAgentChat(message, aiAgentId, loadingSpinner);
+        handleAgentChat(message, aiAgentId,currentChatId,loadingSpinner);
     } else {
         // 原有流式对话逻辑
         handleStreamChat(message, modelSelect,ragId);
     }
 }
 // 新增处理普通请求的方法
-async function handleAgentChat(message, aiAgentId, loadingSpinner) {
+async function handleAgentChat(message, aiAgentId,currentChatId,loadingSpinner) {
     try {
-        const response = await fetch(`http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_agent?aiAgentId=${aiAgentId}&message=${encodeURIComponent(message)}`);
+        const response = await fetch(`http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_agent?chatId=${currentChatId}&aiAgentId=${aiAgentId}&message=${encodeURIComponent(message)}`);
 
         if (response.ok!=true) {
             throw new Error(`HTTP error! status: ${response.status}`);

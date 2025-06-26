@@ -4,14 +4,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.openai.OpenAiEmbeddingModel;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
-import org.springframework.ai.vectorstore.SimpleVectorStore;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -26,15 +21,6 @@ import javax.sql.DataSource;
 @Configuration
 public class AiAgentConfig {
 
-//    @Bean
-//    public VectorStore vectorStore() {
-//        OpenAiApi openAiApi = OpenAiApi.builder()
-//                .baseUrl("https://apis.itedus.cn")
-//                .apiKey("sk-IfXD0bpmszHCQkn2A9Eb05E809F1443a9a6d564aFf133152")
-//                .build();
-//
-//        return SimpleVectorStore.builder(new OpenAiEmbeddingModel(openAiApi)).build();
-//    }
 
     /**
      * 为 MyBatis 创建主数据源
@@ -129,7 +115,6 @@ public class AiAgentConfig {
     /**
      * -- 删除旧的表（如果存在）
      * DROP TABLE IF EXISTS public.vector_store_ollama;
-     *
      * -- 创建新的表，使用UUID作为主键
      * CREATE TABLE public.vector_store_ollama (
      *     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -137,7 +122,6 @@ public class AiAgentConfig {
      *     metadata JSONB,
      *     embedding VECTOR(768)
      * );
-     *
      * SELECT * FROM vector_store_ollama
      */
     @Bean("vectorStore")

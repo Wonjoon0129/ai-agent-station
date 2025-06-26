@@ -2,103 +2,101 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.kimwonjoon.infrastructure.dao.IAiAgentClientDao">
 
-    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiAgentClient">
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine">
         <id column="id" property="id"/>
         <result column="agent_id" property="agentId"/>
-        <result column="client_id" property="clientId"/>
-        <result column="sequence" property="sequence"/>
+        <result column="client_id_from" property="clientIdFrom"/>
+        <result column="client_id_to" property="clientIdTo"/>
+        <result column="condition" property="condition"/>
         <result column="create_time" property="createTime"/>
     </resultMap>
 
     
     <!-- 查询所有智能体-客户端关联配置 -->
     <select id="queryAllAgentClientConfig" resultMap="dataMap">
-        SELECT id, agent_id, client_id, sequence, create_time
-        FROM ai_agent_client
-        ORDER BY agent_id, sequence
+        SELECT id, agent_id, client_id_from,client_id_to, create_time
+        FROM ai_agent_client_line
+        ORDER BY agent_id
     </select>
     
     <!-- 根据ID查询智能体-客户端关联配置 -->
     <select id="queryAgentClientConfigById" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, agent_id, client_id, sequence, create_time
-        FROM ai_agent_client
+        SELECT id, agent_id, client_id_from, create_time
+        FROM ai_agent_client_line
         WHERE id = #{id}
     </select>
     
     <!-- 根据智能体ID查询关联配置 -->
     <select id="queryAgentClientConfigByAgentId" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, agent_id, client_id, sequence, create_time
-        FROM ai_agent_client
+        SELECT id, agent_id, client_id_from, client_id_to,`condition`,create_time
+        FROM ai_agent_client_line
         WHERE agent_id = #{agentId}
-        ORDER BY sequence
     </select>
     
     <!-- 根据客户端ID查询关联配置 -->
     <select id="queryAgentClientConfigByClientId" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, agent_id, client_id, sequence, create_time
-        FROM ai_agent_client
-        WHERE client_id = #{clientId}
-        ORDER BY sequence
+        SELECT id, agent_id, client_id_from, create_time
+        FROM ai_agent_client_line
+        WHERE client_id_from = #{clientIdFrom}
     </select>
     
     <!-- 根据智能体ID和客户端ID查询关联配置 -->
     <select id="queryAgentClientConfigByAgentIdAndClientId" resultMap="dataMap">
-        SELECT id, agent_id, client_id, sequence, create_time
-        FROM ai_agent_client
-        WHERE agent_id = #{agentId} AND client_id = #{clientId}
-        ORDER BY sequence
+        SELECT id, agent_id, client_id_from, create_time
+        FROM ai_agent_client_line
+        WHERE agent_id = #{agentId} AND client_id_from = #{clientIdFrom}
     </select>
     
     <!-- 插入智能体-客户端关联配置 -->
-    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClient">
-        INSERT INTO ai_agent_client (
-            agent_id, client_id, sequence, create_time
+    <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine">
+        INSERT INTO ai_agent_client_line (
+            agent_id, client_id_from, create_time
         ) VALUES (
-            #{agentId}, #{clientId}, #{sequence}, #{createTime}
+            #{agentId}, #{clientIdFrom}, #{sequence}, #{createTime}
         )
     </insert>
     
     <!-- 更新智能体-客户端关联配置 -->
-    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClient">
-        UPDATE ai_agent_client
+    <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine">
+        UPDATE ai_agent_client_line
         SET agent_id = #{agentId},
-            client_id = #{clientId},
-            sequence = #{sequence}
+            client_id_from = #{clientIdFrom}
+
         WHERE id = #{id}
     </update>
     
     <!-- 根据ID删除智能体-客户端关联配置 -->
     <delete id="deleteById" parameterType="java.lang.Long">
-        DELETE FROM ai_agent_client
+        DELETE FROM ai_agent_client_line
         WHERE id = #{id}
     </delete>
     
     <!-- 根据智能体ID删除关联配置 -->
     <delete id="deleteByAgentId" parameterType="java.lang.Long">
-        DELETE FROM ai_agent_client
+        DELETE FROM ai_agent_client_line
         WHERE agent_id = #{agentId}
     </delete>
     
     <!-- 根据客户端ID删除关联配置 -->
     <delete id="deleteByClientId" parameterType="java.lang.Long">
-        DELETE FROM ai_agent_client
-        WHERE client_id = #{clientId}
+        DELETE FROM ai_agent_client_line
+        WHERE client_id_from = #{clientIdFrom}
     </delete>
     
     <!-- 根据智能体ID和客户端ID删除关联配置 -->
     <delete id="deleteByAgentIdAndClientId">
-        DELETE FROM ai_agent_client
-        WHERE agent_id = #{agentId} AND client_id = #{clientId}
+        DELETE FROM ai_agent_client_line
+        WHERE agent_id = #{agentId} AND client_id_from = #{clientIdFrom}
     </delete>
     
     <!-- 根据条件查询智能体-客户端关联配置列表 -->
-    <select id="queryAgentClientList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClient" resultMap="dataMap">
+    <select id="queryAgentClientList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine" resultMap="dataMap">
         SELECT
-        ai_agent_client.id, ai_agent_client.agent_id, ai_agent_client.client_id, ai_agent_client.sequence, ai_agent_client.create_time,ai_client.client_name
+        ai_agent_client_line.id, ai_agent_client_line.agent_id, ai_agent_client_line.client_id_from, ai_agent_client_line.sequence, ai_agent_client_line.create_time,ai_client.client_name
         FROM 
-            ai_agent_client
+            ai_agent_client_line
         LEFT JOIN
-            ai_client ON ai_agent_client.client_id = ai_client.id
+            ai_client ON ai_agent_client_line.client_id_from = ai_client.id
         <where>
             <if test="id != null">
                 AND id = #{id}
@@ -107,7 +105,7 @@
                 AND agent_id = #{agentId}
             </if>
             <if test="clientId != null">
-                AND client_id = #{clientId}
+                AND client_id_from = #{clientIdFrom}
             </if>
             <if test="sequence != null">
                 AND sequence = #{sequence}

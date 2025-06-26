@@ -49,7 +49,7 @@ public class AiAgentChatService implements IAiAgentChatService {
     RagMessageTool ragMessageTool;
 
     @Override
-    public String aiAgentChat(Long aiAgentId, String message) throws Exception {
+    public String aiAgentChat(Long aiAgentId, String message,String chatId) throws Exception {
         log.info("智能体对话请求，参数 {} {}", aiAgentId, message);
 
         List<Long> aiClientIds = repository.queryAiClientIdsByAiAgentId(aiAgentId);
@@ -61,7 +61,7 @@ public class AiAgentChatService implements IAiAgentChatService {
                 content = chatClient.prompt(message + "，" + content)
                         .system(s -> s.param("current_date", LocalDate.now().toString()))
                         .advisors(a -> a
-                                .param(CHAT_MEMORY_CONVERSATION_ID_KEY, "chatId-101")
+                                .param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                                 .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100))
                         .call().content();
             }catch (NoSuchBeanDefinitionException e){

@@ -19,7 +19,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:13306/ai-agent-station?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
+    url: jdbc:mysql://60.204.240.211:13306/ai-agent-station?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -52,8 +52,11 @@ spring:
           driver-class-name: org.postgresql.Driver
           username: postgres
           password: postgres
-          url: jdbc:postgresql://localhost:15432/ai-rag-knowledge
+          url: jdbc:postgresql://60.204.240.211:15432/ai-rag-knowledge
           type: com.zaxxer.hikari.HikariDataSource
+    openai:
+      base-url: https://apis.itedus.cn
+      api-key: sk-Hw5CWZOYBsU5rjPqF87c9178D0B249AeB61f***
     ollama:
       base-url: http://localhost:11434
 
@@ -66,7 +69,7 @@ mybatis:
 redis:
   sdk:
     config:
-      host: localhost
+      host: 60.204.240.211
       port: 16379
       pool-size: 10
       min-idle-size: 5

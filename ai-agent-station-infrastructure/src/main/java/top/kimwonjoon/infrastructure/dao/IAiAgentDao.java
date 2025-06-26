@@ -38,4 +38,6 @@ public interface IAiAgentDao {
     int update(AiAgent aiAgent);
 
     int deleteById(Long id);
+
+    Long queryHeadClientByAgentId(Long agentId);
 }

@@ -19,7 +19,7 @@ public interface IAiAgentService {
 
     Response<Boolean> preheat(Long aiClientId);
 
-    Response<String> chatAgent(Long aiAgentId, String message);
+    Response<String> chatAgent(Long aiAgentId, String message,String chatId);
 
     Flux<ChatResponse> chatStream(Long aiAgentId, Long ragId, String message);
 

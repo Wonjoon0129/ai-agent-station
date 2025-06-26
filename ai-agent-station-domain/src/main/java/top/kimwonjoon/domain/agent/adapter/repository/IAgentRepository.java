@@ -1,7 +1,6 @@
 package top.kimwonjoon.domain.agent.adapter.repository;
 
 
-import org.redisson.api.RList;
 import top.kimwonjoon.domain.agent.model.valobj.*;
 
 import java.util.List;
@@ -40,4 +39,7 @@ public interface IAgentRepository {
 
     List<AiClientModelVO> queryAiClientModelVOList();
 
+    List<AiAgentClientVO> queryAgentClientConfigByAgentId(Long agentId);
+
+    Long queryHeadClientByAgentId(Long agentId);
 }

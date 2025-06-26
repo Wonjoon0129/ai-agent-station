@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RList;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
@@ -55,6 +56,8 @@ public class AgentRepository implements IAgentRepository {
 
     @Resource
     RedissonClient redissonClient;
+    @Autowired
+    private IAiAgentClientDao aiAgentClientDao;
 
     @Override
     public List<AiClientModelVO> queryAiClientModelVOListByClientIds(List<Long> clientIdList) {
@@ -365,6 +368,28 @@ public class AgentRepository implements IAgentRepository {
             aiClientModelVOList.add(vo);
         }
         return aiClientModelVOList;
+    }
+
+    @Override
+    public List<AiAgentClientVO> queryAgentClientConfigByAgentId(Long agentId) {
+        List<AiAgentClientLine> aiAgentClientLines = aiAgentClientDao.queryAgentClientConfigByAgentId(agentId);
+        if(aiAgentClientLines==null||aiAgentClientLines.isEmpty()){
+            return Collections.emptyList();
+        }
+        return aiAgentClientLines.stream().map(agentClientLine -> {
+            AiAgentClientVO vo = new AiAgentClientVO();
+            vo.setId(agentClientLine.getId());
+            vo.setAiAgentId(agentClientLine.getAgentId());
+            vo.setClientIdFrom(agentClientLine.getClientIdFrom());
+            vo.setClientIdTo(agentClientLine.getClientIdTo());
+            vo.setCondition(agentClientLine.getCondition());
+            return vo;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long queryHeadClientByAgentId(Long agentId) {
+       return aiAgentDao.queryHeadClientByAgentId(agentId);
     }
 
 }

@@ -56,7 +56,7 @@ UNLOCK TABLES;
 # 转储表 ai_agent_client
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `ai_agent_client`;
+DROP TABLE IF EXISTS ai_agent_client_line;
 
 CREATE TABLE `ai_agent_client` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -68,10 +68,10 @@ CREATE TABLE `ai_agent_client` (
   UNIQUE KEY `uk_agent_client_seq` (`agent_id`,`client_id`,`sequence`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='智能体-客户端关联表';
 
-LOCK TABLES `ai_agent_client` WRITE;
-/*!40000 ALTER TABLE `ai_agent_client` DISABLE KEYS */;
+LOCK TABLES ai_agent_client_line WRITE;
+/*!40000 ALTER TABLE ai_agent_client_line DISABLE KEYS */;
 
-INSERT INTO `ai_agent_client` (`id`, `agent_id`, `client_id`, `sequence`, `create_time`)
+INSERT INTO ai_agent_client_line (`id`, `agent_id`, client_id_from, `sequence`, `create_time`)
 VALUES
 	(1,1,1,1,'2025-05-04 07:34:46'),
 	(2,1,2,2,'2025-05-04 07:34:46'),
@@ -79,7 +79,7 @@ VALUES
 	(4,3,3,1,'2025-05-05 12:36:41'),
 	(5,4,4,1,'2025-05-07 10:28:59');
 
-/*!40000 ALTER TABLE `ai_agent_client` ENABLE KEYS */;
+/*!40000 ALTER TABLE ai_agent_client_line ENABLE KEYS */;
 UNLOCK TABLES;
 
 

@@ -3,13 +3,13 @@ package top.kimwonjoon.trigger.http.admin;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.evaluation.RelevancyEvaluator;
+import org.springframework.ai.evaluation.EvaluationRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.kimwonjoon.infrastructure.dao.IAiAgentClientDao;
-import top.kimwonjoon.infrastructure.dao.IAiClientAdvisorDao;
 import top.kimwonjoon.infrastructure.dao.IAiClientDao;
-import top.kimwonjoon.infrastructure.dao.IAiClientModelConfigDao;
-import top.kimwonjoon.infrastructure.dao.po.AiAgentClient;
+import top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine;
 import top.kimwonjoon.infrastructure.dao.po.AiClient;
 
 import java.util.Date;
@@ -42,16 +42,17 @@ public class AiAdminClientController {
         }
     }
 
+
     /**
      * 分页查询客户端列表
      *
-     * @param aiAgentClient 查询条件
+     * @param aiAgentClientLine 查询条件
      * @return 分页结果
      */
     @RequestMapping(value = "queryClientList", method = RequestMethod.POST)
-    public ResponseEntity<List<AiAgentClient>> queryClientList(@RequestBody AiAgentClient aiAgentClient) {
+    public ResponseEntity<List<AiAgentClientLine>> queryClientList(@RequestBody AiAgentClientLine aiAgentClientLine) {
         try {
-            List<AiAgentClient> clientList = aiAgentClientDao.queryAgentClientList(aiAgentClient);
+            List<AiAgentClientLine> clientList = aiAgentClientDao.queryAgentClientList(aiAgentClientLine);
             return ResponseEntity.ok(clientList);
         } catch (Exception e) {
             log.error("查询客户端列表异常", e);
@@ -66,9 +67,9 @@ public class AiAdminClientController {
      * @return 客户端
      */
     @RequestMapping(value = "queryClientById", method = RequestMethod.GET)
-    public ResponseEntity<AiAgentClient> queryClientById(@RequestParam("id") Long id) {
+    public ResponseEntity<AiAgentClientLine> queryClientById(@RequestParam("id") Long id) {
         try {
-            AiAgentClient client = aiAgentClientDao.queryAgentClientConfigById(id);
+            AiAgentClientLine client = aiAgentClientDao.queryAgentClientConfigById(id);
             return ResponseEntity.ok(client);
         } catch (Exception e) {
             log.error("查询客户端异常", e);
@@ -83,9 +84,9 @@ public class AiAdminClientController {
      * @return 客户端列表
      */
     @RequestMapping(value = "queryClientByAgentId", method = RequestMethod.GET)
-    public ResponseEntity<List<AiAgentClient>> queryClientByAgentId(@RequestParam("agentId") Long agentId) {
+    public ResponseEntity<List<AiAgentClientLine>> queryClientByAgentId(@RequestParam("agentId") Long agentId) {
         try {
-            List<AiAgentClient> clientList = aiAgentClientDao.queryAgentClientConfigByAgentId(agentId);
+            List<AiAgentClientLine> clientList = aiAgentClientDao.queryAgentClientConfigByAgentId(agentId);
             return ResponseEntity.ok(clientList);
         } catch (Exception e) {
             log.error("根据智能体ID查询客户端异常", e);
@@ -96,14 +97,14 @@ public class AiAdminClientController {
     /**
      * 新增客户端
      *
-     * @param aiAgentClient 客户端
+     * @param aiAgentClientLine 客户端
      * @return 结果
      */
     @RequestMapping(value = "addClient", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> addClient(@RequestBody AiAgentClient aiAgentClient) {
+    public ResponseEntity<Boolean> addClient(@RequestBody AiAgentClientLine aiAgentClientLine) {
         try {
-            aiAgentClient.setCreateTime(new Date());
-            int count = aiAgentClientDao.insert(aiAgentClient);
+            aiAgentClientLine.setCreateTime(new Date());
+            int count = aiAgentClientDao.insert(aiAgentClientLine);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
             log.error("新增客户端异常", e);
@@ -114,13 +115,13 @@ public class AiAdminClientController {
     /**
      * 更新客户端
      *
-     * @param aiAgentClient 客户端
+     * @param aiAgentClientLine 客户端
      * @return 结果
      */
     @RequestMapping(value = "updateClient", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> updateClient(@RequestBody AiAgentClient aiAgentClient) {
+    public ResponseEntity<Boolean> updateClient(@RequestBody AiAgentClientLine aiAgentClientLine) {
         try {
-            int count = aiAgentClientDao.update(aiAgentClient);
+            int count = aiAgentClientDao.update(aiAgentClientLine);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
             log.error("更新客户端异常", e);
