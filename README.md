@@ -11,5 +11,5 @@
 - [x] 动态化的构建模块、装配 Agent 服务，达到随用随配，自主组建出
 各类Agent 功能服务
 - [x] 通过 Redis 存储会话，实现 Agent的短期记忆
-- [x] RAG 的存储，使用PgVector构建向量数据库
+- [x] RAG 的存储，使用多个数据源，可同时使用 pgvector、milvus、redis 等多个主流向量数据库。
 - [x] MCP 支持 stdio，sse 两种方式，无论自主开发的还是市面的都可以使用
