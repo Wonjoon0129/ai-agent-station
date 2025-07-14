@@ -6,11 +6,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
-import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import top.kimwonjoon.domain.agent.service.rag.element.SimilarTextSplitter;
 
 import java.util.List;
 
@@ -31,20 +31,22 @@ public class RagTest {
     @Resource
     private PgVectorStore vectorStore;
 
-    @Resource
-    private TokenTextSplitter tokenTextSplitter;
 
     @Test
     public void test() {
-        TikaDocumentReader reader = new TikaDocumentReader(resource);
+        TikaDocumentReader documentReader = new TikaDocumentReader(resource);
 
-        List<Document> documents = reader.get();
-        List<Document> documentSplitterList = tokenTextSplitter.apply(documents);
+        SimilarTextSplitter textSplitter = new SimilarTextSplitter();
 
-        documents.forEach(doc -> doc.getMetadata().put("knowledge", "知识库名称"));
-        documentSplitterList.forEach(doc -> doc.getMetadata().put("knowledge", "知识库名称"));
+        List<Document> documentList = textSplitter.chunkDocument(documentReader.get(),5L);
 
-        vectorStore.accept(documentSplitterList);
+
+        // 添加知识库标签
+        documentList.forEach(doc -> doc.getMetadata().put("knowledge", "tag"));
+
+        // 存储知识库文件
+        vectorStore.accept(documentList);
+
 
         log.info("上传完成");
     }

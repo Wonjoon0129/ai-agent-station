@@ -8,6 +8,8 @@
         <result column="advisor_type" property="advisorType"/>
         <result column="order_num" property="orderNum"/>
         <result column="ext_param" property="extParam"/>
+        <result column="database_id" property="databaseId"/>
+        <result column="embedding_model_id" property="embeddingModelId"/>
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -15,21 +17,21 @@
 
     <!-- 查询所有顾问配置 -->
     <select id="queryAllAdvisorConfig" resultMap="dataMap">
-        SELECT id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        SELECT id, advisor_name, advisor_type,database_id,embedding_model_id,order_num, ext_param, status, create_time, update_time
         FROM ai_client_advisor
         ORDER BY order_num, id
     </select>
 
     <!-- 根据ID查询顾问配置 -->
     <select id="queryAdvisorConfigById" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        SELECT id, advisor_name, advisor_type, embedding_model_id,database_id,order_num, ext_param, status, create_time, update_time
         FROM ai_client_advisor
         WHERE id = #{id}
     </select>
 
     <!-- 根据顾问名称查询配置 -->
     <select id="queryAdvisorConfigByName" parameterType="java.lang.String" resultMap="dataMap">
-        SELECT id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        SELECT id, advisor_name, advisor_type,embedding_model_id ,database_id,order_num, ext_param, status, create_time, update_time
         FROM ai_client_advisor
         WHERE advisor_name = #{advisorName}
     </select>
@@ -37,9 +39,9 @@
     <!-- 插入顾问配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisor">
         INSERT INTO ai_client_advisor (
-            advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+            advisor_name, advisor_type, order_num,embedding_model_id,database_id ,ext_param, status, create_time, update_time
         ) VALUES (
-                     #{advisorName}, #{advisorType}, #{orderNum}, #{extParam}, #{status}, #{createTime}, #{updateTime}
+                     #{advisorName}, #{advisorType}, #{orderNum},#{embeddingModelId},#{databaseId},#{extParam}, #{status}, #{createTime}, #{updateTime}
                  )
     </insert>
 
@@ -51,6 +53,8 @@
             order_num = #{orderNum},
             ext_param = #{extParam},
             status = #{status},
+            database_id = #{databaseId},
+            embedding_model_id = #{embeddingModelId},
             update_time = #{updateTime}
         WHERE id = #{id}
     </update>
@@ -63,7 +67,7 @@
 
     <!-- 根据客户端ID列表查询顾问配置 -->
     <select id="queryAdvisorConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
-        SELECT a.id, a.advisor_name, a.advisor_type, a.order_num, a.ext_param,
+        SELECT a.id, a.advisor_name, a.advisor_type, a.order_num, a.ext_param,a.database_id,a.embedding_model_id,
         a.status, a.create_time, a.update_time
         FROM ai_client_advisor a
         WHERE a.id IN (
@@ -80,7 +84,7 @@
     <!-- 根据条件查询顾问列表 -->
     <select id="queryClientAdvisorList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisor" resultMap="dataMap">
         SELECT
-        id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time
+        id, advisor_name, advisor_type, order_num, ext_param, status, create_time, update_time,database_id,embedding_model_id
         FROM
         ai_client_advisor
         <where>

@@ -33,7 +33,8 @@ import java.util.Map;
 public class AiClientToolMcpNode extends AbstractArmorySupport {
 
     @Resource
-    private AiClientAdvisorNode aiClientAdvisorNode;
+    private AiClientModelNode aiClientModelNode;
+
 
     @Override
     protected String doApply(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
@@ -110,6 +111,6 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
 
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity aiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        return aiClientAdvisorNode;
+        return aiClientModelNode;
     }
 }

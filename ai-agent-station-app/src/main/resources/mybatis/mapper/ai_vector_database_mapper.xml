@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.kimwonjoon.infrastructure.dao.IAiVectorDatabaseDao">
+
+    <resultMap id="dataMap" type="top.kimwonjoon.infrastructure.dao.po.AiVectorDatabase">
+        <id column="id" property="id"/>
+        <id column="db_name" property="dbName"/>
+        <id column="db_type" property="dbType"/>
+        <id column="url" property="url"/>
+        <id column="port" property="port"/>
+        <id column="user_name" property="userName"/>
+        <id column="password" property="password"/>
+        <id column="status" property="status"/>
+        <id column="remark" property="remark"/>
+        <id column="extra" property="extra"/>
+        <id column="create_time" property="createTime"/>
+        <id column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="queryAiVectorDatabase" resultMap="dataMap">
+        select * from ai_vector_database
+        where status = 1;
+    </select>
+    <select id="queryAiVectorDatabaseByClientIds" parameterType="java.util.List" resultMap="dataMap">
+        SELECT *
+        FROM ai_vector_database d
+        WHERE d.id IN (
+        SELECT DISTINCT c.database_id
+        FROM ai_client_advisor_config ac left join ai_client_advisor c on ac.advisor_id = c.id
+        WHERE ac.client_id IN
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+        )
+    </select>
+</mapper>

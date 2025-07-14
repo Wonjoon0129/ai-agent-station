@@ -39,6 +39,16 @@ public class AiClientAdvisor extends Page {
     private String extParam;
 
     /**
+     * 向量库ID
+     */
+    private Long databaseId;
+
+    /**
+     * 模型ID
+     */
+    private Long embeddingModelId;
+
+    /**
      * 状态(0:禁用,1:启用)
      */
     private Integer status;
@@ -52,5 +62,6 @@ public class AiClientAdvisor extends Page {
      * 更新时间
      */
     private Date updateTime;
+
 
 }

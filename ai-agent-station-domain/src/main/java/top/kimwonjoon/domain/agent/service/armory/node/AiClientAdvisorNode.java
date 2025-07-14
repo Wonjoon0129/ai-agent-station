@@ -7,10 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.stereotype.Component;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientAdvisorVO;
@@ -33,9 +36,7 @@ import java.util.List;
 @Component
 public class AiClientAdvisorNode extends AbstractArmorySupport {
     @Resource
-    AiClientModelNode aiClientModelNode;
-    @Resource
-    VectorStore vectorStore;
+    AiClientNode aiClientNode;
 
     @Resource
     RedisChatMemory chatMemory;
@@ -68,8 +69,9 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
 
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity aiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        return aiClientModelNode;
+        return aiClientNode;
     }
+
 
     private Advisor createAdvisor(AiClientAdvisorVO aiClientAdvisorVO) {
         String advisorType = aiClientAdvisorVO.getAdvisorType();
@@ -79,6 +81,7 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
                         .build();
             }
             case "RagAnswer" -> {
+                VectorStore vectorStore = createVectorStore(aiClientAdvisorVO);
                 AiClientAdvisorVO.RagAnswer ragAnswer = aiClientAdvisorVO.getRagAnswer();
                 RagQueryTransformer ragQueryTransformer= new RagQueryTransformer("question_answer_context");
                 VectorStoreDocumentRetriever vectorStoreDocumentRetriever = new VectorStoreDocumentRetriever(vectorStore, 0.0,ragAnswer.getTopK(), null);
@@ -94,5 +97,12 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
         }
 
         throw new RuntimeException("err! advisorType " + advisorType + " not exist!");
+    }
+
+    public VectorStore createVectorStore(AiClientAdvisorVO aiClientAdvisorVO) {
+        OllamaEmbeddingModel embeddingModel = getBean("AiClientEmbeddingModel_" + aiClientAdvisorVO.getEmbeddingModelId());
+        return PgVectorStore.builder(getBean("DataBaseDrive_"+aiClientAdvisorVO.getDatabaseId()), embeddingModel)
+                .vectorTableName(aiClientAdvisorVO.getAdvisorName())
+                .build();
     }
 }

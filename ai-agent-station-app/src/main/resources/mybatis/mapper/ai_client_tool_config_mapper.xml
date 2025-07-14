@@ -66,7 +66,7 @@
         SELECT id, client_id, tool_type, tool_id, create_time
         FROM ai_client_tool_config
         WHERE client_id IN
-        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
             #{clientId}
         </foreach>
     </select>

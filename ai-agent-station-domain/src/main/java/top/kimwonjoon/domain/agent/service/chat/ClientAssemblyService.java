@@ -68,7 +68,6 @@ public class ClientAssemblyService {
 
         }
 
-
         // 构建条件转换关系
         for (AiAgentClientVO relation : relations) {
             ClientNode parentNode = clientNodeMap.get(relation.getClientIdFrom());

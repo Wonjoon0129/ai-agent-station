@@ -112,7 +112,7 @@
     <select id="queryHeadClientByAgentId" parameterType="java.lang.Long" resultType="java.lang.Long" >
         SELECT head_client_id
         FROM ai_agent
-        WHERE id = #{id}
+        WHERE id = #{id} and status = 1
     </select>
 
 </mapper>

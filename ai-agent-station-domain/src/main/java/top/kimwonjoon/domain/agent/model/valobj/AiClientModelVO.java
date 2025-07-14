@@ -50,8 +50,13 @@ public class AiClientModelVO {
     /**
      * 模型类型(openai/azure等)
      */
-    private String modelType;
+    private String modelApiType;
 
+    /**
+     * 模型类型(chat/embedding等)
+     */
+
+    private String modelType;
     /**
      * 模型版本
      */

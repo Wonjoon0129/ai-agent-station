@@ -61,7 +61,7 @@
         SELECT id, client_id, model_id, create_time
         FROM ai_client_model_config
         WHERE client_id IN
-        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
             #{clientId}
         </foreach>
     </select>

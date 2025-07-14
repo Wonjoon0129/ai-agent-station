@@ -43,6 +43,11 @@ public class AiClientModel extends Page {
     /**
      * 模型类型(openai/azure等)
      */
+    private String modelApiType;
+
+    /**
+     * 模型类型(chat/embedding等)
+     */
     private String modelType;
 
     /**

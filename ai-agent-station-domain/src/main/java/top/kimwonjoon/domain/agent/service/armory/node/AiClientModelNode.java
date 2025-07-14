@@ -5,8 +5,12 @@ import com.alibaba.fastjson.JSON;
 import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.embedding.EmbeddingRequest;
+import org.springframework.ai.embedding.EmbeddingResponse;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+import org.springframework.ai.model.Model;
 import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -32,8 +36,10 @@ import java.util.List;
 @Slf4j
 @Component
 public class AiClientModelNode extends AbstractArmorySupport {
+
     @Resource
-    private AiClientNode aiClientNode;
+    private VectorDatabaseNode vectorDatabaseNode;
+
     @Override
     protected String doApply(AiAgentEngineStarterEntity requestParameter, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("Ai Agent 构建，客户端构建节点 {}", JSON.toJSONString(requestParameter));
@@ -48,7 +54,7 @@ public class AiClientModelNode extends AbstractArmorySupport {
         // 遍历模型列表，为每个模型创建对应的Bean
         for (AiClientModelVO modelVO : aiClientModelList) {
             // 创建OpenAiChatModel对象
-            ChatModel chatModel = createOpenAiChatModel(modelVO);
+            ChatModel chatModel =(ChatModel) createOpenAiChatModel(modelVO);
             // 使用父类的通用注册方法
             registerBean(beanName(modelVO.getId()), ChatModel.class, chatModel);
         }
@@ -58,7 +64,7 @@ public class AiClientModelNode extends AbstractArmorySupport {
 
     @Override
     public StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> get(AiAgentEngineStarterEntity aiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext dynamicContext) throws Exception {
-        return aiClientNode;
+        return vectorDatabaseNode;
     }
 
 
@@ -73,9 +79,9 @@ public class AiClientModelNode extends AbstractArmorySupport {
      * @param modelVO 模型配置值对象
      * @return OpenAiChatModel实例
      */
-    protected ChatModel createOpenAiChatModel(AiClientModelVO modelVO) {
-        String modelType=modelVO.getModelType();
-        switch (modelType){
+    protected Model createOpenAiChatModel(AiClientModelVO modelVO) {
+        String modelApiType=modelVO.getModelApiType();
+        switch (modelApiType){
             case "openai"->{
                 // 构建OpenAiApi
                 OpenAiApi openAiApi = OpenAiApi.builder()
@@ -105,8 +111,8 @@ public class AiClientModelNode extends AbstractArmorySupport {
                                 .build())
                         .build();
             }
-            case "ollama"->{
-                OllamaApi ollamaApi=OllamaApi.builder()
+            case "ollama"-> {
+                OllamaApi ollamaApi = OllamaApi.builder()
                         .baseUrl(modelVO.getBaseUrl())
                         .build();
 
@@ -120,18 +126,18 @@ public class AiClientModelNode extends AbstractArmorySupport {
                         mcpSyncClients.add(mcpSyncClient);
                     }
                 }
-
-                return OllamaChatModel.builder()
-                        .ollamaApi(ollamaApi)
-                        .defaultOptions(OllamaOptions.builder()
-                                .model(modelVO.getModelVersion())
-                                .toolCallbacks(new SyncMcpToolCallbackProvider(mcpSyncClients).getToolCallbacks())
-                                .build())
-                        .build();
+                    return OllamaChatModel.builder()
+                            .ollamaApi(ollamaApi)
+                            .defaultOptions(OllamaOptions.builder()
+                                    .model(modelVO.getModelVersion())
+                                    .toolCallbacks(new SyncMcpToolCallbackProvider(mcpSyncClients).getToolCallbacks())
+                                    .build())
+                            .build();
 
             }
+
         }
-        throw new RuntimeException("err! transportType " + modelType + " not exist!");
+        throw new RuntimeException("err! transportType " + modelApiType + " not exist!");
     }
 
 

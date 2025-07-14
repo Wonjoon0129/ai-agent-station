@@ -138,12 +138,8 @@ public class AiAgentConfig {
         return PgVectorStore.builder(jdbcTemplate, embeddingModel)
                 .vectorTableName("vector_store_ollama")
                 .build();
+
     }
 
-
-    @Bean
-    public TokenTextSplitter tokenTextSplitter() {
-        return new TokenTextSplitter();
-    }
 
 }

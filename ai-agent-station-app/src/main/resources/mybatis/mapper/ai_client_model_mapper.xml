@@ -9,6 +9,7 @@
         <result column="api_key" property="apiKey"/>
         <result column="completions_path" property="completionsPath"/>
         <result column="embeddings_path" property="embeddingsPath"/>
+        <result column="model_api_type" property="modelApiType"/>
         <result column="model_type" property="modelType"/>
         <result column="model_version" property="modelVersion"/>
         <result column="timeout" property="timeout"/>
@@ -19,21 +20,21 @@
 
     <!-- 查询所有模型配置 -->
     <select id="queryAllModelConfig" resultMap="dataMap">
-        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_api_type, model_type,model_version, timeout, status, create_time, update_time
         FROM ai_client_model
         ORDER BY id
     </select>
 
     <!-- 根据ID查询模型配置 -->
     <select id="queryModelConfigById" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_api_type, model_type, model_version, timeout, status, create_time, update_time
         FROM ai_client_model
         WHERE id = #{id}
     </select>
 
     <!-- 根据模型名称查询模型配置 -->
     <select id="queryModelConfigByName" parameterType="java.lang.String" resultMap="dataMap">
-        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+        SELECT id, model_name, base_url, api_key, completions_path, embeddings_path, model_api_type, model_type, model_version, timeout, status, create_time, update_time
         FROM ai_client_model
         WHERE model_name = #{modelName}
     </select>
@@ -41,9 +42,9 @@
     <!-- 插入模型配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModel">
         INSERT INTO ai_client_model (
-            model_name, base_url, api_key, completions_path, embeddings_path, model_type, model_version, timeout, status, create_time, update_time
+            model_name, base_url, api_key, completions_path, embeddings_path, model_api_type, model_type, model_version, timeout, status, create_time, update_time
         ) VALUES (
-                     #{modelName}, #{baseUrl}, #{apiKey}, #{completionsPath}, #{embeddingsPath}, #{modelType}, #{modelVersion}, #{timeout}, #{status}, #{createTime}, #{updateTime}
+                     #{modelName}, #{baseUrl}, #{apiKey}, #{completionsPath}, #{embeddingsPath}, #{modelApiType}, #{modelType}, #{modelVersion}, #{timeout}, #{status}, #{createTime}, #{updateTime}
                  )
     </insert>
 
@@ -55,6 +56,7 @@
             api_key = #{apiKey},
             completions_path = #{completionsPath},
             embeddings_path = #{embeddingsPath},
+            model_api_type = #{modelApiType},
             model_type = #{modelType},
             model_version = #{modelVersion},
             timeout = #{timeout},
@@ -72,7 +74,7 @@
     <!-- 根据客户端ID列表查询模型配置 -->
     <select id="queryModelConfigByClientIds" parameterType="java.util.List" resultMap="dataMap">
         SELECT m.id, m.model_name, m.base_url, m.api_key, m.completions_path, m.embeddings_path,
-        m.model_type, m.model_version, m.timeout, m.status, m.create_time, m.update_time
+        m.model_api_type,m.model_type, m.model_version, m.timeout, m.status, m.create_time, m.update_time
         FROM ai_client_model m
         WHERE m.id IN (
         SELECT DISTINCT c.model_id
@@ -86,7 +88,7 @@
 
     <select id="queryClientModelList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientModel" resultMap="dataMap">
         SELECT
-        id, model_name, base_url, api_key, completions_path, embeddings_path,
+        id, model_name, base_url, api_key, completions_path, embeddings_path,model_api_type,
         model_type, model_version, timeout, status, create_time, update_time
         FROM
         ai_client_model
@@ -97,8 +99,8 @@
             <if test="modelName != null and modelName != ''">
                 AND model_name LIKE CONCAT('%', #{modelName}, '%')
             </if>
-            <if test="modelType != null and modelType != ''">
-                AND model_type = #{modelType}
+            <if test="modelApiType != null and modelApiType != ''">
+                AND model_api_type = #{modelApiType}
             </if>
             <if test="status != null">
                 AND status = #{status}

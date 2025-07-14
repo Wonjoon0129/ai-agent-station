@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,11 @@ public class DefaultArmoryStrategyFactory {
     public ChatModel chatModel(Long modelId) {
         return (ChatModel) applicationContext.getBean("AiClientModel_" + modelId);
     }
+
+    public EmbeddingModel embeddingModel(Long modelId) {
+        return (EmbeddingModel) applicationContext.getBean("AiClientEmbeddingModel_" + modelId);
+    }
+
 
     @Data
     @Builder

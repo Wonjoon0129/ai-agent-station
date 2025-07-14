@@ -30,13 +30,13 @@ import java.util.stream.Collectors;
 public class AgentRepository implements IAgentRepository {
 
     @Resource
-    IAiClientModelDao  aiClientModelDao;
+    IAiClientModelDao aiClientModelDao;
     @Resource
     IAiClientModelToolConfigDao aiClientModelToolConfigDao;
     @Resource
     IAiClientToolMcpDao aiClientToolMcpDao;
     @Resource
-    IAiClientAdvisorDao  aiClientAdvisorDao;
+    IAiClientAdvisorDao aiClientAdvisorDao;
     @Resource
     IAiClientSystemPromptDao aiClientSystemPromptDao;
     @Resource
@@ -53,6 +53,8 @@ public class AgentRepository implements IAgentRepository {
     IAiAgentDao aiAgentDao;
     @Resource
     IAiRagOrderDao aiRagOrderDao;
+    @Resource
+    IAiVectorDatabaseDao aiVectorDatabaseDao;
 
     @Resource
     RedissonClient redissonClient;
@@ -61,7 +63,7 @@ public class AgentRepository implements IAgentRepository {
 
     @Override
     public List<AiClientModelVO> queryAiClientModelVOListByClientIds(List<Long> clientIdList) {
-        List<AiClientModel> aiClientModels=aiClientModelDao.queryModelConfigByClientIds(clientIdList);
+        List<AiClientModel> aiClientModels = aiClientModelDao.queryModelConfigByClientIds(clientIdList);
         if (null == aiClientModels || aiClientModels.isEmpty()) return new ArrayList<>();
 
         // 使用lambda表达式获取所有AiClientModel的id属性列表
@@ -82,6 +84,7 @@ public class AgentRepository implements IAgentRepository {
             vo.setApiKey(aiClientModel.getApiKey());
             vo.setCompletionsPath(aiClientModel.getCompletionsPath());
             vo.setEmbeddingsPath(aiClientModel.getEmbeddingsPath());
+            vo.setModelApiType(aiClientModel.getModelApiType());
             vo.setModelType(aiClientModel.getModelType());
             vo.setModelVersion(aiClientModel.getModelVersion());
             vo.setTimeout(aiClientModel.getTimeout());
@@ -115,7 +118,7 @@ public class AgentRepository implements IAgentRepository {
         List<AiClientToolMcpVO> aiClientToolMcpVOList = new ArrayList<>();
         if (null == aiClientToolMcps || aiClientToolMcps.isEmpty()) return aiClientToolMcpVOList;
 
-        for(AiClientToolMcp aiClientToolMcp:aiClientToolMcps){
+        for (AiClientToolMcp aiClientToolMcp : aiClientToolMcps) {
             AiClientToolMcpVO vo = new AiClientToolMcpVO();
             vo.setId(aiClientToolMcp.getId());
             vo.setMcpName(aiClientToolMcp.getMcpName());
@@ -126,15 +129,15 @@ public class AgentRepository implements IAgentRepository {
             String transportType = aiClientToolMcp.getTransportType();
             String transportConfig = aiClientToolMcp.getTransportConfig();
 
-            try{
-                if("sse".equals(transportType)){
+            try {
+                if ("sse".equals(transportType)) {
                     // 解析SSE配置
                     ObjectMapper objectMapper = new ObjectMapper();
                     AiClientToolMcpVO.TransportConfigSse sseConfig = objectMapper.readValue(transportConfig, AiClientToolMcpVO.TransportConfigSse.class);
                     vo.setTransportConfigSse(sseConfig);
-                }else if("stdio".equals(transportType)){
+                } else if ("stdio".equals(transportType)) {
                     // 解析Stdio配置
-                    Map<String,AiClientToolMcpVO.TransportConfigStdio.Stdio> stdio= JSON.parseObject(transportConfig,
+                    Map<String, AiClientToolMcpVO.TransportConfigStdio.Stdio> stdio = JSON.parseObject(transportConfig,
                             new com.alibaba.fastjson.TypeReference<>() {
                             });
                     AiClientToolMcpVO.TransportConfigStdio stdioConfig = new AiClientToolMcpVO.TransportConfigStdio();
@@ -143,7 +146,7 @@ public class AgentRepository implements IAgentRepository {
                     vo.setTransportConfigStdio(stdioConfig);
 
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 log.error("解析传输配置失败: {}", e.getMessage(), e);
             }
             aiClientToolMcpVOList.add(vo);
@@ -160,6 +163,8 @@ public class AgentRepository implements IAgentRepository {
         return aiClientAdvisors.stream().map(advisor -> {
             AiClientAdvisorVO vo = AiClientAdvisorVO.builder()
                     .id(advisor.getId())
+                    .databaseId(advisor.getDatabaseId())
+                    .embeddingModelId(advisor.getEmbeddingModelId())
                     .advisorName(advisor.getAdvisorName())
                     .advisorType(advisor.getAdvisorType())
                     .orderNum(advisor.getOrderNum())
@@ -189,7 +194,7 @@ public class AgentRepository implements IAgentRepository {
         // 从DAO层查询系统提示词配置
         List<AiClientSystemPrompt> aiClientSystemPrompts = aiClientSystemPromptDao.querySystemPromptConfigByClientIds(clientIdList);
 
-        if(null==aiClientSystemPrompts||aiClientSystemPrompts.isEmpty()){
+        if (null == aiClientSystemPrompts || aiClientSystemPrompts.isEmpty()) {
             return Collections.emptyMap();
         }
         /*Map<Long, AiClientSystemPromptVO> resultMap = new HashMap<>();
@@ -222,19 +227,19 @@ public class AgentRepository implements IAgentRepository {
         }
         //查询系统提示词配置
         List<AiClientSystemPromptConfig> systemPromptConfigs = aiClientSystemPromptConfigDao.querySystemPromptConfigByClientIds(clientIdList);
-        Map<Long, AiClientSystemPromptConfig> systemPromptConfigMap=systemPromptConfigs.stream().collect(Collectors.toMap(AiClientSystemPromptConfig::getClientId,prompt->prompt,(a,b)->a));
+        Map<Long, AiClientSystemPromptConfig> systemPromptConfigMap = systemPromptConfigs.stream().collect(Collectors.toMap(AiClientSystemPromptConfig::getClientId, prompt -> prompt, (a, b) -> a));
 
         //查询模型配置
         List<AiClientModelConfig> modeConfigs = aiClientModelConfigDao.queryModelConfigByClientIds(clientIdList);
-        Map<Long,AiClientModelConfig> modelConfigMap=modeConfigs.stream().collect(Collectors.toMap(AiClientModelConfig::getClientId,model->model,(a,b)->a));
+        Map<Long, AiClientModelConfig> modelConfigMap = modeConfigs.stream().collect(Collectors.toMap(AiClientModelConfig::getClientId, model -> model, (a, b) -> a));
 
         // 查询MCP工具配置，暂时只有 mcp，无 function call
-        List<AiClientToolConfig> toolConfigs =aiClientToolConfigDao.queryToolConfigByClientIds(clientIdList);
-        Map<Long,List<AiClientToolConfig>> mcpMap =toolConfigs.stream().filter(config->"mcp".equals(config.getToolType()))
+        List<AiClientToolConfig> toolConfigs = aiClientToolConfigDao.queryToolConfigByClientIds(clientIdList);
+        Map<Long, List<AiClientToolConfig>> mcpMap = toolConfigs.stream().filter(config -> "mcp".equals(config.getToolType()))
                 .collect(Collectors.groupingBy(AiClientToolConfig::getClientId));
 
         // 查询顾问配置
-        List<AiClientAdvisorConfig> advisorConfigs=aiClientAdvisorConfigDao.queryClientAdvisorConfigByClientIds(clientIdList);
+        List<AiClientAdvisorConfig> advisorConfigs = aiClientAdvisorConfigDao.queryClientAdvisorConfigByClientIds(clientIdList);
         Map<Long, List<AiClientAdvisorConfig>> advisorConfigMap = advisorConfigs.stream()
                 .collect(Collectors.groupingBy(AiClientAdvisorConfig::getClientId));
 
@@ -341,11 +346,12 @@ public class AgentRepository implements IAgentRepository {
 
     @Override
     public List<Long> queryAllInvalidTaskScheduleIds() {
-        return aiAgentTaskScheduleDao.queryAllInvalidTaskScheduleIds();    }
+        return aiAgentTaskScheduleDao.queryAllInvalidTaskScheduleIds();
+    }
 
     @Override
     public List<AiClientModelVO> queryAiClientModelVOList() {
-        List<AiClientModel> aiClientModels=aiClientModelDao.queryClientModelList();
+        List<AiClientModel> aiClientModels = aiClientModelDao.queryClientModelList();
 
         if (null == aiClientModels || aiClientModels.isEmpty()) return new ArrayList<>();
 
@@ -362,6 +368,7 @@ public class AgentRepository implements IAgentRepository {
             vo.setCompletionsPath(aiClientModel.getCompletionsPath());
             vo.setEmbeddingsPath(aiClientModel.getEmbeddingsPath());
             vo.setModelType(aiClientModel.getModelType());
+            vo.setModelApiType(aiClientModel.getModelApiType());
             vo.setModelVersion(aiClientModel.getModelVersion());
             vo.setTimeout(aiClientModel.getTimeout());
             vo.setAiClientModelToolConfigs(null);
@@ -373,7 +380,7 @@ public class AgentRepository implements IAgentRepository {
     @Override
     public List<AiAgentClientVO> queryAgentClientConfigByAgentId(Long agentId) {
         List<AiAgentClientLine> aiAgentClientLines = aiAgentClientDao.queryAgentClientConfigByAgentId(agentId);
-        if(aiAgentClientLines==null||aiAgentClientLines.isEmpty()){
+        if (aiAgentClientLines == null || aiAgentClientLines.isEmpty()) {
             return Collections.emptyList();
         }
         return aiAgentClientLines.stream().map(agentClientLine -> {
@@ -389,8 +396,25 @@ public class AgentRepository implements IAgentRepository {
 
     @Override
     public Long queryHeadClientByAgentId(Long agentId) {
-       return aiAgentDao.queryHeadClientByAgentId(agentId);
+        return aiAgentDao.queryHeadClientByAgentId(agentId);
     }
 
+    @Override
+    public List<AiVectorDatabaseVO> queryAiVectorDatabaseVO(List<Long> clientIdList) {
+        List<AiVectorDatabaseVO> aiVectorDatabaseVOS = new ArrayList<>();
+        List<AiVectorDatabase> aiVectorDatabases = aiVectorDatabaseDao.queryAiVectorDatabaseByClientIds(clientIdList);
+        for (AiVectorDatabase aiVectorDatabase : aiVectorDatabases) {
+            AiVectorDatabaseVO aiVectorDatabaseVO = new AiVectorDatabaseVO();
+            aiVectorDatabaseVO.setId(aiVectorDatabase.getId());
+            aiVectorDatabaseVO.setDbName(aiVectorDatabase.getDbName());
+            aiVectorDatabaseVO.setDbType(aiVectorDatabase.getDbType());
+            aiVectorDatabaseVO.setUrl(aiVectorDatabase.getUrl());
+            aiVectorDatabaseVO.setPort(aiVectorDatabase.getPort());
+            aiVectorDatabaseVO.setUserName(aiVectorDatabase.getUserName());
+            aiVectorDatabaseVO.setPassword(aiVectorDatabase.getPassword());
+            aiVectorDatabaseVOS.add(aiVectorDatabaseVO);
+        }
+        return aiVectorDatabaseVOS;
+    }
 }
 

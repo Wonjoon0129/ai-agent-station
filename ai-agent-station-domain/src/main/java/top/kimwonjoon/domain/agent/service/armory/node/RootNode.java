@@ -37,6 +37,11 @@ public class RootNode extends AbstractArmorySupport {
             return repository.queryAiClientModelVOListByClientIds(requestParameter.getClientIdList());
         }, threadPoolExecutor);
 
+        CompletableFuture<List<AiVectorDatabaseVO>> aiVectorDataBaseListFuture = CompletableFuture.supplyAsync(() -> {
+            log.info("查询配置数据(ai_vector_database) {}", requestParameter.getClientIdList());
+            return repository.queryAiVectorDatabaseVO(requestParameter.getClientIdList());
+        }, threadPoolExecutor);
+
         CompletableFuture<List<AiClientToolMcpVO>> aiClientToolMcpListFuture = CompletableFuture.supplyAsync(() -> {
             log.info("查询配置数据(ai_client_tool_mcp) {}", requestParameter.getClientIdList());
             return repository.queryAiClientToolMcpVOListByClientIds(requestParameter.getClientIdList());
@@ -64,6 +69,7 @@ public class RootNode extends AbstractArmorySupport {
                     dynamicContext.setValue("aiClientAdvisorList", aiClientAdvisorListFuture.join());
                     dynamicContext.setValue("aiSystemPromptConfig", aiSystemPromptConfigFuture.join());
                     dynamicContext.setValue("aiClientList", aiClientListFuture.join());
+                    dynamicContext.setValue("aiVectorDataBaseList", aiVectorDataBaseListFuture.join());
                 }).join();
 
     }

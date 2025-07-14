@@ -44,6 +44,16 @@ public class AiClientAdvisorVO {
      */
     private RagAnswer ragAnswer;
 
+    /**
+     * 扩展；向量库ID
+     */
+    private Long databaseId;
+
+    /**
+     * 模型ID
+     */
+    private Long embeddingModelId;
+
     @Data
     @Builder
     @AllArgsConstructor
