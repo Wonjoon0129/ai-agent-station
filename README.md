@@ -1,10 +1,15 @@
-# xfg-frame-archetype - DDD 脚手架 - @小傅哥 v2.2
 
-- docker 使用文档：[https://bugstack.cn/md/road-map/docker.html](https://bugstack.cn/md/road-map/docker.html)
-- DDD 教程；
-  - [DDD 概念理论](https://bugstack.cn/md/road-map/ddd-guide-01.html)
-  - [DDD 建模方法](https://bugstack.cn/md/road-map/ddd-guide-02.html)
-  - [DDD 工程模型](https://bugstack.cn/md/road-map/ddd-guide-03.html)
-  - [DDD 架构设计](https://bugstack.cn/md/road-map/ddd.html)
-  - [DDD 建模案例](https://bugstack.cn/md/road-map/ddd-model.html)
+# 🤯 Ai-Agent-Station 
 
+本项目是是利用大语言模型，作为其核心大脑的智能系统，它能够通过整合大模型的逻辑推理能力与自定义工具的执行能力，能够主动拆解任务，完成对话预设，执行规划，记忆，RAG，MCP，多模态交互等功能，同时实现动态化配置，进行解耦。
+<br>
+<br>
+
+## 🛠️  实现功能:
+
+- [x] 支持Ollama部署、OpenAI等多种语言模型
+- [x] 动态化的构建模块、装配 Agent 服务，达到随用随配，自主组建出
+各类Agent 功能服务
+- [x] 通过 Redis 存储会话，实现 Agent的短期记忆
+- [x] RAG 的存储，使用PgVector构建向量数据库
+- [x] MCP 支持 stdio，sse 两种方式，无论自主开发的还是市面的都可以使用
