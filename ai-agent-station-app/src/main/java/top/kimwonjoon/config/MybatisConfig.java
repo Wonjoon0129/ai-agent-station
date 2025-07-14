@@ -19,7 +19,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.sql.DataSource;
 
 @Configuration
-public class AiAgentConfig {
+public class MybatisConfig {
 
 
     /**
@@ -75,70 +75,6 @@ public class AiAgentConfig {
     @Bean("sqlSessionTemplate")
     public SqlSessionTemplate sqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactoryBean sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory.getObject());
-    }
-
-    /**
-     * 为 PgVector 创建专用的数据源
-     */
-    @Bean("pgVectorDataSource")
-    public DataSource pgVectorDataSource(@Value("${spring.ai.vectorstore.pgvector.datasource.driver-class-name}") String driverClassName,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.url}") String url,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.username}") String username,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.password}") String password,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.maximum-pool-size:5}") int maximumPoolSize,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.minimum-idle:2}") int minimumIdle,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.idle-timeout:30000}") long idleTimeout,
-                                         @Value("${spring.ai.vectorstore.pgvector.datasource.hikari.connection-timeout:30000}") long connectionTimeout) {
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setDriverClassName(driverClassName);
-        dataSource.setJdbcUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        // 连接池配置
-        dataSource.setMaximumPoolSize(maximumPoolSize);
-        dataSource.setMinimumIdle(minimumIdle);
-        dataSource.setIdleTimeout(idleTimeout);
-        dataSource.setConnectionTimeout(connectionTimeout);
-        dataSource.setPoolName("PgVectorHikariPool");
-        return dataSource;
-    }
-
-    /**
-     * 为 PgVector 创建专用的 JdbcTemplate
-     */
-    @Bean("pgVectorJdbcTemplate")
-    public JdbcTemplate pgVectorJdbcTemplate(@Qualifier("pgVectorDataSource") DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
-
-
-    /**
-     * -- 删除旧的表（如果存在）
-     * DROP TABLE IF EXISTS public.vector_store_ollama;
-     * -- 创建新的表，使用UUID作为主键
-     * CREATE TABLE public.vector_store_ollama (
-     *     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-     *     content TEXT NOT NULL,
-     *     metadata JSONB,
-     *     embedding VECTOR(768)
-     * );
-     * SELECT * FROM vector_store_ollama
-     */
-    @Bean("vectorStore")
-    public PgVectorStore pgVectorStore(@Value("${spring.ai.ollama.base-url}") String baseUrl,@Qualifier("pgVectorJdbcTemplate") JdbcTemplate jdbcTemplate) {
-
-        OllamaApi ollamaApi=new OllamaApi.Builder()
-                .baseUrl(baseUrl)
-                .build();
-        OllamaEmbeddingModel embeddingModel = OllamaEmbeddingModel
-                .builder()
-                .ollamaApi(ollamaApi)
-                .defaultOptions(OllamaOptions.builder().model("nomic-embed-text").build())
-                .build();
-        return PgVectorStore.builder(jdbcTemplate, embeddingModel)
-                .vectorTableName("vector_store_ollama")
-                .build();
-
     }
 
 
