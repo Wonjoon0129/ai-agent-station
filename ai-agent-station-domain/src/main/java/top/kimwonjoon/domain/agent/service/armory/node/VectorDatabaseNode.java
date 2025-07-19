@@ -45,7 +45,7 @@ public class VectorDatabaseNode extends AbstractArmorySupport {
         return aiClientAdvisorNode;
     }
 
-    protected void createVectorDatabaseDrive(AiVectorDatabaseVO aiVectorDatabaseVO) {
+    public void createVectorDatabaseDrive(AiVectorDatabaseVO aiVectorDatabaseVO) {
         String dbType = aiVectorDatabaseVO.getDbType();
         switch (dbType) {
             case "pgvector" -> {
@@ -61,6 +61,7 @@ public class VectorDatabaseNode extends AbstractArmorySupport {
                 dataSource.setConnectionTimeout(30000);
                 dataSource.setPoolName("PgVectorHikariPool");
                 JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
                 registerBean(beanName(aiVectorDatabaseVO.getId()), JdbcTemplate.class,jdbcTemplate);
                 log.info("注册了一个pgvector数据库连接池，beanName：{"+beanName(aiVectorDatabaseVO.getId()));
             }

@@ -30,11 +30,6 @@ public class AiClientAdvisorVO {
     private String advisorType;
 
     /**
-     * 顺序号
-     */
-    private Integer orderNum;
-
-    /**
      * 扩展；记忆
      */
     private ChatMemory chatMemory;

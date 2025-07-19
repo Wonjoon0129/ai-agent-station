@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
-import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,8 +27,6 @@ public class RagTest {
     @Value("classpath:data/file.txt")
     private org.springframework.core.io.Resource resource;
 
-    @Resource
-    private PgVectorStore vectorStore;
 
 
     @Test
@@ -45,7 +42,6 @@ public class RagTest {
         documentList.forEach(doc -> doc.getMetadata().put("knowledge", "tag"));
 
         // 存储知识库文件
-        vectorStore.accept(documentList);
 
 
         log.info("上传完成");

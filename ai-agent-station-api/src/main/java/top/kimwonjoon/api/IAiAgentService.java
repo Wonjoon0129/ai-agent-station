@@ -23,6 +23,6 @@ public interface IAiAgentService {
 
     Flux<ChatResponse> chatStream(Long aiAgentId, Long ragId, String message);
 
-    Response<Boolean> uploadRagFile(String name, String tag, List<MultipartFile> files);
+    Response<Boolean> uploadRagFile(String name, String tag, List<MultipartFile> files,Long advisorId );
 
 }

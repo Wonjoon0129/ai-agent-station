@@ -8,7 +8,6 @@ import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
@@ -39,7 +38,7 @@ public class AiAgentRagService implements IAiAgentRagService {
     SimilarTextSplitter textSplitter;
 
     @Override
-    public void storeRagFile(String name, String tag, List<MultipartFile> files) {
+    public void storeRagFile(String name, String tag, List<MultipartFile> files,Long advisorId) {
 
         Long id;
         for (MultipartFile file : files) {
@@ -49,9 +48,8 @@ public class AiAgentRagService implements IAiAgentRagService {
 
             // 添加知识库标签
             documentList.forEach(doc -> doc.getMetadata().put("knowledge", tag));
-            AiClientAdvisorVO aiClientAdvisorVO=new AiClientAdvisorVO();
-            aiClientAdvisorVO.setDatabaseId(1L);
-            aiClientAdvisorVO.setEmbeddingModelId(5L);
+
+            AiClientAdvisorVO aiClientAdvisorVO=repository.getAdvisorById(advisorId);
             aiClientAdvisorVO.setAdvisorName("vector_store_ollama");
             VectorStore vectorStore = aiClientAdvisorNode.createVectorStore(aiClientAdvisorVO);
 

@@ -149,10 +149,10 @@ public class AiAgentController implements IAiAgentService {
      */
     @RequestMapping(value = "file/upload", method = RequestMethod.POST, headers = "content-type=multipart/form-data")
     @Override
-    public Response<Boolean> uploadRagFile(@RequestParam("name") String name, @RequestParam("tag") String tag, @RequestParam("files") List<MultipartFile> files) {
+    public Response<Boolean> uploadRagFile(@RequestParam("name") String name, @RequestParam("tag") String tag, @RequestParam("files") List<MultipartFile> files,@RequestParam("databaseId") Long advisorId) {
         try {
             log.info("上传知识库，请求 {}", name);
-            aiAgentRagService.storeRagFile(name, tag, files);
+            aiAgentRagService.storeRagFile(name, tag, files,advisorId);
             Response<Boolean> response = Response.<Boolean>builder()
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())

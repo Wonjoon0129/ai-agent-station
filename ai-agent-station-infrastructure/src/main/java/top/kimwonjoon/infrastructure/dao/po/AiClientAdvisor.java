@@ -28,10 +28,6 @@ public class AiClientAdvisor extends Page {
      */
     private String advisorType;
 
-    /**
-     * 顺序号
-     */
-    private Integer orderNum;
 
     /**
      * 扩展参数配置，json 记录

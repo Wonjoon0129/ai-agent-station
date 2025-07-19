@@ -63,6 +63,7 @@ public class AiAgentChatService implements IAiAgentChatService {
                         .advisors(a -> a
                                 .param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                                 .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100))
+
                         .call().content();
             }catch (NoSuchBeanDefinitionException e){
                 throw new Exception("请重新配置智能体对话客户端");

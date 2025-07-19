@@ -6,13 +6,17 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
+import top.kimwonjoon.domain.agent.model.valobj.AiClientAdvisorVO;
+import top.kimwonjoon.domain.agent.service.armory.node.AiClientAdvisorNode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 /**
@@ -26,10 +30,11 @@ import java.util.stream.Collectors;
 public class RagMessageTool {
 
     @Resource
-    private IAgentRepository repository;
+    private AiClientAdvisorNode aiClientAdvisorNode;
 
     @Resource
-    private PgVectorStore vectorStore;
+    private IAgentRepository repository;
+
 
     public List<Message> ragMessage(Long ragId,String message) {
         // 封装请求参数
@@ -44,6 +49,11 @@ public class RagMessageTool {
                     .topK(5)
                     .filterExpression("knowledge == '" + tag + "'")
                     .build();
+            AiClientAdvisorVO aiClientAdvisorVO=new AiClientAdvisorVO();
+            aiClientAdvisorVO.setDatabaseId(1L);
+            aiClientAdvisorVO.setEmbeddingModelId(5L);
+            aiClientAdvisorVO.setAdvisorName("vector_store_ollama");
+            VectorStore vectorStore = aiClientAdvisorNode.createVectorStore(aiClientAdvisorVO);
 
             List<Document> documents = vectorStore.similaritySearch(searchRequest);
             String documentCollectors = documents.stream().map(Document::getFormattedContent).collect(Collectors.joining());

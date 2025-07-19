@@ -52,6 +52,12 @@
             <input type="text" id="tag" name="tag" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="输入知识标签" required />
         </div>
 
+      <!-- 知识库库选择 -->
+      <div class="mb-4">
+        <label for="databaseId" class="block text-sm font-medium text-gray-700">选择数据库</label>
+        <input type="text" id="databaseId" name="databaseId" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="输入数据库ID" required />
+    </div>
+    
         <!-- 上传文件区域 -->
         <div class="mb-4">
             <label for="files" class="block text-sm font-medium text-gray-700">上传文件</label>
@@ -133,6 +139,7 @@
        const formData = new FormData();
        formData.append('name', document.getElementById('name').value);
        formData.append('tag', document.getElementById('tag').value);
+       formData.append('databaseId', document.getElementById('databaseId').value);
        files.forEach(file => formData.append('files', file));
 
        axios.post('http://localhost:8091/ai-agent-station/api/v1/ai/agent/file/upload', formData)

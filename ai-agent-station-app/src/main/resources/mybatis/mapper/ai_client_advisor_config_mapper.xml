@@ -104,7 +104,7 @@
         SELECT DISTINCT advisor_id
         FROM ai_client_advisor_config
         WHERE client_id IN
-        <foreach collection="clientIdList" item="clientId" open="(" separator="," close=")">
+        <foreach collection="list" item="clientId" open="(" separator="," close=")">
             #{clientId}
         </foreach>
     </select>

@@ -78,13 +78,14 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
         switch (advisorType) {
             case "ChatMemory" -> {
                 return PromptChatMemoryAdvisor.builder(chatMemory)
+//                        .order()
                         .build();
             }
             case "RagAnswer" -> {
                 VectorStore vectorStore = createVectorStore(aiClientAdvisorVO);
                 AiClientAdvisorVO.RagAnswer ragAnswer = aiClientAdvisorVO.getRagAnswer();
                 RagQueryTransformer ragQueryTransformer= new RagQueryTransformer("question_answer_context");
-                VectorStoreDocumentRetriever vectorStoreDocumentRetriever = new VectorStoreDocumentRetriever(vectorStore, 0.0,ragAnswer.getTopK(), null);
+                VectorStoreDocumentRetriever vectorStoreDocumentRetriever = new VectorStoreDocumentRetriever(vectorStore, 0.8,ragAnswer.getTopK(), null);
                 return RagAnswerAdvisor.builder(vectorStore)
                         .queryTransformers(ragQueryTransformer)
                         .documentRetriever(vectorStoreDocumentRetriever)
@@ -92,6 +93,7 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
                                 .topK(ragAnswer.getTopK())
                                 .filterExpression(ragAnswer.getFilterExpression())
                                 .build())
+//                        .order()
                         .build();
             }
         }

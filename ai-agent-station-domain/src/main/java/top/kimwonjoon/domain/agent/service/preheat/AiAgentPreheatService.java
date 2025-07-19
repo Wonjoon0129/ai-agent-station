@@ -11,10 +11,13 @@ import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
+import top.kimwonjoon.domain.agent.model.valobj.AiClientAdvisorVO;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientModelVO;
+import top.kimwonjoon.domain.agent.model.valobj.AiVectorDatabaseVO;
 import top.kimwonjoon.domain.agent.service.IAiAgentPreheatService;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import top.kimwonjoon.domain.agent.service.armory.node.AiClientModelNode;
+import top.kimwonjoon.domain.agent.service.armory.node.VectorDatabaseNode;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +34,7 @@ public class AiAgentPreheatService extends AiClientModelNode implements IAiAgent
     @Resource
     private IAgentRepository repository;
     @Resource
-    AiClientModelNode  aiClientModelNode;
+    VectorDatabaseNode vectorDatabaseNode;
 
     @Override
     public void preheat() throws Exception {
@@ -58,6 +61,11 @@ public class AiAgentPreheatService extends AiClientModelNode implements IAiAgent
             }
         }
 
+
+        List<AiVectorDatabaseVO> aiVectorDatabaseVOList=repository.queryAiVectorDatabaseVO();
+        for(AiVectorDatabaseVO aiVectorDatabaseVO : aiVectorDatabaseVOList){
+            vectorDatabaseNode.createVectorDatabaseDrive(aiVectorDatabaseVO);
+        }
 
     }
 

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能体平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-50: #e6f7ee;
+            --primary-100: #c2ebd6;
+            --primary-200: #9bdfbd;
+            --primary-300: #70d3a3;
+            --primary-400: #4dc98f;
+            --primary-500: #1fbf7b;
+            --primary-600: #16af6f;
+            --primary-700: #0a9c60;
+            --primary-800: #008a52;
+            --primary-900: #006a3a;
+
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-700: #374151;
+            --gray-900: #111827;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-700), var(--primary-900));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            background-color: white;
+            color: var(--primary-700);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: none;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 20px;
+            color: white;
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.25);
+            width: 250px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 主内容区 */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-800);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            background-color: var(--primary-100);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-700);
+        }
+
+        /* 功能入口网格 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-300);
+        }
+
+        .feature-icon {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+            color: white;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .feature-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-800);
+        }
+
+        .feature-desc {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .feature-tag {
+            background-color: var(--primary-100);
+            color: var(--primary-700);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            align-self: flex-start;
+        }
+
+        /* 智能体展示区 */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .agent-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-200);
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: var(--primary-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .agent-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .agent-info {
+            flex-grow: 1;
+        }
+
+        .agent-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-800);
+        }
+
+        .agent-type {
+            font-size: 0.85rem;
+            color: var(--primary-600);
+            background-color: var(--primary-100);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 0.25rem;
+        }
+
+        .agent-status {
+            font-size: 0.8rem;
+            color: var(--primary-700);
+            font-weight: 500;
+        }
+
+        .agent-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .agent-desc {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .agent-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            background-color: var(--gray-50);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-700);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-100);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .search-input {
+                width: 160px;
+            }
+
+            .search-input:focus {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                margin-top: 1rem;
+                justify-content: center;
+            }
+
+            .search-box {
+                order: 2;
+            }
+
+            .features-grid, .agents-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-grid, .agents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 0.5rem;
+            }
+
+            .search-input {
+                width: 140px;
+            }
+
+            .search-input:focus {
+                width: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <span>AI智能体平台</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="./index.html" class="nav-link active">首页</a>
+            <a href="#" class="nav-link">智能体开发</a>
+            <a href="#" class="nav-link">模型接入</a>
+            <a href="#" class="nav-link">向量库配置</a>
+            <a href="./knowledge-base.html" class="nav-link">知识库管理</a>
+            <a href="#" class="nav-link">文档管理</a>
+            <a href="#" class="nav-link">MCP管理</a>
+        </div>
+
+        <div class="user-section">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="搜索智能体...">
+            </div>
+            <div class="user-avatar">
+                <i class="fas fa-user-circle" style="font-size: 1.8rem; color: rgba(255,255,255,0.85);"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 主内容区 -->
+<div class="container">
+    <!-- 功能入口部分 -->
+    <h2 class="section-title">
+        <i class="fas fa-cogs"></i>
+        平台功能
+    </h2>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">智能体开发</h3>
+                <p class="feature-desc">创建、配置和管理AI智能体，定制化智能助手功能</p>
+                <span class="feature-tag">核心功能</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-microchip"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">模型接入</h3>
+                <p class="feature-desc">接入和管理多种AI模型，支持OpenAI、Claude等主流模型</p>
+                <span class="feature-tag">配置中心</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">向量库配置</h3>
+                <p class="feature-desc">配置和管理向量数据库，优化AI语义理解能力</p>
+                <span class="feature-tag">增强能力</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">知识库管理</h3>
+                <p class="feature-desc">构建和管理专业知识库，为智能体提供领域知识支持</p>
+                <span class="feature-tag">知识中心</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">文档管理</h3>
+                <p class="feature-desc">管理智能体相关文档，支持多种格式文档解析</p>
+                <span class="feature-tag">资源管理</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-sliders-h"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">MCP管理</h3>
+                <p class="feature-desc">模型控制面板，统一管理模型配置和参数</p>
+                <span class="feature-tag">控制中心</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 智能体展示部分 -->
+    <h2 class="section-title">
+        <i class="fas fa-star"></i>
+        推荐智能体
+    </h2>
+
+    <div class="agents-grid">
+        <!-- 智能体卡片 1 -->
+        <div class="agent-card">
+            <div class="agent-header">
+                <div class="agent-icon">
+                    <i class="fab fa-js"></i>
+                </div>
+                <div class="agent-info">
+                    <div class="agent-name">JavaScript脚本助手</div>
+                    <div class="agent-type">系统内置智能体-脚本库</div>
+                </div>
+                <div class="agent-status">已发布</div>
+            </div>
+            <div class="agent-body">
+                <p class="agent-desc">帮助用户编写、调试和优化JavaScript代码，提供实时建议和错误检测功能。</p>
+            </div>
+            <div class="agent-footer">
+                <button class="btn btn-outline">查看详情</button>
+                <button class="btn btn-primary">立即使用</button>
+            </div>
+        </div>
+
+        <!-- 智能体卡片 2 -->
+        <div class="agent-card">
+            <div class="agent-header">
+                <div class="agent-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="agent-info">
+                    <div class="agent-name">SQL助手</div>
+                    <div class="agent-type">系统内置智能体-数据库</div>
+                </div>
+                <div class="agent-status">已发布</div>
+            </div>
+            <div class="agent-body">
+                <p class="agent-desc">帮助用户编写数据集和列表页面SQL，进行SQL优化等操作，提高数据库操作效率。</p>
+            </div>
+            <div class="agent-footer">
+                <button class="btn btn-outline">查看详情</button>
+                <button class="btn btn-primary">立即使用</button>
+            </div>
+        </div>
+
+        <!-- 智能体卡片 3 -->
+        <div class="agent-card">
+            <div class="agent-header">
+                <div class="agent-icon">
+                    <i class="fab fa-vuejs"></i>
+                </div>
+                <div class="agent-info">
+                    <div class="agent-name">Vue开发助手</div>
+                    <div class="agent-type">系统内置智能体-前端</div>
+                </div>
+                <div class="agent-status">已发布</div>
+            </div>
+            <div class="agent-body">
+                <p class="agent-desc">专为Vue开发者设计的智能助手，帮助创建组件、解决常见问题并优化性能。</p>
+            </div>
+            <div class="agent-footer">
+                <button class="btn btn-outline">查看详情</button>
+                <button class="btn btn-primary">立即使用</button>
+            </div>
+        </div>
+
+        <!-- 智能体卡片 4 -->
+        <div class="agent-card">
+            <div class="agent-header">
+                <div class="agent-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="agent-info">
+                    <div class="agent-name">内容校对</div>
+                    <div class="agent-type">系统内置智能体-内容处理</div>
+                </div>
+                <div class="agent-status">已发布</div>
+            </div>
+            <div class="agent-body">
+                <p class="agent-desc">自动检测和修正文本内容中的语法、拼写错误，提升内容质量。</p>
+            </div>
+            <div class="agent-footer">
+                <button class="btn btn-outline">查看详情</button>
+                <button class="btn btn-primary">立即使用</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 简单的交互效果
+    document.addEventListener('DOMContentLoaded', function() {
+        // 卡片悬停效果增强
+        const cards = document.querySelectorAll('.feature-card, .agent-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // 搜索框聚焦效果
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('focus', function() {
+            this.parentNode.querySelector('.search-icon').style.color = 'white';
+        });
+
+        searchInput.addEventListener('blur', function() {
+            this.parentNode.querySelector('.search-icon').style.color = 'rgba(255, 255, 255, 0.7)';
+        });
+
+        // 导航菜单激活状态
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -29,6 +29,10 @@ spring:
       max-lifetime: 1800000
   main:
     allow-bean-definition-overriding: true
+  ai:
+    openai:
+      base-url: https://apis.itedus.cn
+      api-key: sk-Hw5CWZOYBsU5rjPqF87c9178D0B249AeB61f***
   #  main:
   #    banner-mode: off
   #    web-application-type: none

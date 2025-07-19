@@ -167,7 +167,6 @@ public class AgentRepository implements IAgentRepository {
                     .embeddingModelId(advisor.getEmbeddingModelId())
                     .advisorName(advisor.getAdvisorName())
                     .advisorType(advisor.getAdvisorType())
-                    .orderNum(advisor.getOrderNum())
                     .build();
 
             // 根据 advisorType 类型转换 extParam
@@ -416,5 +415,34 @@ public class AgentRepository implements IAgentRepository {
         }
         return aiVectorDatabaseVOS;
     }
+
+    @Override
+    public AiClientAdvisorVO getAdvisorById(Long advisorId) {
+       AiClientAdvisor aiClientAdvisor=aiClientAdvisorDao.queryAdvisorConfigById(advisorId);
+       AiClientAdvisorVO vo = new AiClientAdvisorVO();
+       vo.setAdvisorName(aiClientAdvisor.getAdvisorName());
+       vo.setEmbeddingModelId(aiClientAdvisor.getEmbeddingModelId());
+       vo.setDatabaseId(aiClientAdvisor.getDatabaseId());
+       return vo;
+    }
+
+    @Override
+    public List<AiVectorDatabaseVO> queryAiVectorDatabaseVO() {
+        List<AiVectorDatabase> aiVectorDatabases = aiVectorDatabaseDao.queryAiVectorDatabase();
+        List<AiVectorDatabaseVO> aiVectorDatabaseVOS = new ArrayList<>();
+        for(AiVectorDatabase aiVectorDatabase : aiVectorDatabases){
+            AiVectorDatabaseVO vo = new AiVectorDatabaseVO();
+            vo.setId(aiVectorDatabase.getId());
+            vo.setDbName(aiVectorDatabase.getDbName());
+            vo.setDbType(aiVectorDatabase.getDbType());
+            vo.setUrl(aiVectorDatabase.getUrl());
+            vo.setPort(aiVectorDatabase.getPort());
+            vo.setUserName(aiVectorDatabase.getUserName());
+            vo.setPassword(aiVectorDatabase.getPassword());
+            aiVectorDatabaseVOS.add(vo);
+        }
+        return aiVectorDatabaseVOS;
+    }
+
 }
 
