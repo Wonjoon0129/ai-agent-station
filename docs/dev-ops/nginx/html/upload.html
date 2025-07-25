@@ -53,10 +53,12 @@
         </div>
 
       <!-- 知识库库选择 -->
-      <div class="mb-4">
-        <label for="databaseId" class="block text-sm font-medium text-gray-700">选择数据库</label>
-        <input type="text" id="databaseId" name="databaseId" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="输入数据库ID" required />
-    </div>
+        <div class="mb-4">
+            <label for="databaseId" class="block text-sm font-medium text-gray-700">选择数据库</label>
+            <select id="databaseId" name="databaseId" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
+                <option value="">加载中...</option>
+            </select>
+        </div>
     
         <!-- 上传文件区域 -->
         <div class="mb-4">
@@ -87,7 +89,52 @@
 <script>
     const fileListElement = document.querySelector('#fileList ul');
 
-     // 文件选择变更处理
+    // 新增：加载数据库列表
+    async function loadDatabases() {
+        const select = document.getElementById('databaseId');
+        try {
+            const response = await axios.post(
+                'http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorList',
+                {}
+            );
+
+            const data = response.data;
+
+            if (Array.isArray(data)) {
+                select.innerHTML = '<option value="">请选择数据库</option>';
+
+                // 筛选有效数据库并创建选项
+                data.forEach(db => {
+                    if (db.databaseId !== null) {
+                        const option = document.createElement('option');
+                        option.value = db.id;
+                        option.textContent = db.advisorName;
+
+                        select.appendChild(option);
+                    }
+                });
+
+                // 如果没有有效选项，显示提示
+                if (select.options.length === 1) {
+                    select.innerHTML = '<option value="">无可用数据库</option>';
+                }
+            } else {
+                throw new Error('返回的数据格式不正确');
+            }
+        } catch (error) {
+            select.innerHTML = '<option value="">加载失败，点击重试</option>';
+            select.onclick = () => {
+                select.innerHTML = '<option value="">加载中...</option>';
+                loadDatabases();
+            };
+            console.error('加载数据库失败:', error);
+        }
+    }
+
+    // 页面加载时调用
+    document.addEventListener('DOMContentLoaded', loadDatabases);
+
+    // 文件选择变更处理
      document.getElementById('files').addEventListener('change', function (e) {
        const files = Array.from(e.target.files);
        fileListElement.innerHTML = ''; // 清空列表
@@ -123,11 +170,15 @@
      // 提交事件处理
      document.getElementById('uploadForm').addEventListener('submit', function (e) {
        e.preventDefault();
-
        const loadingOverlay = document.getElementById('loadingOverlay');
        const input = document.getElementById('files');
        const files = Array.from(input.files);
+       const dbId = document.getElementById('databaseId').value;
 
+     if (!dbId) {
+         alert('请选择数据库');
+         return;
+     }
        if (files.length === 0) {
          alert('请先选择一个文件');
          return;
@@ -139,7 +190,7 @@
        const formData = new FormData();
        formData.append('name', document.getElementById('name').value);
        formData.append('tag', document.getElementById('tag').value);
-       formData.append('databaseId', document.getElementById('databaseId').value);
+       formData.append('databaseId', dbId);
        files.forEach(file => formData.append('files', file));
 
        axios.post('http://localhost:8091/ai-agent-station/api/v1/ai/agent/file/upload', formData)

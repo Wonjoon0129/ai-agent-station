@@ -5,6 +5,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.model.Model;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
@@ -27,7 +28,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class AiAgentPreheatService extends AiClientModelNode implements IAiAgentPreheatService {
+public class AiAgentPreheatService implements IAiAgentPreheatService {
 
     @Resource
     private DefaultArmoryStrategyFactory defaultArmoryStrategyFactory;
@@ -35,30 +36,19 @@ public class AiAgentPreheatService extends AiClientModelNode implements IAiAgent
     private IAgentRepository repository;
     @Resource
     VectorDatabaseNode vectorDatabaseNode;
+    @Resource
+    AiClientModelNode aiClientModelNode;
 
     @Override
     public void preheat() throws Exception {
         List<AiClientModelVO> aiClientModelList = repository.queryAiClientModelVOList();
+
+
         // 遍历模型列表，为每个模型创建对应的Bean
         for (AiClientModelVO modelVO : aiClientModelList) {
 
-            if(modelVO.getModelType().equals("2")){
-                OllamaApi ollamaApi = OllamaApi.builder()
-                        .baseUrl(modelVO.getBaseUrl())
-                        .build();
-
-                OllamaEmbeddingModel embeddingModel = OllamaEmbeddingModel
-                        .builder()
-                        .ollamaApi(ollamaApi)
-                        .defaultOptions(OllamaOptions.builder().model(modelVO.getModelVersion()).build())
-                        .build();
-                registerBean("AiClientEmbeddingModel_"+modelVO.getId(), EmbeddingModel.class, embeddingModel);
-            }else{
-                // 创建OpenAiChatModel对象
-                ChatModel chatModel = (ChatModel) createOpenAiChatModel(modelVO);
-                // 使用父类的通用注册方法
-                registerBean(beanName(modelVO.getId()), ChatModel.class, chatModel);
-            }
+            Model openAiChatModel = aiClientModelNode.createOpenAiChatModel(modelVO);
+            aiClientModelNode.registerBean("AiClientEmbeddingModel_"+modelVO.getId(), Model.class, openAiChatModel);
         }
 
 

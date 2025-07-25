@@ -1,12 +1,19 @@
 package top.kimwonjoon.domain.agent.service.armory.factory.element;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.model.Model;
 import org.springframework.ai.rag.Query;
 import org.springframework.ai.rag.preretrieval.query.transformation.QueryTransformer;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import picocli.CommandLine;
+
+import java.util.ArrayList;
 
 /**
  * @ClassName QueryTransformer
@@ -17,11 +24,13 @@ import org.springframework.util.StringUtils;
  */
 @Slf4j
 public class RagQueryTransformer implements QueryTransformer {
+    ChatModel chatModel;
     private static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = new PromptTemplate("Given a user query, rewrite it to provide better results when querying a {target}.\nRemove any irrelevant information, and ensure the query is concise and specific.\n\nOriginal query:\n{query}\n\nRewritten query:\n");
     private static final String DEFAULT_TARGET = "vector store";
     private final String targetSearchSystem;
 
-    public RagQueryTransformer( @Nullable String targetSearchSystem) {
+    public RagQueryTransformer( @Nullable String targetSearchSystem, ChatModel model) {
+        this.chatModel = model;
         this.targetSearchSystem = targetSearchSystem != null ? targetSearchSystem : "vector store";
     }
 
@@ -29,7 +38,15 @@ public class RagQueryTransformer implements QueryTransformer {
     public Query transform(Query query) {
         Assert.notNull(query, "query cannot be null");
         StringBuilder rewrittenQueryText = new StringBuilder();
-        rewrittenQueryText.append(query.text()+"\ncontext information is below, surrounded by ---------------------\n\n---------------------\n"+this.targetSearchSystem+"\n---------------------\n\nGiven the context and provided history information and not prior knowledge,\nreply to the user comment. If the answer is not in the context, inform\nthe user that you can't answer the question.\n");
+        UserMessage userMessage=new UserMessage(query.text()+"请你用一句话回答");
+
+        String content = ChatClient.create(chatModel).prompt().messages(userMessage)
+                .call()
+                .content();
+
+        String regex = "<think>[\\s\\S]*?</think>";
+        String trim = content.replaceAll(regex, "").trim();
+        rewrittenQueryText.append(query.text()+"\n-----------------\n"+trim);
         if (!StringUtils.hasText(rewrittenQueryText)) {
             log.warn("Query rewrite result is null/empty. Returning the input query unchanged.");
             return query;

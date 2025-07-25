@@ -698,9 +698,8 @@
                     <div class="form-col">
                         <label class="form-label">顾问类型</label>
                         <select class="form-control" v-model="currentAdvisor.advisorType">
-                            <option value="PromptChatMemory">PromptChatMemory</option>
                             <option value="RagAnswer">RagAnswer</option>
-                            <option value="SimpleLoggerAdvisor">SimpleLoggerAdvisor</option>
+                            <option value="ChatMemory">ChatMemory</option>
                         </select>
                     </div>
                     <div class="form-col">
@@ -757,7 +756,7 @@
             const currentAdvisor = reactive({
                 id: null,
                 advisorName: '',
-                advisorType: 'PromptChatMemory',
+                advisorType: 'RagAnswer',
                 orderNum: 0,
                 extParam: '',
                 databaseId: null,
@@ -788,61 +787,15 @@
             // 获取知识库列表
             const fetchAdvisors = async () => {
                 try {
-                    // 模拟API请求
-                    console.log('Fetching advisors...');
-
                     // 实际API调用应该像这样：
-                    /*
-                    const response = await axios.post('/api/v1/ai/admin/client/advisor/queryClientAdvisorList', {
+                    const response = await axios.post('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorList', {
                         pageNum: currentPage.value,
                         pageSize: pageSize.value,
-                        advisorName: searchQuery.value,
-                        status: statusFilter.value === 'all' ? null : Number(statusFilter.value)
                     });
 
                     advisors.value = response.data;
                     totalItems.value = response.data.total; // 假设后端返回总数
-                    */
 
-                    // 模拟数据
-                    advisors.value = [
-                        {
-                            id: 1,
-                            advisorName: '客户支持知识库',
-                            advisorType: 'RagAnswer',
-                            orderNum: 1,
-                            databaseId: 101,
-                            embeddingModelId: 201,
-                            status: 1,
-                            createTime: '2023-10-15T08:30:00Z',
-                            updateTime: '2023-10-20T14:25:00Z'
-                        },
-                        {
-                            id: 2,
-                            advisorName: '产品文档知识库',
-                            advisorType: 'PromptChatMemory',
-                            orderNum: 2,
-                            databaseId: 102,
-                            embeddingModelId: 202,
-                            status: 1,
-                            createTime: '2023-09-22T10:15:00Z',
-                            updateTime: '2023-10-18T09:45:00Z'
-                        },
-                        {
-                            id: 3,
-                            advisorName: '技术问题知识库',
-                            advisorType: 'SimpleLoggerAdvisor',
-                            orderNum: 3,
-                            databaseId: 103,
-                            embeddingModelId: 203,
-                            status: 0,
-                            createTime: '2023-11-05T13:40:00Z',
-                            updateTime: '2023-11-10T16:20:00Z'
-                        }
-                    ];
-
-                    totalItems.value = 3;
-                    totalPages.value = 1;
 
                 } catch (error) {
                     console.error('获取知识库列表失败:', error);
@@ -856,9 +809,12 @@
                 Object.assign(currentAdvisor, {
                     id: null,
                     advisorName: '',
-                    advisorType: 'PromptChatMemory',
+                    advisorType: 'RagAnswer',
                     orderNum: 0,
-                    extParam: '',
+                    extParam: '{\n' +
+                        '    "topK": "4",\n' +
+                        '    "filterExpression": "knowledge == \'知识库名称\'"\n' +
+                        '}',
                     databaseId: null,
                     embeddingModelId: null,
                     status: 1
@@ -892,23 +848,21 @@
                         console.log('Updating advisor:', currentAdvisor);
 
                         // 实际API调用：
-                        /*
-                        const response = await axios.post('/api/v1/ai/admin/client/advisor/updateClientAdvisor', currentAdvisor);
+                        const response = await axios.post('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/updateClientAdvisor', currentAdvisor);
                         if (response.data) {
                             // 更新成功
                         }
-                        */
+
                     } else {
                         // 新增知识库
                         console.log('Creating advisor:', currentAdvisor);
 
                         // 实际API调用：
-                        /*
-                        const response = await axios.post('/api/v1/ai/admin/client/advisor/addClientAdvisor', currentAdvisor);
+                        const response = await axios.post('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/addClientAdvisor', currentAdvisor);
                         if (response.data) {
                             // 新增成功
                         }
-                        */
+
                     }
 
                     // 刷新列表
@@ -933,12 +887,12 @@
                     console.log('Deleting advisor ID:', id);
 
                     // 实际API调用：
-                    /*
-                    const response = await axios.get(`/api/v1/ai/admin/client/advisor/deleteClientAdvisor?id=${id}`);
+
+                    const response = await axios.get(`http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/deleteClientAdvisor?id=${id}`);
                     if (response.data) {
                         // 删除成功
                     }
-                    */
+
 
                     // 刷新列表
                     fetchAdvisors();

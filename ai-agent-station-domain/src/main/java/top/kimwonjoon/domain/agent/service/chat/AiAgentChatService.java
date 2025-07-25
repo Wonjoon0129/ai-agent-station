@@ -1,39 +1,24 @@
 package top.kimwonjoon.domain.agent.service.chat;
 
 import jakarta.annotation.Resource;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.content.Media;
-import org.springframework.ai.document.Document;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
 import top.kimwonjoon.domain.agent.service.IAiAgentChatService;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import top.kimwonjoon.domain.agent.service.rag.element.RagMessageTool;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -77,7 +62,7 @@ public class AiAgentChatService implements IAiAgentChatService {
 
     @Override
     public String aiMultiChat(Long modelId,String message,List<String> types,List<org.springframework.core.io.Resource> resource,Long ragId) throws Exception {
-        
+
         ChatModel chatModel = defaultArmoryStrategyFactory.chatModel(modelId);
 
         Media[] media = new Media[resource.size()];

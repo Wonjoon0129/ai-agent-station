@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSON;
 import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.document.MetadataMode;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
@@ -15,6 +17,8 @@ import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.OpenAiEmbeddingModel;
+import org.springframework.ai.openai.OpenAiEmbeddingOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.stereotype.Component;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
@@ -79,7 +83,7 @@ public class AiClientModelNode extends AbstractArmorySupport {
      * @param modelVO 模型配置值对象
      * @return OpenAiChatModel实例
      */
-    protected Model createOpenAiChatModel(AiClientModelVO modelVO) {
+    public Model createOpenAiChatModel(AiClientModelVO modelVO) {
         String modelApiType=modelVO.getModelApiType();
         switch (modelApiType){
             case "openai"->{
@@ -91,6 +95,9 @@ public class AiClientModelNode extends AbstractArmorySupport {
                         .embeddingsPath(modelVO.getEmbeddingsPath())
                         .build();
 
+                if(modelVO.getModelType().equals("2")){
+                    return new OpenAiEmbeddingModel(openAiApi, MetadataMode.EMBED,OpenAiEmbeddingOptions.builder().dimensions(768).model(modelVO.getModelVersion()).build());
+                }
                 List<McpSyncClient> mcpSyncClients = new ArrayList<>();
                 List<AiClientModelVO.AiClientModelToolConfigVO> toolConfigs = modelVO.getAiClientModelToolConfigs();
                 if (null != toolConfigs && !toolConfigs.isEmpty()) {
@@ -116,6 +123,13 @@ public class AiClientModelNode extends AbstractArmorySupport {
                         .baseUrl(modelVO.getBaseUrl())
                         .build();
 
+                if(modelVO.getModelType().equals("2")){
+                    return OllamaEmbeddingModel
+                            .builder()
+                            .ollamaApi(ollamaApi)
+                            .defaultOptions(OllamaOptions.builder().model(modelVO.getModelVersion()).build())
+                            .build();
+                }
                 List<McpSyncClient> mcpSyncClients = new ArrayList<>();
                 List<AiClientModelVO.AiClientModelToolConfigVO> toolConfigs = modelVO.getAiClientModelToolConfigs();
                 if (null != toolConfigs && !toolConfigs.isEmpty()) {

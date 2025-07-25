@@ -62,7 +62,9 @@ public class AiClientAdvisorVO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RagAnswer {
+
         private int topK = 4;
+        private double similarityThreshold;
         private String filterExpression;
     }
 

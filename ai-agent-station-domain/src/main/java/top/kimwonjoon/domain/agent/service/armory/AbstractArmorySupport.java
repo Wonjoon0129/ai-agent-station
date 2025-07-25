@@ -55,7 +55,7 @@ public abstract class AbstractArmorySupport extends AbstractMultiThreadStrategyR
      * @param beanClass Bean类型
      * @param <T>       Bean类型
      */
-    protected synchronized <T> void registerBean(String beanName, Class<T> beanClass, T beanInstance) {
+    public synchronized <T> void registerBean(String beanName, Class<T> beanClass, T beanInstance) {
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
 
         // 注册Bean

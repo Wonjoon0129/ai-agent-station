@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
@@ -17,6 +18,7 @@ import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.stereotype.Component;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientAdvisorVO;
+import top.kimwonjoon.domain.agent.model.valobj.AiClientModelVO;
 import top.kimwonjoon.domain.agent.service.armory.AbstractArmorySupport;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import top.kimwonjoon.domain.agent.service.armory.factory.element.RagAnswerAdvisor;
@@ -41,6 +43,8 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
     @Resource
     RedisChatMemory chatMemory;
 
+    ChatModel chatModel;
+
 
 
     @Override
@@ -48,6 +52,10 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
         log.info("Ai Agent 构建，advisor 顾问节点 {}", JSON.toJSONString(requestParameter));
 
         List<AiClientAdvisorVO> aiClientAdvisorList = dynamicContext.getValue("aiClientAdvisorList");
+        List<AiClientModelVO> aiClientModelList = dynamicContext.getValue("aiClientModelList");
+        AiClientModelVO aiClientModelVO = aiClientModelList.get(0);
+        this.chatModel=getBean("AiClientModel_" + aiClientModelVO.getId());
+
         if (aiClientAdvisorList == null || aiClientAdvisorList.isEmpty()) {
             log.warn("没有可用的AI客户端顾问（advisor）配置");
             return router(requestParameter, dynamicContext);
@@ -73,28 +81,23 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
     }
 
 
-    private Advisor createAdvisor(AiClientAdvisorVO aiClientAdvisorVO) {
+    protected Advisor createAdvisor(AiClientAdvisorVO aiClientAdvisorVO) {
         String advisorType = aiClientAdvisorVO.getAdvisorType();
         switch (advisorType) {
             case "ChatMemory" -> {
                 return PromptChatMemoryAdvisor.builder(chatMemory)
-//                        .order()
+                        .order(2)
                         .build();
             }
             case "RagAnswer" -> {
                 VectorStore vectorStore = createVectorStore(aiClientAdvisorVO);
                 AiClientAdvisorVO.RagAnswer ragAnswer = aiClientAdvisorVO.getRagAnswer();
-                RagQueryTransformer ragQueryTransformer= new RagQueryTransformer("question_answer_context");
-                VectorStoreDocumentRetriever vectorStoreDocumentRetriever = new VectorStoreDocumentRetriever(vectorStore, 0.8,ragAnswer.getTopK(), null);
-                return RagAnswerAdvisor.builder(vectorStore)
-                        .queryTransformers(ragQueryTransformer)
-                        .documentRetriever(vectorStoreDocumentRetriever)
-                        .searchRequest(SearchRequest.builder()
-                                .topK(ragAnswer.getTopK())
-                                .filterExpression(ragAnswer.getFilterExpression())
-                                .build())
-//                        .order()
-                        .build();
+                RagQueryTransformer ragQueryTransformer= new RagQueryTransformer("question_answer_context",chatModel);
+                return new RagAnswerAdvisor(vectorStore, SearchRequest.builder()
+                        .topK(ragAnswer.getTopK())
+                        .similarityThreshold(ragAnswer.getSimilarityThreshold())
+                        .build(),ragQueryTransformer);
+
             }
         }
 
@@ -102,8 +105,9 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
     }
 
     public VectorStore createVectorStore(AiClientAdvisorVO aiClientAdvisorVO) {
-        OllamaEmbeddingModel embeddingModel = getBean("AiClientEmbeddingModel_" + aiClientAdvisorVO.getEmbeddingModelId());
+        EmbeddingModel embeddingModel = getBean("AiClientEmbeddingModel_" + aiClientAdvisorVO.getEmbeddingModelId());
         return PgVectorStore.builder(getBean("DataBaseDrive_"+aiClientAdvisorVO.getDatabaseId()), embeddingModel)
+                .dimensions(768)
                 .vectorTableName(aiClientAdvisorVO.getAdvisorName())
                 .build();
     }

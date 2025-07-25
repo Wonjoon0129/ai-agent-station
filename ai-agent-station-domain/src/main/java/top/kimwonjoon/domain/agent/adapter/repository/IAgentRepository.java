@@ -48,4 +48,5 @@ public interface IAgentRepository {
     AiClientAdvisorVO getAdvisorById(Long advisorId);
 
     List<AiVectorDatabaseVO> queryAiVectorDatabaseVO();
+
 }

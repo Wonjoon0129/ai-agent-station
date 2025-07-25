@@ -76,7 +76,7 @@
             #{clientId}
         </foreach>
         )
-        ORDER BY a.order_num, a.id
+        ORDER BY  a.id
     </select>
 
     <!-- 根据条件查询顾问列表 -->

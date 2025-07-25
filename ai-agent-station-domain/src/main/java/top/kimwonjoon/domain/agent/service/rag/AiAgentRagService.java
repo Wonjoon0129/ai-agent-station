@@ -29,6 +29,7 @@ import java.util.List;
 @Service
 public class AiAgentRagService implements IAiAgentRagService {
 
+
     @Resource
     private AiClientAdvisorNode aiClientAdvisorNode;
     @Resource
@@ -40,19 +41,17 @@ public class AiAgentRagService implements IAiAgentRagService {
     @Override
     public void storeRagFile(String name, String tag, List<MultipartFile> files,Long advisorId) {
 
-        Long id;
+        AiClientAdvisorVO aiClientAdvisorVO=repository.getAdvisorById(advisorId);
+        aiClientAdvisorVO.setAdvisorName("vector_store_ollama");     //暂时写成这样
+        VectorStore vectorStore = aiClientAdvisorNode.createVectorStore(aiClientAdvisorVO);
+
         for (MultipartFile file : files) {
             TikaDocumentReader documentReader = new TikaDocumentReader(file.getResource());
 
-            List<Document> documentList = textSplitter.chunkDocument(documentReader.get(),6L);
-
+            List<Document> documentList = textSplitter.chunkDocument(documentReader.get(),aiClientAdvisorVO.getEmbeddingModelId());
             // 添加知识库标签
             documentList.forEach(doc -> doc.getMetadata().put("knowledge", tag));
-
-            AiClientAdvisorVO aiClientAdvisorVO=repository.getAdvisorById(advisorId);
-            aiClientAdvisorVO.setAdvisorName("vector_store_ollama");
-            VectorStore vectorStore = aiClientAdvisorNode.createVectorStore(aiClientAdvisorVO);
-
+            documentList.forEach(doc -> doc.getMetadata().put("file", file.getOriginalFilename()));
             vectorStore.accept(documentList);
 
             // 存储到数据库
