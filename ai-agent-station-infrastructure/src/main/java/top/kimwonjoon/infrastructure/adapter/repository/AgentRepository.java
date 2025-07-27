@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.redisson.api.RList;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 @Repository
 public class AgentRepository implements IAgentRepository {
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
     @Resource
     IAiClientModelDao aiClientModelDao;
     @Resource
@@ -302,14 +306,18 @@ public class AgentRepository implements IAgentRepository {
     }
 
     @Override
-    public void createTagOrder(AiRagOrderVO aiRagOrderVO) {
+    public long createTagOrder(AiRagOrderVO aiRagOrderVO) {
+        String idSql = "select LAST_INSERT_ID() from dual";
         AiRagOrder aiRagOrder = new AiRagOrder();
-        aiRagOrder.setRagName(aiRagOrderVO.getRagName());
+        aiRagOrder.setAdvisorId(aiRagOrderVO.getAdvisorId());
+        aiRagOrder.setFileName(aiRagOrderVO.getFileName());
         aiRagOrder.setKnowledgeTag(aiRagOrderVO.getKnowledgeTag());
         aiRagOrder.setStatus(1);
         aiRagOrder.setCreateTime(new Date());
         aiRagOrder.setUpdateTime(new Date());
         aiRagOrderDao.insert(aiRagOrder);
+        long i = jdbcTemplate.queryForObject(idSql, Long.class);
+        return i;
 
     }
 

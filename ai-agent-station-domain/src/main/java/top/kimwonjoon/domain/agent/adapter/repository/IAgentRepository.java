@@ -29,7 +29,7 @@ public interface IAgentRepository {
 
     String queryRagKnowledgeTag(Long ragId);
 
-    void createTagOrder(AiRagOrderVO aiRagOrderVO);
+    long createTagOrder(AiRagOrderVO aiRagOrderVO);
 
     List<Long> queryAiClientIds();
 

@@ -30,6 +30,7 @@ import java.util.List;
 public class AiAgentRagService implements IAiAgentRagService {
 
 
+
     @Resource
     private AiClientAdvisorNode aiClientAdvisorNode;
     @Resource
@@ -41,24 +42,32 @@ public class AiAgentRagService implements IAiAgentRagService {
     @Override
     public void storeRagFile(String name, String tag, List<MultipartFile> files,Long advisorId) {
 
+
         AiClientAdvisorVO aiClientAdvisorVO=repository.getAdvisorById(advisorId);
         aiClientAdvisorVO.setAdvisorName("vector_store_ollama");     //暂时写成这样
         VectorStore vectorStore = aiClientAdvisorNode.createVectorStore(aiClientAdvisorVO);
 
         for (MultipartFile file : files) {
-            TikaDocumentReader documentReader = new TikaDocumentReader(file.getResource());
 
-            List<Document> documentList = textSplitter.chunkDocument(documentReader.get(),aiClientAdvisorVO.getEmbeddingModelId());
-            // 添加知识库标签
-            documentList.forEach(doc -> doc.getMetadata().put("knowledge", tag));
-            documentList.forEach(doc -> doc.getMetadata().put("file", file.getOriginalFilename()));
-            vectorStore.accept(documentList);
 
             // 存储到数据库
             AiRagOrderVO aiRagOrderVO = new AiRagOrderVO();
-            aiRagOrderVO.setRagName(name);
+            aiRagOrderVO.setFileName(file.getOriginalFilename());
             aiRagOrderVO.setKnowledgeTag(tag);
-            repository.createTagOrder(aiRagOrderVO);
+            aiRagOrderVO.setAdvisorId(advisorId);
+            long i = repository.createTagOrder(aiRagOrderVO);
+
+            TikaDocumentReader documentReader = new TikaDocumentReader(file.getResource());
+            List<Document> documentList = textSplitter.chunkDocument(documentReader.get(),aiClientAdvisorVO.getEmbeddingModelId());
+
+            // 添加知识库标签
+            documentList.forEach(doc -> doc.getMetadata().put("knowledge", tag));
+            documentList.forEach(doc -> doc.getMetadata().put("file", file.getOriginalFilename()));
+            documentList.forEach(doc -> doc.getMetadata().put("rag_id", i));
+            vectorStore.accept(documentList);
+
+
+
         }
     }
 

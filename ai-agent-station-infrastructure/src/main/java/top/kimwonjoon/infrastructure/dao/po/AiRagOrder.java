@@ -19,9 +19,13 @@ public class AiRagOrder extends Page {
     private Long id;
 
     /**
+     * 知识库ID
+     */
+    private Long advisorId;
+    /**
      * 知识库名称
      */
-    private String ragName;
+    private String fileName;
 
     /**
      * 知识标签
