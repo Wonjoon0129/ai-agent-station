@@ -16,4 +16,6 @@ import java.util.List;
 @Mapper
 public interface IAiClientDao {
     List<AiClient> queryClientListAll(AiClient aiClient);
+
+    AiClient queryClientById(Long id);
 }

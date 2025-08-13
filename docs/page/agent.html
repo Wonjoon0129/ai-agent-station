@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能体平台 - 智能体开发</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-50: #e6f7ee;
+            --primary-100: #c2ebd6;
+            --primary-200: #9bdfbd;
+            --primary-300: #70d3a3;
+            --primary-400: #4dc98f;
+            --primary-500: #1fbf7b;
+            --primary-600: #16af6f;
+            --primary-700: #0a9c60;
+            --primary-800: #008a52;
+            --primary-900: #006a3a;
+
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-700: #374151;
+            --gray-900: #111827;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-700), var(--primary-900));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            background-color: white;
+            color: var(--primary-700);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: none;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 20px;
+            color: white;
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.25);
+            width: 250px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 主内容区 */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-800);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            background-color: var(--primary-100);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-700);
+        }
+
+        /* 功能入口网格 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-300);
+        }
+
+        .feature-icon {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+            color: white;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .feature-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-800);
+        }
+
+        .feature-desc {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .feature-tag {
+            background-color: var(--primary-100);
+            color: var(--primary-700);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            align-self: flex-start;
+        }
+
+        /* 智能体展示区 */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .agent-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-200);
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: var(--primary-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .agent-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .agent-info {
+            flex-grow: 1;
+        }
+
+        .agent-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-800);
+        }
+
+        .agent-type {
+            font-size: 0.85rem;
+            color: var(--primary-600);
+            background-color: var(--primary-100);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 0.25rem;
+        }
+
+        .agent-status {
+            font-size: 0.8rem;
+            color: var(--primary-700);
+            font-weight: 500;
+        }
+
+        .agent-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .agent-desc {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .agent-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            background-color: var(--gray-50);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-700);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-100);
+        }
+
+        /* 对话窗口样式 */
+        .chat-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .chat-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary-700), var(--primary-900));
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .chat-title-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .close-chat:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .message-area {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background-color: var(--primary-50);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.agent {
+            background-color: var(--gray-100);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .message-content {
+            line-height: 1.6;
+        }
+
+        .input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .message-input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-family: inherit;
+            resize: none;
+            height: 60px;
+            max-height: 150px;
+            transition: all 0.2s ease;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(31, 191, 123, 0.2);
+        }
+
+        .send-button {
+            background-color: var(--primary-600);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .send-button:hover {
+            background-color: var(--primary-700);
+        }
+
+        .send-button:disabled {
+            background-color: var(--gray-300);
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: var(--gray-100);
+            border-radius: 12px;
+            align-self: flex-start;
+            margin-top: 0.5rem;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            background-color: var(--gray-700);
+            margin: 0 2px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* 加载状态 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--gray-200);
+            border-bottom-color: var(--primary-500);
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .search-input {
+                width: 160px;
+            }
+
+            .search-input:focus {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                margin-top: 1rem;
+                justify-content: center;
+            }
+
+            .search-box {
+                order: 2;
+            }
+
+            .features-grid, .agents-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .chat-container {
+                width: 95%;
+                height: 90vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-grid, .agents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 0.5rem;
+            }
+
+            .search-input {
+                width: 140px;
+            }
+
+            .search-input:focus {
+                width: 160px;
+            }
+
+            .agent-footer {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <span>AI智能体平台</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#" class="nav-link">首页</a>
+            <a href="#" class="nav-link active">智能体开发</a>
+            <a href="#" class="nav-link">模型接入</a>
+            <a href="#" class="nav-link">向量库配置</a>
+            <a href="#" class="nav-link">知识库管理</a>
+            <a href="#" class="nav-link">文档管理</a>
+            <a href="#" class="nav-link">MCP管理</a>
+        </div>
+
+        <div class="user-section">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="搜索智能体...">
+            </div>
+            <div class="user-avatar">
+                <i class="fas fa-user-circle" style="font-size: 1.8rem; color: rgba(255,255,255,0.85);"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 主内容区 -->
+<div class="container">
+    <!-- 功能入口部分 -->
+    <h2 class="section-title">
+        <i class="fas fa-cogs"></i>
+        智能体开发
+    </h2>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">创建智能体</h3>
+                <p class="feature-desc">创建新的AI智能体，自定义名称、描述和功能</p>
+                <span class="feature-tag">新建</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-sliders-h"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">配置工作流</h3>
+                <p class="feature-desc">设计智能体的工作流程，包括模型选择和工具集成</p>
+                <span class="feature-tag">配置</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">脚本编辑器</h3>
+                <p class="feature-desc">编写和调试智能体的自定义脚本和功能代码</p>
+                <span class="feature-tag">开发</span>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-flask"></i>
+            </div>
+            <div class="feature-content">
+                <h3 class="feature-title">测试与调试</h3>
+                <p class="feature-desc">测试智能体的功能和性能，进行调试和优化</p>
+                <span class="feature-tag">测试</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 智能体展示部分 -->
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-star"></i>
+            我的智能体
+        </h2>
+        <div class="filter-controls">
+            <select class="filter-select">
+                <option value="all">全部状态</option>
+                <option value="published">已发布</option>
+                <option value="draft">草稿</option>
+                <option value="testing">测试中</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="agents-grid" id="agentsContainer">
+        <!-- 智能体卡片将通过JS动态加载 -->
+        <div class="loading">
+            <div class="loader"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 对话窗口 -->
+<div class="chat-modal" id="chatModal">
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="chat-title">
+                <div class="chat-title-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span id="agentTitle">智能体对话</span>
+            </div>
+            <button class="close-chat" id="closeChat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="message-area" id="messageArea">
+            <div class="message agent">
+                <div class="message-header">
+                    <i class="fas fa-robot"></i> 智能助手
+                </div>
+                <div class="message-content">
+                    您好！我是您的AI助手，有什么可以帮您的吗？
+                </div>
+            </div>
+        </div>
+        <div class="input-area">
+            <textarea class="message-input" id="messageInput" placeholder="输入您的问题..."></textarea>
+            <button class="send-button" id="sendButton">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 模拟API响应数据
+    const mockAgents = [
+        {
+            id: 1,
+            name: "JavaScript脚本助手",
+            type: "系统内置智能体-脚本库",
+            status: "已发布",
+            description: "帮助用户编写、调试和优化JavaScript代码，提供实时建议和错误检测功能。",
+            icon: "fab fa-js"
+        },
+        {
+            id: 2,
+            name: "SQL助手",
+            type: "系统内置智能体-数据库",
+            status: "已发布",
+            description: "帮助用户编写数据集和列表页面SQL，进行SQL优化等操作，提高数据库操作效率。",
+            icon: "fas fa-database"
+        },
+        {
+            id: 3,
+            name: "Vue开发助手",
+            type: "系统内置智能体-前端",
+            status: "测试中",
+            description: "专为Vue开发者设计的智能助手，帮助创建组件、解决常见问题并优化性能。",
+            icon: "fab fa-vuejs"
+        },
+        {
+            id: 4,
+            name: "内容校对",
+            type: "系统内置智能体-内容处理",
+            status: "已发布",
+            description: "自动检测和修正文本内容中的语法、拼写错误，提升内容质量。",
+            icon: "fas fa-check-circle"
+        },
+        {
+            id: 5,
+            name: "数据分析助手",
+            type: "自定义智能体-数据处理",
+            status: "草稿",
+            description: "帮助用户进行数据分析和可视化，支持多种数据格式导入和处理。",
+            icon: "fas fa-chart-line"
+        },
+        {
+            id: 6,
+            name: "API测试助手",
+            type: "自定义智能体-后端开发",
+            status: "已发布",
+            description: "自动化API测试和文档生成，支持多种协议和认证方式。",
+            icon: "fas fa-plug"
+        }
+    ];
+
+    // DOM元素
+    const agentsContainer = document.getElementById('agentsContainer');
+    const chatModal = document.getElementById('chatModal');
+    const closeChat = document.getElementById('closeChat');
+    const agentTitle = document.getElementById('agentTitle');
+    const messageArea = document.getElementById('messageArea');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const searchInput = document.querySelector('.search-input');
+    const filterSelect = document.querySelector('.filter-select');
+
+    // 当前选中的智能体
+    let currentAgent = null;
+    let chatId = null;
+
+    // 定义后端 API 的 URL 和请求配置
+    const apiUrl = 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/queryAiAgentList';
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function () {
+        // 初始化智能体列表（从后端获取数据）
+        fetchAgentList();
+
+        // 初始化事件监听器
+        initEventListeners();
+
+        // 卡片悬停效果增强
+        initCardHoverEffect();
+    });
+
+    // 获取智能体列表数据
+    async function fetchAgentList() {
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}), // 如果需要传参，可以在这里添加请求体
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json(); // 假设后端返回 JSON 数据
+            renderAgents(data); // 渲染智能体列表
+        } catch (error) {
+            console.error('获取智能体列表失败:', error);
+            agentsContainer.innerHTML = `
+            <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--gray-700);">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--gray-300);"></i>
+                <h3>加载失败</h3>
+                <p>无法加载智能体列表，请稍后重试。</p>
+            </div>
+        `;
+        }
+    }
+
+    // 渲染智能体列表
+    function renderAgents(agents) {
+        agentsContainer.innerHTML = '';
+
+        if (!agents || agents.length === 0) {
+            agentsContainer.innerHTML = `
+            <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--gray-700);">
+                <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem; color: var(--gray-300);"></i>
+                <h3>没有找到智能体</h3>
+                <p>请尝试其他搜索条件或创建新的智能体</p>
+            </div>
+        `;
+            return;
+        }
+
+        agents.forEach(agent => {
+            const agentCard = document.createElement('div');
+            agentCard.className = 'agent-card';
+            agentCard.innerHTML = `
+            <div class="agent-header">
+                <div class="agent-icon">
+                    <i class="${agent.icon}"></i>
+                </div>
+                <div class="agent-info">
+                    <div class="agent-name">${agent.name}</div>
+                    <div class="agent-type">${agent.type}</div>
+                </div>
+                <div class="agent-status">${agent.status}</div>
+            </div>
+            <div class="agent-body">
+                <p class="agent-desc">${agent.description}</p>
+            </div>
+            <div class="agent-footer">
+                <button class="btn btn-outline detail-btn" data-id="${agent.id}">查看详情</button>
+                <button class="btn btn-primary chat-btn" data-id="${agent.id}">立即使用</button>
+            </div>
+        `;
+            agentsContainer.appendChild(agentCard);
+        });
+
+        // 为按钮添加事件监听器
+        document.querySelectorAll('.chat-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const agentId = this.getAttribute('data-id');
+                openChatModal(agentId);
+            });
+        });
+    }
+
+
+    // 打开对话窗口
+    function openChatModal(agentId) {
+        currentAgent = mockAgents.find(agent => agent.id == agentId);
+        if (!currentAgent) return;
+
+        // 生成唯一的chatId（在实际应用中应使用更可靠的方法）
+        chatId = `chat_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+
+        // 设置标题
+        agentTitle.textContent = `与 ${currentAgent.name} 对话`;
+
+        // 清空消息区域（保留第一条欢迎消息）
+        messageArea.innerHTML = `
+            <div class="message agent">
+                <div class="message-header">
+                    <i class="fas fa-robot"></i> ${currentAgent.name}
+                </div>
+                <div class="message-content">
+                    您好！我是您的${currentAgent.name}，有什么可以帮您的吗？
+                </div>
+            </div>
+        `;
+
+        // 显示对话窗口
+        chatModal.classList.add('active');
+        messageInput.focus();
+    }
+
+    // 发送消息
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        // 添加用户消息
+        addMessage('user', message);
+        messageInput.value = '';
+
+        // 显示正在输入指示器
+        showTypingIndicator();
+
+        // 模拟API请求延迟
+        setTimeout(() => {
+            // 移除正在输入指示器
+            document.querySelector('.typing-indicator')?.remove();
+
+            // 添加AI回复
+            addMessage('agent', generateResponse(message));
+
+            // 滚动到底部
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }, 1500);
+    }
+
+    // 添加消息到对话区域
+    function addMessage(sender, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        messageDiv.innerHTML = `
+            <div class="message-header">
+                <i class="${sender === 'user' ? 'fas fa-user' : 'fas fa-robot'}"></i>
+                ${sender === 'user' ? '您' : currentAgent.name}
+            </div>
+            <div class="message-content">${content}</div>
+        `;
+        messageArea.appendChild(messageDiv);
+
+        // 滚动到底部
+        messageArea.scrollTop = messageArea.scrollHeight;
+    }
+
+    // 显示正在输入指示器
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.innerHTML = `
+            <span></span>
+            <span></span>
+            <span></span>
+        `;
+        messageArea.appendChild(typingDiv);
+        messageArea.scrollTop = messageArea.scrollHeight;
+    }
+
+    // 生成智能体回复（模拟）
+    function generateResponse(message) {
+        const responses = [
+            `我理解您的问题："${message}"。根据我的知识库，我可以提供以下建议...`,
+            `关于"${message}"，我认为有几个关键点需要考虑。首先...其次...最后...`,
+            `感谢您的提问！${message}是一个很好的问题。我的分析结果是...`,
+            `针对"${message}"，我已经检索了相关资料，以下是总结：...`,
+            `我明白您关心"${message}"。基于当前信息，我的建议是...`,
+            `这个问题很有意思！让我为您详细解释"${message}"的相关内容...`
+        ];
+
+        return responses[Math.floor(Math.random() * responses.length)];
+    }
+
+    // 初始化事件监听器
+    function initEventListeners() {
+        // 关闭对话窗口
+        closeChat.addEventListener('click', () => {
+            chatModal.classList.remove('active');
+        });
+
+        // 发送消息
+        sendButton.addEventListener('click', sendMessage);
+
+        // 按Enter发送消息，Shift+Enter换行
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // 搜索功能
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredAgents = mockAgents.filter(agent =>
+                agent.name.toLowerCase().includes(searchTerm) ||
+                agent.description.toLowerCase().includes(searchTerm)
+            );
+            renderAgents(filteredAgents);
+        });
+
+        // 筛选功能
+        filterSelect.addEventListener('change', () => {
+            const status = filterSelect.value;
+            let filteredAgents = mockAgents;
+
+            if (status !== 'all') {
+                filteredAgents = mockAgents.filter(agent => {
+                    if (status === 'published') return agent.status === '已发布';
+                    if (status === 'draft') return agent.status === '草稿';
+                    if (status === 'testing') return agent.status === '测试中';
+                    return true;
+                });
+            }
+
+            renderAgents(filteredAgents);
+        });
+    }
+
+    // 卡片悬停效果
+    function initCardHoverEffect() {
+        const cards = document.querySelectorAll('.feature-card, .agent-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    }
+</script>
+</body>
+</html>

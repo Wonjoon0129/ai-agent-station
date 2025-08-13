@@ -7,14 +7,13 @@ import org.junit.runner.RunWith;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import top.kimwonjoon.domain.agent.service.IAiAgentChatService;
 import top.kimwonjoon.domain.agent.service.IAiAgentPreheatService;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 
 import java.time.LocalDate;
 
-import static top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.CHAT_MEMORY_CONVERSATION_ID_KEY;
-import static top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_CONVERSATION_ID_KEY;
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
 @Slf4j
 @RunWith(SpringRunner.class)

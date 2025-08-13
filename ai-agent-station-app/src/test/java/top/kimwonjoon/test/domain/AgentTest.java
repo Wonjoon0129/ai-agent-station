@@ -18,9 +18,6 @@ import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
@@ -30,8 +27,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.CHAT_MEMORY_CONVERSATION_ID_KEY;
-import static top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_CONVERSATION_ID_KEY;
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
 
 /**

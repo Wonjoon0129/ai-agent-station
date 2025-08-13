@@ -49,4 +49,5 @@ public interface IAgentRepository {
 
     List<AiVectorDatabaseVO> queryAiVectorDatabaseVO();
 
+    Map<String, AiAgentClientFlowConfigVO> queryAiAgentClientFlowConfig(String aiAgentId);
 }

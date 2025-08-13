@@ -1,22 +1,19 @@
-package top.kimwonjoon.domain.agent.service.chat;
+package top.kimwonjoon.domain.agent.service.chat.flow;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
-import top.kimwonjoon.domain.agent.service.chat.node.ClientNode;
+import top.kimwonjoon.domain.agent.service.chat.flow.node.ClientNode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.CHAT_MEMORY_CONVERSATION_ID_KEY;
-import static top.kimwonjoon.domain.agent.service.chat.AiAgentChatService.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_CONVERSATION_ID_KEY;
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
 /**
  * @ClassName FlowExecutorService
@@ -50,7 +47,7 @@ public class FlowExecutorService {
 
         List<Message> messages=new ArrayList<>();
 
-        String previousClientOutput = null;
+        String previousClientOutput;
         int stepCount = 0; // 防止无限循环
         int maxSteps = 100; // 最大执行步骤
 
@@ -59,9 +56,8 @@ public class FlowExecutorService {
 
         while (currentNode != null && stepCount < maxSteps) {
 
-            // log.info("Executing client: {}, step: {}", currentNode.getClientId(), stepCount);
+            log.info("Executing client: {}, step: {}", currentNode.getClientId(), stepCount);
             try {
-
                 ChatResponse response = currentNode.getClientInstance()
                     .prompt()
                     .messages(messages)
@@ -95,9 +91,9 @@ public class FlowExecutorService {
 
         if (stepCount >= maxSteps) {
             // log.warn("Flow execution exceeded max steps for agentId: {}", agentId);
-            return "Flow execution aborted due to exceeding max steps.";
+            return "由于超过了最大步骤数，流程执行已中止。";
         }
 
-        return "Flow did not complete as expected."; // 如果currentNode为null但没有返回结果
+        return "流程未按预期完成。"; // 如果currentNode为null但没有返回结果
     }
 }

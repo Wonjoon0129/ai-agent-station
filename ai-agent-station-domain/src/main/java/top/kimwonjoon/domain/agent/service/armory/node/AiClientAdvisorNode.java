@@ -6,12 +6,8 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.ollama.OllamaEmbeddingModel;
-import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
-import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
@@ -19,6 +15,7 @@ import org.springframework.stereotype.Component;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientAdvisorVO;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientModelVO;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.armory.AbstractArmorySupport;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import top.kimwonjoon.domain.agent.service.armory.factory.element.RagAnswerAdvisor;
@@ -54,7 +51,7 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
         List<AiClientAdvisorVO> aiClientAdvisorList = dynamicContext.getValue("aiClientAdvisorList");
         List<AiClientModelVO> aiClientModelList = dynamicContext.getValue("aiClientModelList");
         AiClientModelVO aiClientModelVO = aiClientModelList.get(0);
-        this.chatModel=getBean("AiClientModel_" + aiClientModelVO.getId());
+        this.chatModel=getBean(AiAgentEnumVO.AI_CLIENT_MODEL.getBeanNameTag() + aiClientModelVO.getId());
 
         if (aiClientAdvisorList == null || aiClientAdvisorList.isEmpty()) {
             log.warn("没有可用的AI客户端顾问（advisor）配置");
@@ -72,7 +69,7 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
 
     @Override
     protected String beanName(Long id) {
-        return "AiClientAdvisor_" + id;
+        return AiAgentEnumVO.AI_CLIENT_ADVISOR.getBeanNameTag() + id;
     }
 
     @Override
@@ -105,8 +102,8 @@ public class AiClientAdvisorNode extends AbstractArmorySupport {
     }
 
     public VectorStore createVectorStore(AiClientAdvisorVO aiClientAdvisorVO) {
-        EmbeddingModel embeddingModel = getBean("AiClientEmbeddingModel_" + aiClientAdvisorVO.getEmbeddingModelId());
-        return PgVectorStore.builder(getBean("DataBaseDrive_"+aiClientAdvisorVO.getDatabaseId()), embeddingModel)
+        EmbeddingModel embeddingModel = getBean(AiAgentEnumVO.AI_CLIENT_EMBEDDING_MODEL.getBeanNameTag() + aiClientAdvisorVO.getEmbeddingModelId());
+        return PgVectorStore.builder(getBean(AiAgentEnumVO.DATA_BASE_DRIVE.getBeanNameTag()+aiClientAdvisorVO.getDatabaseId()), embeddingModel)
                 .dimensions(768)
                 .vectorTableName(aiClientAdvisorVO.getAdvisorName())
                 .build();

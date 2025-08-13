@@ -6,9 +6,6 @@ import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.document.MetadataMode;
-import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.embedding.EmbeddingRequest;
-import org.springframework.ai.embedding.EmbeddingResponse;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.model.Model;
 import org.springframework.ai.ollama.OllamaChatModel;
@@ -23,6 +20,7 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.stereotype.Component;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientModelVO;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.armory.AbstractArmorySupport;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 
@@ -74,7 +72,7 @@ public class AiClientModelNode extends AbstractArmorySupport {
 
     @Override
     protected String beanName(Long id) {
-        return "AiClientModel_" + id;
+        return AiAgentEnumVO.AI_CLIENT_MODEL.getBeanNameTag() + id;
     }
 
     /**
@@ -104,7 +102,7 @@ public class AiClientModelNode extends AbstractArmorySupport {
 
                     for (AiClientModelVO.AiClientModelToolConfigVO toolConfig : toolConfigs) {
                         Long toolId = toolConfig.getToolId();
-                        McpSyncClient mcpSyncClient = getBean("AiClientToolMcp_" + toolId);
+                        McpSyncClient mcpSyncClient = getBean(AiAgentEnumVO.AI_CLIENT_TOOL_MCP.getBeanNameTag() + toolId);
                         mcpSyncClients.add(mcpSyncClient);
                     }
                 }
@@ -136,7 +134,7 @@ public class AiClientModelNode extends AbstractArmorySupport {
 
                     for (AiClientModelVO.AiClientModelToolConfigVO toolConfig : toolConfigs) {
                         Long toolId = toolConfig.getToolId();
-                        McpSyncClient mcpSyncClient = getBean("AiClientToolMcp_" + toolId);
+                        McpSyncClient mcpSyncClient = getBean(AiAgentEnumVO.AI_CLIENT_TOOL_MCP.getBeanNameTag() + toolId);
                         mcpSyncClients.add(mcpSyncClient);
                     }
                 }

@@ -3,13 +3,11 @@ package top.kimwonjoon.domain.agent.service.armory.node;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.cos.COSObjectKey;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
-import top.kimwonjoon.domain.agent.model.valobj.AiClientToolMcpVO;
 import top.kimwonjoon.domain.agent.model.valobj.AiVectorDatabaseVO;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.armory.AbstractArmorySupport;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 
@@ -72,7 +70,7 @@ public class VectorDatabaseNode extends AbstractArmorySupport {
 
     @Override
     protected String beanName(Long id) {
-        return "DataBaseDrive_" + id;
+        return AiAgentEnumVO.DATA_BASE_DRIVE.getBeanNameTag() + id;
     }
 
 

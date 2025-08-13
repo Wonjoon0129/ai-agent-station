@@ -1,13 +1,13 @@
-package top.kimwonjoon.domain.agent.service.chat;
+package top.kimwonjoon.domain.agent.service.chat.flow;
 
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.evaluation.RelevancyEvaluator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
 import top.kimwonjoon.domain.agent.model.valobj.AiAgentClientVO;
-import top.kimwonjoon.domain.agent.service.chat.node.ClientNode;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
+import top.kimwonjoon.domain.agent.service.chat.flow.node.ClientNode;
 
 import java.util.*;
 
@@ -38,7 +38,7 @@ public class ClientAssemblyService {
         List<AiAgentClientVO> relations =  agentRepository.queryAgentClientConfigByAgentId(agentId);
 
         if (relations == null || relations.isEmpty()) {
-            return new ClientNode(aiClientId,applicationContext.getBean("ChatClient_" + aiClientId, ChatClient.class));
+            return new ClientNode(aiClientId,applicationContext.getBean(AiAgentEnumVO.CHAT_CLIENT.getBeanNameTag() + aiClientId, ChatClient.class));
         }
 
         Map<Long, ClientNode> clientNodeMap = new HashMap<>();
@@ -55,7 +55,7 @@ public class ClientAssemblyService {
             try {
                 // 假设Bean的名称规则为 "clientBeanPrefix" + clientId
                 // 您需要根据实际的Bean命名规则调整
-                String beanName = "ChatClient_" + clientId;
+                String beanName = AiAgentEnumVO.CHAT_CLIENT.getBeanNameTag() + clientId;
                 ChatClient clientBean = applicationContext.getBean(beanName, ChatClient.class);
                 clientNodeMap.put(clientId, new ClientNode(clientId, clientBean));
             } catch (Exception e) {

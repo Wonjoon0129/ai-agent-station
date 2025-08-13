@@ -15,6 +15,7 @@ import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientAdvisorVO;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientModelVO;
 import top.kimwonjoon.domain.agent.model.valobj.AiVectorDatabaseVO;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.IAiAgentPreheatService;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import top.kimwonjoon.domain.agent.service.armory.node.AiClientModelNode;
@@ -43,26 +44,22 @@ public class AiAgentPreheatService implements IAiAgentPreheatService {
     public void preheat() throws Exception {
         List<AiClientModelVO> aiClientModelList = repository.queryAiClientModelVOList();
 
-
         // 遍历模型列表，为每个模型创建对应的Bean
         for (AiClientModelVO modelVO : aiClientModelList) {
-
             Model openAiChatModel = aiClientModelNode.createOpenAiChatModel(modelVO);
-            aiClientModelNode.registerBean("AiClientEmbeddingModel_"+modelVO.getId(), Model.class, openAiChatModel);
+            aiClientModelNode.registerBean(AiAgentEnumVO.AI_CLIENT_EMBEDDING_MODEL.getBeanNameTag()+modelVO.getId(), Model.class, openAiChatModel);
         }
-
 
         List<AiVectorDatabaseVO> aiVectorDatabaseVOList=repository.queryAiVectorDatabaseVO();
         for(AiVectorDatabaseVO aiVectorDatabaseVO : aiVectorDatabaseVOList){
             vectorDatabaseNode.createVectorDatabaseDrive(aiVectorDatabaseVO);
         }
-
     }
 
     @Override
-    public void preheat(Long aiClientId) throws Exception {
+    public void preheat(Long agiAgentId) throws Exception {
 
-        List<Long> list = repository.queryAiClientIdsByAiAgentId(aiClientId);
+        List<Long> list = repository.queryAiClientIdsByAiAgentId(agiAgentId);
         StrategyHandler<AiAgentEngineStarterEntity, DefaultArmoryStrategyFactory.DynamicContext, String> handler = defaultArmoryStrategyFactory.strategyHandler();
         handler.apply(AiAgentEngineStarterEntity.builder()
                 .clientIdList(list)

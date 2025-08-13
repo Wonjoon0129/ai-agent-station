@@ -32,6 +32,8 @@ public class AiAgentClientLine extends Page {
 
     private  String condition;
 
+    private String stepPrompt;
+
     /**
      * 创建时间
      */

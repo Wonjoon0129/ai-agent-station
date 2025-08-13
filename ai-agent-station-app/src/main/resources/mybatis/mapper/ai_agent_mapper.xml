@@ -41,25 +41,27 @@
 
     <!-- 根据智能体ID查询关联的客户端ID列表 -->
     <select id="queryClientIdsByAgentId" resultType="java.lang.Long">
-        SELECT
-            client_id_to AS client_id
-        FROM
-            ai_agent_client_line
-        WHERE
-            agent_id = #{agentId}
+    select distinct a.client_id
+    from
+        (SELECT
+             client_id_to AS client_id
+         FROM
+             ai_agent_client_line
+         WHERE
+             agent_id = #{agentId}
 
-        UNION ALL
+         UNION ALL
 
-        SELECT
-            head_client_id AS client_id
-        FROM
-            ai_agent
-        WHERE
-            id = #{agentId}
-          AND head_client_id IS NOT NULL
+         SELECT
+             head_client_id AS client_id
+         FROM
+             ai_agent
+         WHERE
+             id = #{agentId}
+           AND head_client_id IS NOT NULL
 
-        ORDER BY
-            client_id
+         ORDER BY
+             client_id)  a where client_id is not null
     </select>
 
     <!-- 查询所有有效的智能体关联的客户端ID -->

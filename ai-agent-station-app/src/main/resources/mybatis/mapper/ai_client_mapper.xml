@@ -32,6 +32,14 @@
             LIMIT #{offset}, #{limit}
         </if>
     </select>
+    <select id="queryClientById" resultType="top.kimwonjoon.infrastructure.dao.po.AiClient">
+        SELECT
+        id, client_name, description, status, create_time, update_time
+        FROM
+        ai_client
+        WHERE
+        id = #{id}
+    </select>
 
 
 </mapper>

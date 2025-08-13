@@ -1,4 +1,4 @@
-package top.kimwonjoon.domain.agent.service.chat;
+package top.kimwonjoon.domain.agent.service.chat.flow;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

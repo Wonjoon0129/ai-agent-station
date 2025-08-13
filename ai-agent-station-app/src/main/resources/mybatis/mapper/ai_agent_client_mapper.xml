@@ -9,6 +9,7 @@
         <result column="client_id_to" property="clientIdTo"/>
         <result column="condition" property="condition"/>
         <result column="create_time" property="createTime"/>
+        <result column="step_prompt" property="stepPrompt"/>
     </resultMap>
 
     
@@ -28,7 +29,7 @@
     
     <!-- 根据智能体ID查询关联配置 -->
     <select id="queryAgentClientConfigByAgentId" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, agent_id, client_id_from, client_id_to,`condition`,create_time
+        SELECT id, agent_id, client_id_from, client_id_to,step_prompt,`condition`,create_time
         FROM ai_agent_client_line
         WHERE agent_id = #{agentId}
     </select>

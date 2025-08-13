@@ -11,9 +11,9 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.utils.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientToolMcpVO;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.armory.AbstractArmorySupport;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 
@@ -106,7 +106,7 @@ public class AiClientToolMcpNode extends AbstractArmorySupport {
 
     @Override
     protected String beanName(Long id) {
-        return "AiClientToolMcp_" + id;
+        return AiAgentEnumVO.AI_CLIENT_TOOL_MCP.getBeanNameTag() + id;
     }
 
     @Override

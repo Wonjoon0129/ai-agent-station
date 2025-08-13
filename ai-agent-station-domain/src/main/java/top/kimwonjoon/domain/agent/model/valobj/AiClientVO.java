@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +30,13 @@ public class AiClientVO {
     private List<String> advisorBeanIdList;
 
     public String getModelBeanName() {
-        return "AiClientModel_" + modelBeanId;
+        return AiAgentEnumVO.AI_CLIENT_MODEL.getBeanNameTag() + modelBeanId;
     }
 
     public List<String> getMcpBeanNameList() {
         List<String> beanNameList = new ArrayList<>();
         for (String mcpBeanId : mcpBeanIdList) {
-            beanNameList.add("AiClientToolMcp_" + mcpBeanId);
+            beanNameList.add(AiAgentEnumVO.AI_CLIENT_TOOL_MCP.getBeanNameTag() + mcpBeanId);
         }
         return beanNameList;
     }
@@ -43,7 +44,7 @@ public class AiClientVO {
     public List<String> getAdvisorBeanNameList() {
         List<String> beanNameList = new ArrayList<>();
         for (String mcpBeanId : advisorBeanIdList) {
-            beanNameList.add("AiClientAdvisor_" + mcpBeanId);
+            beanNameList.add(AiAgentEnumVO.AI_CLIENT_ADVISOR.getBeanNameTag() + mcpBeanId);
         }
         return beanNameList;
     }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.armory.node.RootNode;
 
 import java.util.ArrayList;
@@ -43,15 +44,15 @@ public class DefaultArmoryStrategyFactory {
         return rootNode;
     }
     public ChatClient chatClient(Long clientId) {
-        return (ChatClient) applicationContext.getBean("ChatClient_" + clientId);
+        return (ChatClient) applicationContext.getBean(AiAgentEnumVO.CHAT_CLIENT.getBeanNameTag() + clientId);
     }
 
     public ChatModel chatModel(Long modelId) {
-        return (ChatModel) applicationContext.getBean("AiClientModel_" + modelId);
+        return (ChatModel) applicationContext.getBean(AiAgentEnumVO.AI_CLIENT_MODEL.getBeanNameTag() + modelId);
     }
 
     public EmbeddingModel embeddingModel(Long modelId) {
-        return (EmbeddingModel) applicationContext.getBean("AiClientEmbeddingModel_" + modelId);
+        return (EmbeddingModel) applicationContext.getBean(AiAgentEnumVO.AI_CLIENT_EMBEDDING_MODEL.getBeanNameTag() + modelId);
     }
 
 

@@ -1,8 +1,7 @@
-package top.kimwonjoon.domain.agent.service.chat.node;
+package top.kimwonjoon.domain.agent.service.chat.flow.node;
 
 import lombok.Data;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.evaluation.RelevancyEvaluator;
 
 import java.util.HashMap;
 import java.util.Map;

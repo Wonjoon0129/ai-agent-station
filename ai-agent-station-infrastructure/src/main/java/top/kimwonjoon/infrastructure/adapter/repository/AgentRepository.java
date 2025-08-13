@@ -59,6 +59,8 @@ public class AgentRepository implements IAgentRepository {
     IAiRagOrderDao aiRagOrderDao;
     @Resource
     IAiVectorDatabaseDao aiVectorDatabaseDao;
+    @Resource
+    IAiClientDao aiClientDao;
 
     @Resource
     RedissonClient redissonClient;
@@ -450,6 +452,58 @@ public class AgentRepository implements IAgentRepository {
             aiVectorDatabaseVOS.add(vo);
         }
         return aiVectorDatabaseVOS;
+    }
+
+    @Override
+    public Map<String, AiAgentClientFlowConfigVO> queryAiAgentClientFlowConfig(String aiAgentId) {
+        Long agentId = Long.parseLong(aiAgentId);
+        if (aiAgentId == null || aiAgentId.trim().isEmpty()) {
+            return Map.of();
+        }
+
+        try{
+            Map<String, AiAgentClientFlowConfigVO> result = new HashMap<>();
+
+            Long l = aiAgentDao.queryHeadClientByAgentId(agentId);
+            if(l==null){
+                return result;
+            }
+            // 根据智能体ID查询流程配置列表
+            List<AiAgentClientLine> aiAgentClientLines = aiAgentClientDao.queryAgentClientConfigByAgentId(agentId);
+            Map<Long,AiAgentClientLine> map=new HashMap();
+            for (AiAgentClientLine aiAgentClientLine : aiAgentClientLines) {
+                map.put(aiAgentClientLine.getClientIdFrom(),aiAgentClientLine);
+            }
+            long from=l;
+            int i=1;
+            while(true){
+                AiAgentClientLine tmp = map.get(from);
+
+                AiAgentClientFlowConfigVO vo = new AiAgentClientFlowConfigVO();
+                vo.setClientId(String.valueOf(from));
+                vo.setClientName("client"+i);
+                vo.setClientType(tmp.getCondition());
+                vo.setSequence(i++);
+                vo.setStepPrompt(tmp.getStepPrompt());
+
+                result.put(tmp.getCondition(),vo);
+
+                Long clientIdTo = tmp.getClientIdTo();
+                if(clientIdTo==null){
+                    break;
+                }
+                from=clientIdTo;
+            }
+
+            return result;
+
+        }catch (NumberFormatException e) {
+            log.error("Invalid aiAgentId format: {}", aiAgentId, e);
+            return Map.of();
+        } catch (Exception e) {
+            log.error("Query ai agent client flow config failed, aiAgentId: {}", aiAgentId, e);
+            return Map.of();
+        }
     }
 
 }

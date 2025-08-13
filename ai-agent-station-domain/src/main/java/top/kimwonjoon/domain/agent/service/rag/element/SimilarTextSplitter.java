@@ -7,6 +7,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -179,7 +180,7 @@ public class SimilarTextSplitter {
 
         List<float[]> embeddings = new ArrayList<>();
         // 获取嵌入模型
-        EmbeddingModel embeddingModel= (EmbeddingModel) applicationContext.getBean("AiClientEmbeddingModel_" + modelId);
+        EmbeddingModel embeddingModel= (EmbeddingModel) applicationContext.getBean(AiAgentEnumVO.AI_CLIENT_EMBEDDING_MODEL.getBeanNameTag() + modelId);
         // 调用模型生成嵌入向量
         for(String sentence:sentences){
             log.info("sentence:{}",sentence);
