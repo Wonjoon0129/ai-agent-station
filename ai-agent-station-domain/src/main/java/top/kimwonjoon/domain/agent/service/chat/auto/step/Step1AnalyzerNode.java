@@ -12,8 +12,6 @@ import top.kimwonjoon.domain.agent.service.chat.auto.step.factory.DefaultAutoAge
 
 /**
  * 任务分析节点
- *
- * @author xiaofuge bugstack.cn @小傅哥
  * 2025/7/27 16:36
  */
 @Slf4j

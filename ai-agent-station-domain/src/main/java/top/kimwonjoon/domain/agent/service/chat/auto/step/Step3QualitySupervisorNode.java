@@ -84,7 +84,6 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
         if (dynamicContext.isCompleted() || dynamicContext.getStep() > dynamicContext.getMaxStep()) {
             return router(requestParameter, dynamicContext);
         }
-        
         // 否则继续下一轮执行，返回到Step1AnalyzerNode
         return router(requestParameter, dynamicContext);
     }

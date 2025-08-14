@@ -10,7 +10,6 @@ import top.kimwonjoon.infrastructure.dao.IAiVectorDatabaseDao;
 import top.kimwonjoon.infrastructure.dao.po.AiVectorDatabase;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * @ClassName AiVectorDatabaseTest

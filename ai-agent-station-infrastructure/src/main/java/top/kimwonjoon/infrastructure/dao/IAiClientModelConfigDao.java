@@ -1,7 +1,6 @@
 package top.kimwonjoon.infrastructure.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import top.kimwonjoon.domain.agent.model.valobj.AiClientModelVO;
 import top.kimwonjoon.infrastructure.dao.po.AiClientModelConfig;
 
 import java.util.List;

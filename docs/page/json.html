@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON格式化工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #f5f7fa, #e4edf5);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s ease;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* 新增AI服务声明样式 */
+        .ai-service-banner {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            color: #2E8B57;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(46, 139, 87, 0.3);
+            transition: all 0.3s ease;
+            z-index: 10;
+            max-width: 600px;
+        }
+
+        .ai-service-banner:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 139, 87, 0.2);
+            border-color: #2E8B57;
+        }
+
+        .ai-service-banner a {
+            color: #2E8B57;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(46, 139, 87, 0.1);
+            transition: all 0.3s;
+        }
+
+        .ai-service-banner a:hover {
+            background: rgba(46, 139, 87, 0.2);
+        }
+
+        .ai-icon {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(45deg, #2E8B57, #3CB371);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #2E8B57;
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 20px auto 0;
+            color: #5a6d80;
+            line-height: 1.6;
+        }
+
+        .tool-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .input-section, .output-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 2px solid #2E8B57;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-section:hover, .output-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(46, 139, 87, 0.15);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #2E8B57;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(46, 139, 87, 0.3);
+        }
+
+        .section-title i {
+            margin-right: 12px;
+            font-size: 1.6rem;
+            background: rgba(46, 139, 87, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2E8B57;
+        }
+
+        .textarea-container {
+            position: relative;
+            height: 380px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-grow: 1;
+            border: 1px solid #e0e6ed;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        textarea, .output {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            background: #f9fbfd;
+            border: 1px solid #e0e6ed;
+            border-radius: 12px;
+            color: #333;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 15px;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            border-color: #2E8B57;
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
+        }
+
+        .output {
+            overflow: auto;
+            white-space: pre;
+            background: #f9fbfd;
+        }
+
+        .section-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #2E8B57, #3CB371);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(46, 139, 87, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(46, 139, 87, 0.35);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        }
+
+        .btn-compress {
+            background: linear-gradient(45deg, #5a67d8, #6c7ae0);
+        }
+
+        .btn-copy {
+            background: linear-gradient(45deg, #2E8B57, #4CAF50);
+        }
+
+        .btn-settings {
+            background: linear-gradient(45deg, #5a6d80, #7a8a9c);
+        }
+
+        .btn-ai {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+        }
+
+        .btn-ai.active {
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.5);
+        }
+
+        .error {
+            color: #e53e3e;
+            margin-top: 15px;
+            font-weight: 500;
+            background: rgba(229, 62, 62, 0.08);
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            border-left: 4px solid #e53e3e;
+            font-family: monospace;
+        }
+
+        .info {
+            color: #2E8B57;
+            margin-top: 15px;
+            font-weight: 500;
+            background: rgba(46, 139, 87, 0.08);
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            border-left: 4px solid #2E8B57;
+            font-family: monospace;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            padding: 12px 0;
+            border-top: 1px solid #edf2f7;
+            color: #5a6d80;
+        }
+
+        .stats span {
+            font-weight: 600;
+            color: #2E8B57;
+        }
+
+        .example {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #2E8B57;
+            background: rgba(46, 139, 87, 0.08);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .example:hover {
+            background: rgba(46, 139, 87, 0.15);
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 60px;
+            justify-content: center;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 25px;
+            width: 260px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(46, 139, 87, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(46, 139, 87, 0.15);
+            border-color: #2E8B57;
+        }
+
+        .feature-card i {
+            font-size: 2.8rem;
+            color: #2E8B57;
+            margin-bottom: 20px;
+            background: rgba(46, 139, 87, 0.1);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: #2E8B57;
+            font-size: 1.4rem;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #5a6d80;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 25px;
+            font-size: 0.95rem;
+            color: #5a6d80;
+            border-top: 1px solid #edf2f7;
+        }
+
+        /* JSON Syntax Highlighting */
+        .json-key {
+            color: #2E8B57;
+            font-weight: 600;
+        }
+
+        .json-string {
+            color: #d35400;
+        }
+
+        .json-number {
+            color: #9b59b6;
+        }
+
+        .json-boolean {
+            color: #2980b9;
+        }
+
+        .json-null {
+            color: #e74c3c;
+        }
+
+        .json-punctuation {
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        .settings-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .setting-group {
+            margin-bottom: 20px;
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #5a6d80;
+            font-weight: 500;
+        }
+
+        .setting-group select, .setting-group input {
+            width: 100%;
+            padding: 12px;
+            background: #f9fbfd;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            color: #333;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .setting-group select:focus, .setting-group input:focus {
+            border-color: #2E8B57;
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .theme-option {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-option.active {
+            border-color: #2E8B57;
+            transform: scale(1.15);
+        }
+
+        .theme-light { background: linear-gradient(135deg, #f5f7fa, #e4edf5); }
+        .theme-dark { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+        .theme-green { background: linear-gradient(135deg, #e6f4ea, #d1e8d7); }
+
+        /* AI Loading Indicator */
+        .ai-loading {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 214, 107, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            color: #d35400;
+            font-weight: 500;
+            border-left: 4px solid #FF8E53;
+        }
+
+        .ai-loading i {
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            color: #d35400;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            margin-left: 15px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2E8B57;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .ai-service-banner {
+                font-size: 0.8rem;
+                padding: 10px 15px;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .tool-container {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .features {
+                gap: 20px;
+            }
+
+            .feature-card {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .ai-service-banner {
+                position: static;
+                margin: 20px auto 0;
+                max-width: 90%;
+                border-radius: 15px;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .ai-icon {
+                display: none;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .ai-service-banner {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="ai-service-banner">
+        <div class="ai-icon">
+            <i class="fas fa-brain"></i>
+        </div>
+        <div>
+            AI服务由本人基于SpringAI编写的工作流智能体提供
+        </div>
+        <a href="https://github.com/Wonjoon0129/ai-agent-station" target="_blank">
+            <i class="fab fa-github"></i> Github地址
+        </a>
+    </div>
+
+    <header>
+        <h1><i class="fas fa-code"></i> JSON格式化工具</h1>
+        <p class="subtitle">格式化、压缩、验证JSON数据，支持语法高亮显示、自定义缩进和主题切换</p>
+    </header>
+
+    <button class="btn btn-github" id="github-btn">
+        <i class="fas fa-compress"></i> 项目地址
+    </button>
+
+    <div class="tool-container">
+        <div class="input-section">
+            <h2 class="section-title"><i class="fas fa-pencil-alt"></i> 输入JSON</h2>
+            <div class="textarea-container">
+                <textarea id="json-input" placeholder='在此处粘贴您的JSON数据...&#10;例如: { "name": "John", "age": 30, "city": "New York" }'></textarea>
+            </div>
+
+            <div class="example" id="load-example">
+                <i class="fas fa-lightbulb"></i> 加载示例JSON数据
+            </div>
+
+            <div class="section-controls">
+                <button class="btn btn-ai" id="ai-assist-btn">
+                    <i class="fas fa-robot"></i> AI辅助
+                </button>
+                <button class="btn" id="format-btn">
+                    <i class="fas fa-indent"></i> 格式化JSON
+                </button>
+                <button class="btn btn-compress" id="compress-btn">
+                    <i class="fas fa-compress"></i> 压缩JSON
+                </button>
+                <button class="btn btn-clear" id="clear-btn">
+                    <i class="fas fa-trash"></i> 清空内容
+                </button>
+                <button class="btn btn-settings" id="settings-btn">
+                    <i class="fas fa-cog"></i> 设置
+                </button>
+            </div>
+
+            <div class="ai-loading" id="ai-loading">
+                <i class="fas fa-spinner"></i> AI正在处理您的请求，请稍候...
+            </div>
+
+            <div class="info" id="info-msg"></div>
+            <div class="error" id="error-msg"></div>
+
+            <div class="settings-panel" id="settings-panel">
+                <div class="setting-group">
+                    <label>缩进设置</label>
+                    <select id="indent-select">
+                        <option value="2">2个空格</option>
+                        <option value="4" selected>4个空格</option>
+                        <option value="tab">制表符</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label>主题选择</label>
+                    <div class="theme-selector">
+                        <div class="theme-option theme-light active" data-theme="light"></div>
+                        <div class="theme-option theme-dark" data-theme="dark"></div>
+                        <div class="theme-option theme-green" data-theme="green"></div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label>自动格式化
+                        <label class="switch">
+                            <input type="checkbox" id="auto-format">
+                            <span class="slider"></span>
+                        </label>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-section">
+            <h2 class="section-title"><i class="fas fa-check-circle"></i> 格式化结果</h2>
+            <div class="textarea-container">
+                <div id="json-output" class="output"></div>
+            </div>
+
+            <div class="stats">
+                <div><i class="fas fa-grip-lines"></i> 行数: <span id="line-count">0</span></div>
+                <div><i class="fas fa-font"></i> 字符数: <span id="char-count">0</span></div>
+                <div><i class="fas fa-weight-hanging"></i> 大小: <span id="size">0 KB</span></div>
+            </div>
+
+            <div class="section-controls">
+                <button class="btn btn-copy" id="copy-btn">
+                    <i class="fas fa-copy"></i> 复制结果
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <i class="fas fa-bolt"></i>
+            <h3>快速格式化</h3>
+            <p>一键格式化JSON数据，提高可读性</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-compress-arrows-alt"></i>
+            <h3>压缩JSON</h3>
+            <p>删除所有不必要的空格，减小JSON大小</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-check-circle"></i>
+            <h3>语法验证</h3>
+            <p>自动检测并高亮显示JSON语法错误</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-paint-brush"></i>
+            <h3>语法高亮</h3>
+            <p>使用颜色区分键、值、数据类型</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>JSON格式化工具 | 支持所有现代浏览器 | 完全在浏览器端运行，确保数据安全</p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM 元素
+        const jsonInput = document.getElementById('json-input');
+        const jsonOutput = document.getElementById('json-output');
+        const formatBtn = document.getElementById('format-btn');
+        const compressBtn = document.getElementById('compress-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const infoMsg = document.getElementById('info-msg');
+        const loadExample = document.getElementById('load-example');
+        const lineCount = document.getElementById('line-count');
+        const charCount = document.getElementById('char-count');
+        const sizeSpan = document.getElementById('size');
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsPanel = document.getElementById('settings-panel');
+        const indentSelect = document.getElementById('indent-select');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const aiAssistBtn = document.getElementById('ai-assist-btn');
+        const aiLoading = document.getElementById('ai-loading');
+        const autoFormatToggle = document.getElementById('auto-format');
+
+        // 设置
+        let currentTheme = 'light';
+        let indentSize = 4;
+        let aiAssistMode = false;
+
+        // 示例JSON数据
+        const exampleJson = JSON.stringify({
+            "tool": "JSON Formatter",
+            "description": "一个功能强大的JSON格式化工具",
+            "features": ["格式化", "压缩", "验证", "语法高亮"],
+            "version": 2.1,
+            "author": {
+                "name": "Alex Johnson",
+                "email": "alex@example.com",
+                "website": "https://example.com"
+            },
+            "supportedLanguages": ["JavaScript", "Python", "Java", "C#", "PHP"],
+            "isOpenSource": true,
+            "downloads": 18500,
+            "releaseDate": "2023-06-15",
+            "tags": ["web", "tool", "developer", "utility"],
+            "rating": 4.8,
+            "dependencies": {
+                "highlight.js": "^11.0.0",
+                "fonts": "Font Awesome"
+            },
+            "license": "MIT",
+            "repository": "https://github.com/example/json-formatter"
+        }, null, 4);
+
+        // 加载示例
+        loadExample.addEventListener('click', function() {
+            jsonInput.value = exampleJson;
+            formatJson();
+            this.innerHTML = '<i class="fas fa-check"></i> 示例已加载!';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-lightbulb"></i> 加载示例JSON数据';
+            }, 2000);
+        });
+
+        // 设置面板切换
+        settingsBtn.addEventListener('click', function() {
+            settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // 缩进设置
+        indentSelect.addEventListener('change', function() {
+            if (this.value === 'tab') {
+                indentSize = '\t';
+            } else {
+                indentSize = parseInt(this.value);
+            }
+
+            // 如果当前有内容，重新格式化
+            if (jsonInput.value.trim()) {
+                formatJson();
+            }
+        });
+
+        // 主题切换
+        themeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                themeOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+
+                currentTheme = this.dataset.theme;
+                document.body.className = '';
+                document.body.classList.add(`theme-${currentTheme}`);
+            });
+        });
+
+        // AI辅助模式切换
+        aiAssistBtn.addEventListener('click', function() {
+            aiAssistMode = !aiAssistMode;
+            if (aiAssistMode) {
+                this.classList.add('active');
+                this.innerHTML = '<i class="fas fa-robot"></i> AI辅助已开启';
+                showInfo('AI辅助模式已开启，点击"格式化JSON"按钮将使用AI优化您的JSON数据。');
+            } else {
+                this.classList.remove('active');
+                this.innerHTML = '<i class="fas fa-robot"></i> AI辅助';
+                showInfo('AI辅助模式已关闭。');
+            }
+        });
+
+        // 格式化JSON
+        formatBtn.addEventListener('click', function() {
+            if (aiAssistMode) {
+                getAIFormattedJson();
+            } else {
+                formatJson();
+            }
+        });
+
+        // 压缩JSON
+        compressBtn.addEventListener('click', function() {
+            try {
+                const parsedJson = JSON.parse(jsonInput.value);
+                const compressed = JSON.stringify(parsedJson);
+                jsonOutput.textContent = compressed;
+                highlightJson(compressed);
+                updateStats(compressed);
+                hideMessages();
+            } catch (err) {
+                showError(err.message);
+            }
+        });
+
+        // 清空内容
+        clearBtn.addEventListener('click', function() {
+            jsonInput.value = '';
+            jsonOutput.textContent = '';
+            hideMessages();
+            updateStats('');
+        });
+
+        // 复制结果
+        copyBtn.addEventListener('click', function() {
+            const text = jsonOutput.textContent;
+            if (text) {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        // 显示复制成功反馈
+                        const originalText = copyBtn.innerHTML;
+                        copyBtn.innerHTML = '<i class="fas fa-check"></i> 已复制!';
+                        setTimeout(() => {
+                            copyBtn.innerHTML = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('复制失败:', err);
+                    });
+            }
+        });
+
+        // 自动格式化切换
+        autoFormatToggle.addEventListener('change', function() {
+            if (this.checked) {
+                jsonInput.addEventListener('input', autoFormatHandler);
+                showInfo('已开启自动格式化功能');
+            } else {
+                jsonInput.removeEventListener('input', autoFormatHandler);
+                showInfo('已关闭自动格式化功能');
+            }
+        });
+
+        // 自动格式化处理函数
+        function autoFormatHandler() {
+            if (jsonInput.value.trim() !== '') {
+                setTimeout(() => {
+                    formatJson();
+                }, 1000);
+            }
+        }
+
+        // 格式化JSON函数
+        function formatJson() {
+            try {
+                const inputText = jsonInput.value.trim();
+                if (!inputText) {
+                    showError('请输入JSON数据');
+                    return;
+                }
+
+                const parsedJson = JSON.parse(inputText);
+                const formatted = JSON.stringify(parsedJson, null, indentSize);
+                jsonOutput.textContent = formatted;
+                highlightJson(formatted);
+                updateStats(formatted);
+                hideMessages();
+            } catch (err) {
+                showError(err.message);
+            }
+        }
+
+        // 获取AI优化的JSON
+        async function getAIFormattedJson() {
+            const inputText = jsonInput.value.trim();
+            if (!inputText) {
+                showError('请输入JSON数据');
+                return;
+            }
+            const TIMEOUT = 10000;
+
+            try {
+                // 显示加载指示器
+                aiLoading.style.display = 'block';
+                hideMessages();
+
+                // 这里替换为您的实际API端点
+                const currentChatId = Date.now().toString();
+                const aiAgentId = 6;
+                const message = `请优化以下JSON数据，使其更规范、易读，并保持原数据结构不变:\n\n${inputText}`;
+
+                const url=`/ai-agent-api/chat_agent?chatId=${currentChatId}&aiAgentId=${aiAgentId}&message=${encodeURIComponent(message)}`;
+                const fetchPromise = fetch(url);
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => {
+                        reject(new Error("请求超时，请稍后再试"));
+                    }, TIMEOUT);
+                });
+
+                const response = await Promise.race([fetchPromise, timeoutPromise]);
+                // 调用AI API
+
+                if (!response.ok) {
+                    throw new Error(`API请求失败: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // 检查返回的code是否为"0000"表示成功
+                if (result.code !== "0000") {
+                    throw new Error(result.info || 'AI处理失败');
+                }
+
+                // 从data字段获取JSON内容
+                let jsonContent = result.data;
+
+                if (jsonContent.startsWith('Yes')||jsonContent.startsWith('yes')){
+                    highlightJson(inputText);
+                    updateStats(inputText);
+                    formatJson();
+                    return
+                }
+
+                // 提取JSON内容（处理```json\n...\n```格式）
+                if (jsonContent.startsWith('```json')) {
+                    jsonContent = jsonContent.replace(/^```json\n/, '').replace(/\n```$/, '');
+                } else if (jsonContent.startsWith('```')) {
+                    jsonContent = jsonContent.replace(/^```\n/, '').replace(/\n```$/, '');
+                }
+
+                // 验证返回的JSON是否有效
+                const parsedJson = JSON.parse(jsonContent);
+
+                // 1. 先将AI返回的数据放到左边输入框
+                jsonInput.value = JSON.stringify(parsedJson, null, indentSize);
+
+                // 2. 然后对返回的数据进行标准格式化处理
+                const formatted = JSON.stringify(parsedJson, null, indentSize);
+                jsonOutput.textContent = formatted;
+                highlightJson(formatted);
+                updateStats(formatted);
+
+                showInfo(result.info || 'AI已优化您的JSON数据');
+            } catch (err) {
+                showError(`AI处理失败: ${err.message}`);
+            } finally {
+                aiLoading.style.display = 'none';
+            }
+        }
+
+        // 显示信息
+        function showInfo(message) {
+            infoMsg.textContent = message;
+            infoMsg.style.display = 'block';
+            errorMsg.style.display = 'none';
+
+            setTimeout(() => {
+                infoMsg.style.display = 'none';
+            }, 3000);
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            errorMsg.textContent = '错误: ' + message;
+            errorMsg.style.display = 'block';
+            infoMsg.style.display = 'none';
+            jsonOutput.textContent = '';
+            updateStats('');
+
+            // 错误提示动画
+            errorMsg.style.animation = 'none';
+            setTimeout(() => {
+                errorMsg.style.animation = 'pulse 0.5s';
+            }, 10);
+        }
+
+        // 隐藏所有消息
+        function hideMessages() {
+            errorMsg.style.display = 'none';
+            infoMsg.style.display = 'none';
+        }
+
+        // 更新统计信息
+        function updateStats(text) {
+            const lines = text ? text.split('\n').length : 0;
+            const characters = text.length;
+            const sizeKB = (text.length / 1024).toFixed(2);
+
+            lineCount.textContent = lines;
+            charCount.textContent = characters;
+            sizeSpan.textContent = sizeKB + ' KB';
+        }
+
+        // JSON语法高亮
+        function highlightJson(json) {
+            // 清空之前的内容
+            jsonOutput.innerHTML = '';
+
+            // 转义HTML特殊字符
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // 使用正则表达式匹配并添加样式
+            json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+                let cls = 'json-number';
+
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'json-key';
+                    } else {
+                        cls = 'json-string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'json-null';
+                }
+
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+
+            // 添加标点符号样式
+            json = json.replace(/[{}[\],]/g, function(match) {
+                return '<span class="json-punctuation">' + match + '</span>';
+            });
+
+            // 设置高亮后的HTML
+            jsonOutput.innerHTML = json;
+        }
+
+        // 添加错误提示动画
+        const style = document.createElement('style');
+        style.textContent = `
+                @keyframes pulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.02); }
+                    100% { transform: scale(1); }
+                }
+            `;
+        document.head.appendChild(style);
+
+        // 初始化示例
+        jsonInput.value = exampleJson;
+        formatJson();
+    });
+</script>
+</body>
+</html>

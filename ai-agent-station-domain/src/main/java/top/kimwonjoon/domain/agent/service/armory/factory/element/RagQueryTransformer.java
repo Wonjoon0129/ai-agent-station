@@ -5,15 +5,11 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.model.Model;
 import org.springframework.ai.rag.Query;
 import org.springframework.ai.rag.preretrieval.query.transformation.QueryTransformer;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import picocli.CommandLine;
-
-import java.util.ArrayList;
 
 /**
  * @ClassName QueryTransformer
@@ -45,8 +41,11 @@ public class RagQueryTransformer implements QueryTransformer {
                 .content();
 
         String regex = "<think>[\\s\\S]*?</think>";
-        String trim = content.replaceAll(regex, "").trim();
-        rewrittenQueryText.append(query.text()+"\n-----------------\n"+trim);
+        String trim = null;
+        if (content != null) {
+            trim = content.replaceAll(regex, "").trim();
+        }
+        rewrittenQueryText.append(query.text()).append("\n-----------------\n").append(trim);
         if (!StringUtils.hasText(rewrittenQueryText)) {
             log.warn("Query rewrite result is null/empty. Returning the input query unchanged.");
             return query;
@@ -59,4 +58,5 @@ public class RagQueryTransformer implements QueryTransformer {
     public Query apply(Query query) {
         return transform(query);
     }
+
 }

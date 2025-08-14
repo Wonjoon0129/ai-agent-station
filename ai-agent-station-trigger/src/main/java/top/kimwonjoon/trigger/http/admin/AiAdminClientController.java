@@ -3,8 +3,6 @@ package top.kimwonjoon.trigger.http.admin;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.evaluation.RelevancyEvaluator;
-import org.springframework.ai.evaluation.EvaluationRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.kimwonjoon.infrastructure.dao.IAiAgentClientDao;

@@ -1,12 +1,10 @@
 package top.kimwonjoon.test;
 
-import com.alibaba.fastjson.JSON;
 import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
 import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
 import io.modelcontextprotocol.client.transport.ServerParameters;
 import io.modelcontextprotocol.client.transport.StdioClientTransport;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,27 +13,16 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import reactor.core.publisher.Flux;
-import top.kimwonjoon.test.ragAnswer.RagAnswerAdvisor;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * AutoAgent 测试类
@@ -382,7 +369,6 @@ public class AutoAgentTest {
 
     /**
      * 动态多轮执行测试 - 模拟 PlanningAgent 和 ExecutorAgent 的完整动态执行流程
-     *
      * 执行特点：
      * 1. 动态分析用户输入，自主决定执行策略
      * 2. 根据每轮执行结果，智能判断下一步行动
@@ -394,7 +380,7 @@ public class AutoAgentTest {
     public void test_dynamic_multi_step_execution() {
         // 配置参数
         int maxSteps = 4; // 最大执行步数
-        String userInput = "搜索小傅哥，技术项目列表。编写成一份文档，说明不同项目的学习目标，以及不同阶段的伙伴应该学习哪个项目。";
+        String userInput;
         userInput = "搜索 springboot 相关知识，生成4个主要内容章节。每个章节要包括课程内容和配套示例代码。并发对应章节创建对md文档，方便小白伙伴学习。";
         String sessionId = "dynamic-execution-" + System.currentTimeMillis();
 
@@ -569,7 +555,7 @@ public class AutoAgentTest {
                         userInput,
                         step,
                         maxSteps,
-                        executionHistory.length() > 0 ? executionHistory.toString() : "[首次执行]",
+                        !executionHistory.isEmpty() ? executionHistory.toString() : "[首次执行]",
                         currentTask
                 );
 

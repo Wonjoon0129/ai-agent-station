@@ -28,7 +28,7 @@ import java.util.concurrent.ScheduledFuture;
 @Component
 public class AgentTaskJob implements DisposableBean {
 
-    @Autowired
+    @Resource
     private AiAgentTaskService aiAgentTaskService;
 
     @Resource

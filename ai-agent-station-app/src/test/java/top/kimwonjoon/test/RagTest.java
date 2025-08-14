@@ -1,6 +1,5 @@
 package top.kimwonjoon.test;
 
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

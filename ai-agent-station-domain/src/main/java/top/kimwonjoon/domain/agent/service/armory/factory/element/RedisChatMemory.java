@@ -1,23 +1,21 @@
 package top.kimwonjoon.domain.agent.service.armory.factory.element;
 
-import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RList;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.stereotype.Component;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName RedisChatMemory

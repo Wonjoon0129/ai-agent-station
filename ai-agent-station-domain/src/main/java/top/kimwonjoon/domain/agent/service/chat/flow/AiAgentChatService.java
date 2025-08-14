@@ -74,13 +74,12 @@ public class AiAgentChatService implements IAiAgentChatService {
         for(Message message1:messages){
             stringBuilder.append(message1.getText());
         }
-        String response = ChatClient.create(chatModel).prompt()
+
+        return ChatClient.create(chatModel).prompt()
                 .user(u -> u.text(stringBuilder.toString())
                         .media(media))
                 .call()
                 .content();
-
-        return response;
     }
 
 

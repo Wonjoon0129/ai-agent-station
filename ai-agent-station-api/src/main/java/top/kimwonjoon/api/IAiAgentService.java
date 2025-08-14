@@ -1,7 +1,6 @@
 package top.kimwonjoon.api;
 
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import top.kimwonjoon.api.response.Response;

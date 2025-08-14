@@ -139,12 +139,11 @@ public class AiAgentController implements IAiAgentService {
                 types.add(file.getContentType());
             }
             String content= aiAgentChatService.aiMultiChat(modelId, message,types,resource,ragId);
-            Response<String> response = Response.<String>builder()
+            return Response.<String>builder()
                     .code(Constants.ResponseCode.SUCCESS.getCode())
                     .info(Constants.ResponseCode.SUCCESS.getInfo())
                     .data(content)
                     .build();
-            return response;
         } catch (Exception e) {
             log.error("AiAgent 智能体对话，异常 {} {}", message, e);
             return Response.<String>builder()

@@ -9,16 +9,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.model.entity.AiAgentEngineStarterEntity;
 import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.armory.node.RootNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

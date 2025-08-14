@@ -7,7 +7,6 @@ import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
 import top.kimwonjoon.domain.agent.model.valobj.AiClientAdvisorVO;
@@ -16,7 +15,6 @@ import top.kimwonjoon.domain.agent.service.armory.node.AiClientAdvisorNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
 /**

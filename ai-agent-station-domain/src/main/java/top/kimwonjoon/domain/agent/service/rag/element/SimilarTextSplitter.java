@@ -164,8 +164,8 @@ public class SimilarTextSplitter {
 
         for (int i = 0; i < vectorA.length; i++) {
             dotProduct += vectorA[i] * vectorB[i];
-            normA += Math.pow(vectorA[i], 2);
-            normB += Math.pow(vectorB[i], 2);
+            normA += (float) Math.pow(vectorA[i], 2);
+            normB += (float) Math.pow(vectorB[i], 2);
         }
 
         if (normA == 0 || normB == 0) {

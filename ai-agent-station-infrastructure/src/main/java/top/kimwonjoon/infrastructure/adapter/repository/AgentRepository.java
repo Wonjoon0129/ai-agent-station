@@ -5,13 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.redisson.api.RList;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
 import top.kimwonjoon.domain.agent.model.valobj.*;
 import top.kimwonjoon.infrastructure.dao.*;
@@ -31,7 +27,7 @@ import java.util.stream.Collectors;
 @Repository
 public class AgentRepository implements IAgentRepository {
 
-    @Autowired
+    @Resource
     JdbcTemplate jdbcTemplate;
     @Resource
     IAiClientModelDao aiClientModelDao;
@@ -64,7 +60,7 @@ public class AgentRepository implements IAgentRepository {
 
     @Resource
     RedissonClient redissonClient;
-    @Autowired
+    @Resource
     private IAiAgentClientDao aiAgentClientDao;
 
     @Override
@@ -318,8 +314,7 @@ public class AgentRepository implements IAgentRepository {
         aiRagOrder.setCreateTime(new Date());
         aiRagOrder.setUpdateTime(new Date());
         aiRagOrderDao.insert(aiRagOrder);
-        long i = jdbcTemplate.queryForObject(idSql, Long.class);
-        return i;
+        return jdbcTemplate.queryForObject(idSql, Long.class);
 
     }
 

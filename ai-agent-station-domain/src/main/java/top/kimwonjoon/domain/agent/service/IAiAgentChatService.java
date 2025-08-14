@@ -1,7 +1,6 @@
 package top.kimwonjoon.domain.agent.service;
 
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
