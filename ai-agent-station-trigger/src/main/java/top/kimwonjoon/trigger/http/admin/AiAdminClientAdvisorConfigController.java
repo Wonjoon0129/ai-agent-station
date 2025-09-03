@@ -83,7 +83,6 @@ public class AiAdminClientAdvisorConfigController {
     @RequestMapping(value = "addClientAdvisorConfig", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addClientAdvisorConfig(@RequestBody AiClientAdvisorConfig aiClientAdvisorConfig) {
         try {
-            aiClientAdvisorConfig.setCreateTime(new Date());
             int count = aiClientAdvisorConfigDao.insert(aiClientAdvisorConfig);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

@@ -103,7 +103,6 @@ public class AiAdminAgentClientController {
     @RequestMapping(value = "addAgentClient", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addAgentClient(@RequestBody AiAgentClientLine aiAgentClientLine) {
         try {
-            aiAgentClientLine.setCreateTime(new Date());
             int count = aiAgentClientDao.insert(aiAgentClientLine);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

@@ -90,8 +90,6 @@ public class AiAdminClientModelController {
     @RequestMapping(value = "addClientModel", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addClientModel(@RequestBody AiClientModel aiClientModel) {
         try {
-            aiClientModel.setCreateTime(new Date());
-            aiClientModel.setUpdateTime(new Date());
             int count = aiClientModelDao.insert(aiClientModel);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
@@ -109,7 +107,6 @@ public class AiAdminClientModelController {
     @RequestMapping(value = "updateClientModel", method = RequestMethod.POST)
     public ResponseEntity<Boolean> updateClientModel(@RequestBody AiClientModel aiClientModel) {
         try {
-            aiClientModel.setUpdateTime(new Date());
             int count = aiClientModelDao.update(aiClientModel);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

@@ -78,9 +78,9 @@
     <!-- 插入任务调度配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentTaskSchedule">
         INSERT INTO ai_agent_task_schedule (
-            agent_id, task_name, description, cron_expression, task_param, status, create_time, update_time
+            agent_id, task_name, description, cron_expression, task_param, status
         ) VALUES (
-                     #{agentId}, #{taskName}, #{description}, #{cronExpression}, #{taskParam}, #{status}, #{createTime}, #{updateTime}
+                     #{agentId}, #{taskName}, #{description}, #{cronExpression}, #{taskParam}, #{status}
                  )
     </insert>
 
@@ -92,8 +92,7 @@
             description = #{description},
             cron_expression = #{cronExpression},
             task_param = #{taskParam},
-            status = #{status},
-            update_time = #{updateTime}
+            status = #{status}
         WHERE id = #{id}
     </update>
 

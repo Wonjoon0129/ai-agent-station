@@ -63,9 +63,9 @@
     <!-- 插入客户端-顾问关联配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisorConfig">
         INSERT INTO ai_client_advisor_config (
-            client_id, advisor_id, create_time
+            client_id, advisor_id
         ) VALUES (
-                     #{clientId}, #{advisorId}, #{createTime}
+                     #{clientId}, #{advisorId}
                  )
     </insert>
 

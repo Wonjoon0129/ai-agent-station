@@ -17,9 +17,9 @@
     <!-- 插入智能体配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgent">
         INSERT INTO ai_agent (
-            agent_name, channel, description, status, create_time, update_time,head_client_id
+            agent_name, channel, description, status,head_client_id
         ) VALUES (
-                     #{agentName}, #{description}, #{status}, #{createTime}, #{updateTime},#{headClientId}
+                     #{agentName},#{channel}, #{description}, #{status},#{headClientId}
                  )
     </insert>
 
@@ -30,7 +30,7 @@
             channel = #{channel},
             description = #{description},
             status = #{status},
-            update_time = #{updateTime}
+            head_client_id=#{headClientId}
         WHERE id = #{id}
     </update>
     <!-- 根据ID删除智能体配置 -->
@@ -61,7 +61,7 @@
            AND head_client_id IS NOT NULL
 
          ORDER BY
-             client_id)  a where client_id is not null
+             client_id)  a where client_id is not null and client_id != 1
     </select>
 
     <!-- 查询所有有效的智能体关联的客户端ID -->
@@ -79,7 +79,7 @@
     <!-- 根据条件查询智能体列表 -->
     <select id="queryAiAgentList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgent" resultMap="dataMap">
         SELECT
-        id, agent_name, channel, description, status, create_time, update_time
+        id, agent_name, channel, description, status, create_time, update_time,head_client_id
         FROM
         ai_agent
         <where>
@@ -99,7 +99,7 @@
         </if>
     </select>
     <select id="queryAllAgentConfigByChannel" resultType="java.lang.String" resultMap="dataMap">
-        SELECT id, agent_name, channel, description, status, create_time, update_time
+        SELECT id, agent_name, channel, description, status, create_time, update_time,head_client_id
         FROM ai_agent
         WHERE channel = #{channel}
     </select>

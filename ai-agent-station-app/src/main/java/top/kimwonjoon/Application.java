@@ -12,7 +12,6 @@ import top.kimwonjoon.domain.agent.service.IAiAgentPreheatService;
 @Slf4j
 @SpringBootApplication
 @Configurable
-@EnableScheduling
 public class Application implements CommandLineRunner {
     @Resource
     private IAiAgentPreheatService aiAgentArmoryService;

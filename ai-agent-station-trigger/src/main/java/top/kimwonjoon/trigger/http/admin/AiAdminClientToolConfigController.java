@@ -86,7 +86,6 @@ public class AiAdminClientToolConfigController {
     @RequestMapping(value = "addClientToolConfig", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addClientToolConfig(@RequestBody AiClientToolConfig aiClientToolConfig) {
         try {
-            aiClientToolConfig.setCreateTime(new Date());
             int count = aiClientToolConfigDao.insert(aiClientToolConfig);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

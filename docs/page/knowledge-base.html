@@ -528,11 +528,11 @@
             </div>
 
             <div class="nav-links">
-                <a href="index.html" class="nav-link">首页</a>
-                <a href="#" class="nav-link">智能体开发</a>
+                <a href="./index.html" class="nav-link">首页</a>
+                <a href="./agent.html" class="nav-link active">智能体开发</a>
                 <a href="#" class="nav-link">模型接入</a>
                 <a href="#" class="nav-link">向量库配置</a>
-                <a href="#" class="nav-link active">知识库管理</a>
+                <a href="./knowledge-base.html" class="nav-link">知识库管理</a>
                 <a href="#" class="nav-link">文档管理</a>
                 <a href="#" class="nav-link">MCP管理</a>
             </div>
@@ -788,7 +788,7 @@
             const fetchAdvisors = async () => {
                 try {
                     // 实际API调用应该像这样：
-                    const response = await axios.post('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorList', {
+                    const response = await axios.post('http://117.72.40.188:8091/ai-agent-station/api/v1/ai/admin/client/advisor/queryClientAdvisorList', {
                         pageNum: currentPage.value,
                         pageSize: pageSize.value,
                     });

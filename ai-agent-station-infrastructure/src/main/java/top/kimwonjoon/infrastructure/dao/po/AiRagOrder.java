@@ -42,15 +42,6 @@ public class AiRagOrder extends Page {
      */
     private Date createTime;
 
-
-    /**
-     * multimedia
-     */
-    private Integer multimedia;
-
-
-    private Integer headClientId;
-
     /**
      * 更新时间
      */

@@ -80,8 +80,6 @@ public class AiAdminClientSystemPromptController {
     @RequestMapping(value = "addSystemPrompt", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addSystemPrompt(@RequestBody AiClientSystemPrompt aiClientSystemPrompt) {
         try {
-            aiClientSystemPrompt.setCreateTime(new Date());
-            aiClientSystemPrompt.setUpdateTime(new Date());
             int count = aiClientSystemPromptDao.insert(aiClientSystemPrompt);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
@@ -99,7 +97,6 @@ public class AiAdminClientSystemPromptController {
     @RequestMapping(value = "updateSystemPrompt", method = RequestMethod.POST)
     public ResponseEntity<Boolean> updateSystemPrompt(@RequestBody AiClientSystemPrompt aiClientSystemPrompt) {
         try {
-            aiClientSystemPrompt.setUpdateTime(new Date());
             int count = aiClientSystemPromptDao.update(aiClientSystemPrompt);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

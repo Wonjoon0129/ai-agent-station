@@ -8,6 +8,8 @@ import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
 import top.kimwonjoon.domain.agent.model.valobj.AiAgentClientVO;
 import top.kimwonjoon.domain.agent.model.valobj.enums.AiAgentEnumVO;
 import top.kimwonjoon.domain.agent.service.chat.flow.node.ClientNode;
+import top.kimwonjoon.domain.agent.service.chat.flow.node.Node;
+import top.kimwonjoon.domain.agent.service.chat.flow.node.StartNode;
 
 import java.util.*;
 
@@ -32,7 +34,7 @@ public class ClientAssemblyService {
      * @param agentId 智能体ID
      * @return 流程的起始节点列表 (没有被其他节点指向的节点)
      */
-    public ClientNode assembleClientFlow(Long agentId) {
+    public Node assembleClientFlow(Long agentId) {
 
         Long aiClientId = agentRepository.queryHeadClientByAgentId(agentId);
         List<AiAgentClientVO> relations =  agentRepository.queryAgentClientConfigByAgentId(agentId);
@@ -41,7 +43,7 @@ public class ClientAssemblyService {
             return new ClientNode(aiClientId,applicationContext.getBean(AiAgentEnumVO.CHAT_CLIENT.getBeanNameTag() + aiClientId, ChatClient.class));
         }
 
-        Map<Long, ClientNode> clientNodeMap = new HashMap<>();
+        Map<Long, Node> clientNodeMap = new HashMap<>();
         Set<Long> allClientIdsInFlow = new HashSet<>();
         relations.forEach(r -> {
             allClientIdsInFlow.add(r.getClientIdFrom());
@@ -53,11 +55,15 @@ public class ClientAssemblyService {
         // 初始化所有节点
         for (Long clientId : allClientIdsInFlow) {
             try {
-                // 假设Bean的名称规则为 "clientBeanPrefix" + clientId
-                // 您需要根据实际的Bean命名规则调整
-                String beanName = AiAgentEnumVO.CHAT_CLIENT.getBeanNameTag() + clientId;
-                ChatClient clientBean = applicationContext.getBean(beanName, ChatClient.class);
-                clientNodeMap.put(clientId, new ClientNode(clientId, clientBean));
+                if(clientId==1){
+                    clientNodeMap.put(clientId, new StartNode(clientId, null));
+                }else{
+                    // 假设Bean的名称规则为 "clientBeanPrefix" + clientId
+                    // 您需要根据实际的Bean命名规则调整
+                    String beanName = AiAgentEnumVO.CHAT_CLIENT.getBeanNameTag() + clientId;
+                    ChatClient clientBean = applicationContext.getBean(beanName, ChatClient.class);
+                    clientNodeMap.put(clientId, new ClientNode(clientId, clientBean));
+                }
             } catch (Exception e) {
                 // 处理Bean未找到或类型不匹配的异常
                 // log.error("Failed to get or cast client bean for ID: {}", clientId, e);
@@ -70,13 +76,12 @@ public class ClientAssemblyService {
 
         // 构建条件转换关系
         for (AiAgentClientVO relation : relations) {
-            ClientNode parentNode = clientNodeMap.get(relation.getClientIdFrom());
-            ClientNode childNode = null;
+            Node parentNode = clientNodeMap.get(relation.getClientIdFrom());
+            Node childNode = null;
             if (relation.getClientIdTo() != null) {
                 childNode = clientNodeMap.get(relation.getClientIdTo());
             }
             parentNode.addConditionalChild(relation.getCondition(), childNode);
-
         }
 
 

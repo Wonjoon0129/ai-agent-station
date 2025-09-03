@@ -24,14 +24,20 @@ public class AiAgentClientLine extends Page {
     private Long agentId;
 
     /**
-     * 客户端ID
+     * 客户端from
      */
     private Long clientIdFrom;
-
+    /**
+     * 客户端 to
+     */
     private Long clientIdTo;
-
+    /**
+     * 条件
+     */
     private  String condition;
-
+    /**
+     * promt传递模版
+     */
     private String stepPrompt;
 
     /**

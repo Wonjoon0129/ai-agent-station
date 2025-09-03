@@ -34,9 +34,9 @@
     <!-- 插入客户端工具配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolConfig">
         INSERT INTO ai_client_tool_config (
-            client_id, tool_type, tool_id, create_time
+            client_id, tool_type, tool_id
         ) VALUES (
-                     #{clientId}, #{toolType}, #{toolId}, #{createTime}
+                     #{clientId}, #{toolType}, #{toolId}
                  )
     </insert>
 

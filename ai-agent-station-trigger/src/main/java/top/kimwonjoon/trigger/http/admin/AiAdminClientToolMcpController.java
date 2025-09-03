@@ -67,8 +67,6 @@ public class AiAdminClientToolMcpController {
     @RequestMapping(value = "addMcp", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addMcp(@RequestBody AiClientToolMcp aiClientToolMcp) {
         try {
-            aiClientToolMcp.setCreateTime(LocalDateTime.now());
-            aiClientToolMcp.setUpdateTime(LocalDateTime.now());
             int count = aiClientToolMcpDao.insert(aiClientToolMcp);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
@@ -86,7 +84,6 @@ public class AiAdminClientToolMcpController {
     @RequestMapping(value = "updateMcp", method = RequestMethod.POST)
     public ResponseEntity<Boolean> updateMcp(@RequestBody AiClientToolMcp aiClientToolMcp) {
         try {
-            aiClientToolMcp.setUpdateTime(LocalDateTime.now());
             int count = aiClientToolMcpDao.update(aiClientToolMcp);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

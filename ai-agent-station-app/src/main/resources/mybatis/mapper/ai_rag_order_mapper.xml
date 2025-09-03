@@ -70,9 +70,9 @@
     <!-- 插入知识库配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiRagOrder">
         INSERT INTO ai_rag_order (
-            advisor_id, file_name , knowledge_tag, status, create_time, update_time
+            advisor_id, file_name , knowledge_tag, status
         )  VALUES (
-             #{advisorId}, #{fileName}, #{knowledgeTag}, #{status}, #{createTime}, #{updateTime}
+             #{advisorId}, #{fileName}, #{knowledgeTag}, #{status}
                  );
     </insert>
 
@@ -82,8 +82,7 @@
         SET advisor_id =#{advisorId},
             file_name = #{fileName},
             knowledge_tag = #{knowledgeTag},
-            status = #{status},
-            update_time = #{updateTime}
+            status = #{status}
         WHERE id = #{id}
     </update>
 
