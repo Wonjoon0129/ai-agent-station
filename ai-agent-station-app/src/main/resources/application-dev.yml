@@ -17,9 +17,9 @@ thread:
 # 数据库配置；启动时配置数据库资源信息
 spring:
   datasource:
-    username: kimwonjoon
-    password: Jin040129@
-    url: jdbc:mysql://117.72.40.188:13306/ai-agent-station?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
+    username: *
+    password: *
+    url: jdbc:mysql://localhost:13306/ai-agent-station?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
@@ -60,7 +60,7 @@ mybatis:
 redis:
   sdk:
     config:
-      host: 117.72.40.188
+      host: localhost
       port: 16379
       pool-size: 10
       min-idle-size: 5
