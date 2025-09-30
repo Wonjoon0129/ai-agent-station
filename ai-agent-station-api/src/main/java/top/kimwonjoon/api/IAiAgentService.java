@@ -1,8 +1,10 @@
 package top.kimwonjoon.api;
 
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
+import top.kimwonjoon.api.dto.ChatStreamRequestDTO;
 import top.kimwonjoon.api.response.Response;
 
 import java.util.List;
@@ -14,13 +16,11 @@ import java.util.List;
  */
 public interface IAiAgentService {
 
-    Response<String> multiChat(Long modelId,String message,List<MultipartFile> files,Long ragId);
-
     Response<Boolean> preheat(Long aiClientId);
 
     Response<String> chatAgent(Long aiAgentId, String message,String chatId);
 
-    Flux<ChatResponse> chatStream(Long aiAgentId, Long ragId, String message);
+    Flux<ChatResponse> chatStream(String chatId,Long modelId,Long ragId, String message);
 
     Response<Boolean> uploadRagFile(String name, String tag, List<MultipartFile> files,Long advisorId );
 

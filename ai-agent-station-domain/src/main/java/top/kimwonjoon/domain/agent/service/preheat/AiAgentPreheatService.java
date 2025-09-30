@@ -40,7 +40,11 @@ public class AiAgentPreheatService implements IAiAgentPreheatService {
         // 遍历模型列表，为每个模型创建对应的Bean
         for (AiClientModelVO modelVO : aiClientModelList) {
             Model openAiChatModel = aiClientModelNode.createOpenAiChatModel(modelVO);
-            aiClientModelNode.registerBean(AiAgentEnumVO.AI_CLIENT_EMBEDDING_MODEL.getBeanNameTag()+modelVO.getId(), Model.class, openAiChatModel);
+            if(modelVO.getModelType().equals("1")){
+                aiClientModelNode.registerBean(AiAgentEnumVO.AI_CLIENT_MODEL.getBeanNameTag()+modelVO.getId(), Model.class, openAiChatModel);
+            }else{
+                aiClientModelNode.registerBean(AiAgentEnumVO.AI_CLIENT_EMBEDDING_MODEL.getBeanNameTag()+modelVO.getId(), Model.class, openAiChatModel);
+            }
         }
 
         List<AiVectorDatabaseVO> aiVectorDatabaseVOList=repository.queryAiVectorDatabaseVO();

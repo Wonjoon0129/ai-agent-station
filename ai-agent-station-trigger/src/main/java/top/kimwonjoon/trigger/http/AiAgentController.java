@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 import reactor.core.publisher.Flux;
 import top.kimwonjoon.api.IAiAgentService;
 import top.kimwonjoon.api.dto.AutoAgentRequestDTO;
+import top.kimwonjoon.api.dto.ChatStreamRequestDTO;
 import top.kimwonjoon.api.response.Response;
 import top.kimwonjoon.domain.agent.model.entity.ExecuteCommandEntity;
 import top.kimwonjoon.domain.agent.service.IAiAgentChatService;
@@ -110,46 +111,17 @@ public class AiAgentController implements IAiAgentService {
     /**
      * curl http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?modelId=1&ragId=1&message=hi
      */
-    @RequestMapping(value = "chat_stream", method = RequestMethod.GET)
+    @RequestMapping(value = "chat_stream", method = {RequestMethod.GET})
     @Override
-    public Flux<ChatResponse> chatStream(@RequestParam("modelId") Long modelId, @RequestParam("ragId") Long ragId, @RequestParam("message") String message) {
+    public Flux<ChatResponse> chatStream(@RequestParam("chatId") String chatId,@RequestParam("modelId") Long modelId, @RequestParam("ragId") Long ragId, @RequestParam("message") String message) {
         try {
-            log.info("AiAgent 智能体对话(stream)，请求 {} {} {}", modelId, ragId, message);
-            if(modelId == 0){
+            if (modelId == 0) {
                 throw new Exception("请选择模型");
             }
-            return aiAgentChatService.aiAgentChatStream(modelId, ragId, message);
+            return aiAgentChatService.aiAgentChatStream(chatId,modelId, ragId, message);
         } catch (Exception e) {
-            log.error("AiAgent 智能体对话(stream)，失败 {} {} {}", modelId, ragId, message, e);
+            log.error("AiAgent 智能体对话(stream)，失败 {} {} {}", modelId, message, e);
             return Flux.error(e);
-        }
-    }
-    @Override
-    @RequestMapping(value = "multi_chat", method = RequestMethod.POST)
-    public Response<String> multiChat(@RequestParam("modelId") Long modelId, @RequestParam("message") String message,@RequestParam("image") List<MultipartFile> files, @RequestParam("ragId") Long ragId) {
-        try {
-            log.info("multi_chat，请求 {} {} {} {}", modelId, message,files,ragId);
-            if(modelId == 0){
-                throw new Exception("请选择模型");
-            }
-            List<org.springframework.core.io.Resource> resource = new ArrayList<>();
-            List<String> types=new ArrayList<>();
-            for(MultipartFile file : files){
-                resource.add(file.getResource());
-                types.add(file.getContentType());
-            }
-            String content= aiAgentChatService.aiMultiChat(modelId, message,types,resource,ragId);
-            return Response.<String>builder()
-                    .code(Constants.ResponseCode.SUCCESS.getCode())
-                    .info(Constants.ResponseCode.SUCCESS.getInfo())
-                    .data(content)
-                    .build();
-        } catch (Exception e) {
-            log.error("AiAgent 智能体对话，异常 {} {}", message, e);
-            return Response.<String>builder()
-                    .code(Constants.ResponseCode.AGENT_NULL_EXCEPTION.getCode())
-                    .info(Constants.ResponseCode.AGENT_NULL_EXCEPTION.getInfo())
-                    .build();
         }
     }
 

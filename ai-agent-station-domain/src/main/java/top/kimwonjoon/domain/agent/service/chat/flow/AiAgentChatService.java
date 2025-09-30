@@ -1,20 +1,26 @@
 package top.kimwonjoon.domain.agent.service.chat.flow;
 
+import io.modelcontextprotocol.client.McpSyncClient;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+import org.springframework.aop.Advisor;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import reactor.core.publisher.Flux;
 import top.kimwonjoon.domain.agent.adapter.repository.IAgentRepository;
 import top.kimwonjoon.domain.agent.service.IAiAgentChatService;
 import top.kimwonjoon.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
+import top.kimwonjoon.domain.agent.service.armory.factory.element.RedisChatMemory;
 import top.kimwonjoon.domain.agent.service.rag.element.RagMessageTool;
 
 import java.time.LocalDate;
@@ -31,7 +37,11 @@ public class AiAgentChatService implements IAiAgentChatService {
     DefaultArmoryStrategyFactory defaultArmoryStrategyFactory;
 
     @Resource
+    RedisChatMemory chatMemory;
+    @Resource
     RagMessageTool ragMessageTool;
+    @Autowired
+    private ChatModel chatModel;
 
     @Override
     public String aiAgentChat(Long aiAgentId, String message,String chatId) throws Exception {
@@ -48,7 +58,6 @@ public class AiAgentChatService implements IAiAgentChatService {
                         .advisors(a -> a
                                 .param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                                 .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100))
-
                         .call().content();
             }catch (NoSuchBeanDefinitionException e){
                 throw new Exception("请重新配置智能体对话客户端");
@@ -61,7 +70,7 @@ public class AiAgentChatService implements IAiAgentChatService {
     }
 
     @Override
-    public String aiMultiChat(Long modelId,String message,List<String> types,List<org.springframework.core.io.Resource> resource,Long ragId) throws Exception {
+    public Flux<ChatResponse> aiMultiChat(Long modelId,String message,List<String> types,List<org.springframework.core.io.Resource> resource,Long ragId) throws Exception {
 
         ChatModel chatModel = defaultArmoryStrategyFactory.chatModel(modelId);
 
@@ -75,24 +84,31 @@ public class AiAgentChatService implements IAiAgentChatService {
             stringBuilder.append(message1.getText());
         }
 
+
         return ChatClient.create(chatModel).prompt()
                 .user(u -> u.text(stringBuilder.toString())
                         .media(media))
-                .call()
-                .content();
+                .stream().chatResponse();
+
     }
 
 
     @Override
-    public Flux<ChatResponse> aiAgentChatStream(Long modelId, Long ragId, String message) {
+    public Flux<ChatResponse> aiAgentChatStream(String chatId,Long modelId, Long ragId, String message) {
         log.info("智能体对话请求，参数 aiAgentId {} message {}", modelId, message);
 
-        // 获取对话模型
-        ChatModel chatModel = defaultArmoryStrategyFactory.chatModel(modelId);
+        PromptChatMemoryAdvisor promptChatMemoryAdvisor=PromptChatMemoryAdvisor.builder(chatMemory)
+                .order(2)
+                .conversationId(chatId)
+                .build();
 
+        ChatModel chatModel = defaultArmoryStrategyFactory.chatModel(modelId);
+        ChatClient chatClient = ChatClient.builder(chatModel)
+                .defaultAdvisors(promptChatMemoryAdvisor)
+                .build();
         List<Message> messages=ragMessageTool.ragMessage(ragId,message);
-        return chatModel.stream(Prompt.builder()
+        return chatClient.prompt(Prompt.builder()
                 .messages(messages)
-                .build());
+                .build()).stream().chatResponse();
     }
 }

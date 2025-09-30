@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import top.kimwonjoon.domain.agent.service.IAiAgentPreheatService;
 
 @Slf4j
 @SpringBootApplication
 @Configurable
-@EnableScheduling
 public class Application implements CommandLineRunner {
     @Resource
     private IAiAgentPreheatService aiAgentArmoryService;

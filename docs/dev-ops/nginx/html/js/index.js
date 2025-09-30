@@ -12,6 +12,8 @@ let currentChatId = null;
 // 添加文件处理相关变量
 let selectedImages = [];
 
+// const api='/ai-agent-api'
+const api='http://localhost:8091/ai-agent-station/api/v1/ai'
 imageInput.addEventListener('change', function() {
     selectedImages = Array.from(this.files);
     // 可选：更新UI显示已选图片
@@ -72,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 获取知识库列表
     function loadRagOptions() {
 
-        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/rag/queryAllValidRagOrder', {
+        fetch(api+'/admin/rag/queryAllValidRagOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -85,23 +87,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-            const ragSelect = document.getElementById('ragSelect');
-            // 清空现有选项
-            while (ragSelect.options.length > 1) {
-                ragSelect.remove(1);
-            }
+                const ragSelect = document.getElementById('ragSelect');
+                // 清空现有选项
+                while (ragSelect.options.length > 1) {
+                    ragSelect.remove(1);
+                }
 
-            // 添加从服务器获取的选项
-            if (data && data.length > 0) {
-                data.forEach((item) => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.ragName;
-                    // 如果是第一个选项，设置为选中状态
-                    ragSelect.appendChild(option);
-                });
-            }
-        })
+                // 添加从服务器获取的选项
+                if (data && data.length > 0) {
+                    data.forEach((item) => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.ragName;
+                        // 如果是第一个选项，设置为选中状态
+                        ragSelect.appendChild(option);
+                    });
+                }
+            })
             .catch(error => {
                 console.error('获取AI代理列表失败:', error);
             });
@@ -110,76 +112,76 @@ document.addEventListener('DOMContentLoaded', function() {
     // 获取AI代理列表
     function fetchAiAgents() {
         // 发送请求获取AI代理列表
-        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/queryAllAgentConfigListByChannel', {
+        fetch(api+'/admin/agent/queryAllAgentConfigListByChannel', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: 'channel=agent'
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('网络响应不正常');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const aiAgentSelect = document.getElementById('aiAgent');
-            // 清空现有选项
-            while (aiAgentSelect.options.length > 1) {
-                aiAgentSelect.remove(1);
-            }
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应不正常');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const aiAgentSelect = document.getElementById('aiAgent');
+                // 清空现有选项
+                while (aiAgentSelect.options.length > 1) {
+                    aiAgentSelect.remove(1);
+                }
 
-            // 添加从服务器获取的选项
-            if (data && data.length > 0) {
-                data.forEach((agent, index) => {
-                    const option = document.createElement('option');
-                    option.value = agent.id;
-                    option.textContent = agent.agentName;
-                    // 如果是第一个选项，设置为选中状态
-                    aiAgentSelect.appendChild(option);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('获取AI代理列表失败:', error);
-        });
+                // 添加从服务器获取的选项
+                if (data && data.length > 0) {
+                    data.forEach((agent, index) => {
+                        const option = document.createElement('option');
+                        option.value = agent.id;
+                        option.textContent = agent.agentName;
+                        // 如果是第一个选项，设置为选中状态
+                        aiAgentSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('获取AI代理列表失败:', error);
+            });
     }
 
     // 获取提示词列表
     function fetchPromptTemplates() {
-        fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/system/prompt/queryAllSystemPromptConfig', {
+        fetch(api+'/admin/client/system/prompt/queryAllSystemPromptConfig', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('网络响应不正常');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const promptSelect = document.getElementById('promptSelect');
-            // 清空现有选项（保留第一个默认选项）
-            while (promptSelect.options.length > 1) {
-                promptSelect.remove(1);
-            }
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应不正常');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const promptSelect = document.getElementById('promptSelect');
+                // 清空现有选项（保留第一个默认选项）
+                while (promptSelect.options.length > 1) {
+                    promptSelect.remove(1);
+                }
 
-            // 添加从服务器获取的选项
-            if (data && data.length > 0) {
-                data.forEach(prompt => {
-                    const option = document.createElement('option');
-                    option.value = prompt.promptContent;
-                    option.textContent = prompt.promptName;
-                    promptSelect.appendChild(option);
-                });
-            }
-        })
-        .catch(error => {
-            console.error('获取提示词列表失败:', error);
-        });
+                // 添加从服务器获取的选项
+                if (data && data.length > 0) {
+                    data.forEach(prompt => {
+                        const option = document.createElement('option');
+                        option.value = prompt.promptContent;
+                        option.textContent = prompt.promptName;
+                        promptSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('获取提示词列表失败:', error);
+            });
     }
 
     // 初始化加载
@@ -235,7 +237,7 @@ function deleteChat(chatId) {
 function updateChatList() {
     chatList.innerHTML = '';
     const chats = Object.keys(localStorage)
-      .filter(key => key.startsWith('chat_'));
+        .filter(key => key.startsWith('chat_'));
 
     const currentChatIndex = chats.findIndex(key => key.split('_')[1] === currentChatId);
     if (currentChatIndex!== -1) {
@@ -429,13 +431,13 @@ function startEventStream(message) {
         handleAgentChat(message, aiAgentId,currentChatId,loadingSpinner);
     } else {
         // 原有流式对话逻辑
-        handleStreamChat(message, modelSelect,ragId);
+        handleStreamChat(currentChatId,message,modelSelect,ragId);
     }
 }
 // 新增处理普通请求的方法
 async function handleAgentChat(message, aiAgentId,currentChatId,loadingSpinner) {
     try {
-        const response = await fetch(`http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_agent?chatId=${currentChatId}&aiAgentId=${aiAgentId}&message=${encodeURIComponent(message)}`);
+        const response = await fetch(api+`/agent/chat_agent?chatId=${currentChatId}&aiAgentId=${aiAgentId}&message=${encodeURIComponent(message)}`);
 
         if (response.ok!=true) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -486,37 +488,37 @@ function uploadImagesWithMessage(message, images, modelId, ragId) {
     images.forEach(file => formData.append('image', file));
     formData.append('ragId',ragId)
     submitBtn.disabled = true;
-    fetch('http://localhost:8091/ai-agent-station/api/v1/ai/agent/multi_chat', {
+    fetch(api+'/agent/multi_chat', {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.code === '0000') {
-            uploadBtn.classList.remove('bg-green-500');
-            appendMessage(data.data, true);
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === '0000') {
+                uploadBtn.classList.remove('bg-green-500');
+                appendMessage(data.data, true);
 
-            // 隐藏加载指示器
-            loadingSpinner.classList.add('hidden');
+                // 隐藏加载指示器
+                loadingSpinner.classList.add('hidden');
+                submitBtn.disabled = false;
+            } else {
+                appendMessage(`请求失败：${data.info || '未知错误'}`, true);
+            }
+        })
+        .catch(error => {
+            appendMessage(`请求失败：${error.message}`, true);
+        })
+        .finally(() => {
             submitBtn.disabled = false;
-        } else {
-            appendMessage(`请求失败：${data.info || '未知错误'}`, true);
-        }
-    })
-    .catch(error => {
-        appendMessage(`请求失败：${error.message}`, true);
-    })
-    .finally(() => {
-        submitBtn.disabled = false;
-        selectedImages = [];
-        uploadBtn.classList.remove('bg-green-500');
-        loadingSpinner.classList.add('hidden');
-    });
+            selectedImages = [];
+            uploadBtn.classList.remove('bg-green-500');
+            loadingSpinner.classList.add('hidden');
+        });
 }
 
-function handleStreamChat(message, modelId,ragId) {
+function handleStreamChat(chatId,message, modelId,ragId) {
     const modelId2 =modelId || '0';
-    const url = `http://localhost:8091/ai-agent-station/api/v1/ai/agent/chat_stream?modelId=${modelId2}&ragId=${ragId}&message=${encodeURIComponent(message)}`;
+    const url = api+`/agent/chat_stream?chatId=${chatId}&modelId=${modelId2}&ragId=${ragId}&message=${encodeURIComponent(message)}`;
     currentEventSource = new EventSource(url);
     let accumulatedContent = '';
     let tempMessageDiv = null;
@@ -652,7 +654,7 @@ if (window.innerWidth <= 768) {
 async function loadModelOptions() {
 
     try {
-        const response = await fetch('http://localhost:8091/ai-agent-station/api/v1/ai/admin/client/model/queryAllModelConfig', {
+        const response = await fetch(api+'/admin/client/model/queryAllModelConfig', {
             method: 'POST'
         });
 
