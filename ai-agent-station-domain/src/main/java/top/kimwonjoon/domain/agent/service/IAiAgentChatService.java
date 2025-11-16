@@ -16,8 +16,8 @@ public interface IAiAgentChatService {
      */
     String aiAgentChat(Long aiAgentId,String message,String chatId) throws Exception;
 
-    String aiMultiChat(Long modelId,String message,List<String> types,List<org.springframework.core.io.Resource> resource,Long ragId) throws Exception;
+    Flux<ChatResponse> aiMultiChat(Long modelId,String message,List<String> types,List<org.springframework.core.io.Resource> resource,Long ragId) throws Exception;
 
-    Flux<ChatResponse> aiAgentChatStream(Long aiAgentId, Long ragId, String message);
+    Flux<ChatResponse> aiAgentChatStream(String chatId,Long modelId, Long ragId, String message);
 
 }

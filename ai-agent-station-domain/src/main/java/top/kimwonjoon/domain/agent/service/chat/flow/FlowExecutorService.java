@@ -2,14 +2,19 @@ package top.kimwonjoon.domain.agent.service.chat.flow;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RedissonClient;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
+import top.kimwonjoon.domain.agent.service.chat.flow.node.ClientNode;
 import top.kimwonjoon.domain.agent.service.chat.flow.node.Node;
-import top.kimwonjoon.domain.agent.service.chat.flow.node.StartNode;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_CONVERSATION_ID_KEY;
+import static top.kimwonjoon.domain.agent.service.chat.flow.AiAgentChatService.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
 
 /**
  * @ClassName FlowExecutorService
@@ -25,8 +30,6 @@ public class FlowExecutorService {
     @Resource
     private ClientAssemblyService clientAssemblyService;
 
-    @Resource
-    private RedissonClient redissonClient;
     /**
      * 执行指定Agent的客户端流程。
      * @param agentId 智能体ID
@@ -34,7 +37,6 @@ public class FlowExecutorService {
      * @return 最终的执行结果或状态
      */
     public String executeAgentFlow(Long agentId, String message,String chatId) throws Exception {
-        redissonClient.getAtomicLong("num").incrementAndGet();
         Node startNodes = clientAssemblyService.assembleClientFlow(agentId);
         if (startNodes==null) {
             // log.warn("No start nodes found for agentId: {}", agentId);
@@ -57,9 +59,19 @@ public class FlowExecutorService {
 
             log.info("Executing client: {}, step: {}", currentNode.getClientId(), stepCount);
             try {
-                previousClientOutput = currentNode.doApply(messages, chatId);
+                ChatResponse response = currentNode.getClientInstance()
+                    .prompt()
+                    .messages(messages)
+                    .system(s -> s.param("current_date", LocalDate.now().toString()))
+                    .advisors(a -> a
+                            .param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                            .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 100))
+                    .call().chatResponse();
+                previousClientOutput=response.getResult().getOutput().getText();
+                log.info("Client {} output: {}", currentNode.getClientId(), previousClientOutput);
+
                 UserMessage assistantMessage=new UserMessage(previousClientOutput);
-                if(currentNode.getConditionalChildren().isEmpty() && !currentNode.getClass().equals(StartNode.class)){
+                if(currentNode.getConditionalChildren().isEmpty()){
                     messages.add(assistantMessage);
                 }
 
@@ -69,7 +81,7 @@ public class FlowExecutorService {
                 throw new RuntimeException("Error in client execution: " + currentNode.getClientId(), e);
             }
 
-            Node nextNode = currentNode.getNextNode(previousClientOutput);
+            ClientNode nextNode =(ClientNode)currentNode.getNextNode(previousClientOutput);
             if (nextNode == null) {
                 // log.info("Flow finished after client: {}. Final output: {}", currentNode.getClientId(), previousClientOutput);
                 return previousClientOutput; // 返回最后一个客户端的输出作为流程结果
