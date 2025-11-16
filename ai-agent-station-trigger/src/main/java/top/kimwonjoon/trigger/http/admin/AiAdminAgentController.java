@@ -80,8 +80,6 @@ public class AiAdminAgentController {
     @RequestMapping(value = "addAiAgent", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addAiAgent(@RequestBody AiAgent aiAgent) {
         try {
-            aiAgent.setCreateTime(new Date());
-            aiAgent.setUpdateTime(new Date());
             int count = aiAgentDao.insert(aiAgent);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
@@ -99,7 +97,6 @@ public class AiAdminAgentController {
     @RequestMapping(value = "updateAiAgent", method = RequestMethod.POST)
     public ResponseEntity<Boolean> updateAiAgent(@RequestBody AiAgent aiAgent) {
         try {
-            aiAgent.setUpdateTime(new Date());
             int count = aiAgentDao.update(aiAgent);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

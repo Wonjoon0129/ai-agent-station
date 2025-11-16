@@ -67,8 +67,6 @@ public class AiAdminClientAdvisorController {
     @RequestMapping(value = "addClientAdvisor", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addClientAdvisor(@RequestBody AiClientAdvisor aiClientAdvisor) {
         try {
-            aiClientAdvisor.setCreateTime(new Date());
-            aiClientAdvisor.setUpdateTime(new Date());
             int count = aiClientAdvisorDao.insert(aiClientAdvisor);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
@@ -86,7 +84,6 @@ public class AiAdminClientAdvisorController {
     @RequestMapping(value = "updateClientAdvisor", method = RequestMethod.POST)
     public ResponseEntity<Boolean> updateClientAdvisor(@RequestBody AiClientAdvisor aiClientAdvisor) {
         try {
-            aiClientAdvisor.setUpdateTime(new Date());
             int count = aiClientAdvisorDao.update(aiClientAdvisor);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

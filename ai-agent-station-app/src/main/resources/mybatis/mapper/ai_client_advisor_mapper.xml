@@ -38,9 +38,9 @@
     <!-- 插入顾问配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientAdvisor">
         INSERT INTO ai_client_advisor (
-            advisor_name, advisor_type,embedding_model_id,database_id ,ext_param, status, create_time, update_time
+            advisor_name, advisor_type,embedding_model_id,database_id ,ext_param, status
         ) VALUES (
-                     #{advisorName}, #{advisorType},#{embeddingModelId},#{databaseId},#{extParam}, #{status}, #{createTime}, #{updateTime}
+                     #{advisorName}, #{advisorType},#{embeddingModelId},#{databaseId},#{extParam}, #{status}
                  )
     </insert>
 
@@ -52,8 +52,7 @@
             ext_param = #{extParam},
             status = #{status},
             database_id = #{databaseId},
-            embedding_model_id = #{embeddingModelId},
-            update_time = #{updateTime}
+            embedding_model_id = #{embeddingModelId}
         WHERE id = #{id}
     </update>
 

@@ -59,9 +59,9 @@
     <!-- 插入系统提示词配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientSystemPrompt">
         INSERT INTO ai_client_system_prompt (
-            prompt_name, prompt_content, description, status, create_time, update_time
+            prompt_name, prompt_content, description, status
         ) VALUES (
-                     #{promptName}, #{promptContent}, #{description}, #{status}, #{createTime}, #{updateTime}
+                     #{promptName}, #{promptContent}, #{description}, #{status}
                  )
     </insert>
 
@@ -71,8 +71,7 @@
         SET prompt_name = #{promptName},
             prompt_content = #{promptContent},
             description = #{description},
-            status = #{status},
-            update_time = #{updateTime}
+            status = #{status}
         WHERE id = #{id}
     </update>
 

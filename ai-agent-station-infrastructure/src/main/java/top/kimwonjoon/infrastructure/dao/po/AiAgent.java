@@ -47,7 +47,9 @@ public class AiAgent extends Page {
      * 更新时间
      */
     private Date updateTime;
-
+    /**
+     * 头结点 client
+     */
     private Long headClientId;
 
 

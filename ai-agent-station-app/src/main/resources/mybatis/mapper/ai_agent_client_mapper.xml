@@ -22,7 +22,7 @@
     
     <!-- 根据ID查询智能体-客户端关联配置 -->
     <select id="queryAgentClientConfigById" parameterType="java.lang.Long" resultMap="dataMap">
-        SELECT id, agent_id, client_id_from, create_time
+        SELECT id, agent_id, client_id_from, client_id_to,`condition`,step_prompt,create_time
         FROM ai_agent_client_line
         WHERE id = #{id}
     </select>
@@ -51,9 +51,9 @@
     <!-- 插入智能体-客户端关联配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine">
         INSERT INTO ai_agent_client_line (
-            agent_id, client_id_from, create_time
+            agent_id, client_id_from, client_id_to,step_prompt,`condition`
         ) VALUES (
-            #{agentId}, #{clientIdFrom}, #{sequence}, #{createTime}
+            #{agentId}, #{clientIdFrom}, #{clientIdTo},#{stepPrompt}, #{condition}
         )
     </insert>
     
@@ -61,8 +61,10 @@
     <update id="update" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine">
         UPDATE ai_agent_client_line
         SET agent_id = #{agentId},
-            client_id_from = #{clientIdFrom}
-
+            client_id_from = #{clientIdFrom},
+            client_id_to=#{clientIdTo},
+            step_prompt=#{stepPrompt},
+            `condition`=#{condition}
         WHERE id = #{id}
     </update>
     
@@ -93,8 +95,14 @@
     <!-- 根据条件查询智能体-客户端关联配置列表 -->
     <select id="queryAgentClientList" parameterType="top.kimwonjoon.infrastructure.dao.po.AiAgentClientLine" resultMap="dataMap">
         SELECT
-        ai_agent_client_line.id, ai_agent_client_line.agent_id, ai_agent_client_line.client_id_from, ai_agent_client_line.sequence, ai_agent_client_line.create_time,ai_client.client_name
-        FROM 
+        ai_agent_client_line.id,
+        ai_agent_client_line.agent_id,
+        ai_agent_client_line.client_id_from,
+        ai_agent_client_line.client_id_to,
+        ai_agent_client_line.condition,
+        ai_agent_client_line.step_prompt,
+        ai_agent_client_line.create_time,
+        FROM
             ai_agent_client_line
         LEFT JOIN
             ai_client ON ai_agent_client_line.client_id_from = ai_client.id
@@ -105,12 +113,13 @@
             <if test="agentId != null">
                 AND agent_id = #{agentId}
             </if>
-            <if test="clientId != null">
+            <if test="clientIdFrom != null">
                 AND client_id_from = #{clientIdFrom}
             </if>
-            <if test="sequence != null">
-                AND sequence = #{sequence}
+            <if test="clientIdTo != null">
+                AND client_id_to = #{clientIdTo}
             </if>
+
         </where>
         ORDER BY agent_id, sequence, create_time DESC
         <if test="pageSize != null and pageSize > 0">

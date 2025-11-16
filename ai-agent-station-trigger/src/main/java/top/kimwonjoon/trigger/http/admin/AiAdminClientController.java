@@ -28,7 +28,8 @@ public class AiAdminClientController {
     @Resource
     private IAiAgentClientDao aiAgentClientDao;
     @Resource
-    IAiClientDao aiClientDao;
+    private IAiClientDao aiClientDao;
+
     @RequestMapping(value = "queryClientListAll", method = RequestMethod.POST)
     public ResponseEntity<List<AiClient>> queryClientListAll(@RequestBody AiClient aiClient) {
         try {
@@ -101,7 +102,6 @@ public class AiAdminClientController {
     @RequestMapping(value = "addClient", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addClient(@RequestBody AiAgentClientLine aiAgentClientLine) {
         try {
-            aiAgentClientLine.setCreateTime(new Date());
             int count = aiAgentClientDao.insert(aiAgentClientLine);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

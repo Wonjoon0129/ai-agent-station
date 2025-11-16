@@ -63,9 +63,9 @@
     <!-- 插入MCP配置 -->
     <insert id="insert" parameterType="top.kimwonjoon.infrastructure.dao.po.AiClientToolMcp">
         INSERT INTO ai_client_tool_mcp (
-            mcp_name, transport_type, transport_config, request_timeout, status, create_time, update_time
+            mcp_name, transport_type, transport_config, request_timeout, status
         ) VALUES (
-                     #{mcpName}, #{transportType}, #{transportConfig}, #{requestTimeout}, #{status}, #{createTime}, #{updateTime}
+                     #{mcpName}, #{transportType}, #{transportConfig}, #{requestTimeout}, #{status}
                  )
     </insert>
 
@@ -76,8 +76,7 @@
             transport_type = #{transportType},
             transport_config = #{transportConfig},
             request_timeout = #{requestTimeout},
-            status = #{status},
-            update_time = #{updateTime}
+            status = #{status}
         WHERE id = #{id}
     </update>
 

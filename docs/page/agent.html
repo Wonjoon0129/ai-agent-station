@@ -828,23 +828,8 @@
             status: "已发布",
             description: "自动检测和修正文本内容中的语法、拼写错误，提升内容质量。",
             icon: "fas fa-check-circle"
-        },
-        {
-            id: 5,
-            name: "数据分析助手",
-            type: "自定义智能体-数据处理",
-            status: "草稿",
-            description: "帮助用户进行数据分析和可视化，支持多种数据格式导入和处理。",
-            icon: "fas fa-chart-line"
-        },
-        {
-            id: 6,
-            name: "API测试助手",
-            type: "自定义智能体-后端开发",
-            status: "已发布",
-            description: "自动化API测试和文档生成，支持多种协议和认证方式。",
-            icon: "fas fa-plug"
         }
+
     ];
 
     // DOM元素
@@ -863,7 +848,7 @@
     let chatId = null;
 
     // 定义后端 API 的 URL 和请求配置
-    const apiUrl = 'http://localhost:8091/ai-agent-station/api/v1/ai/admin/agent/queryAiAgentList';
+    const apiUrl = 'http://117.72.40.188:8091/ai-agent-station/api/v1/ai/admin/agent/queryAiAgentList';
 
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', function () {
@@ -930,8 +915,8 @@
                     <i class="${agent.icon}"></i>
                 </div>
                 <div class="agent-info">
-                    <div class="agent-name">${agent.name}</div>
-                    <div class="agent-type">${agent.type}</div>
+                    <div class="agent-name">${agent.agentName}</div>
+                    <div class="agent-type">${agent.channel}</div>
                 </div>
                 <div class="agent-status">${agent.status}</div>
             </div>
@@ -985,7 +970,8 @@
     }
 
     // 发送消息
-    function sendMessage() {
+    // 发送消息
+    async function sendMessage() {
         const message = messageInput.value.trim();
         if (!message) return;
 
@@ -993,21 +979,53 @@
         addMessage('user', message);
         messageInput.value = '';
 
-        // 显示正在输入指示器
-        showTypingIndicator();
+        // 显示加载状态
+        showLoadingIndicator();
 
-        // 模拟API请求延迟
-        setTimeout(() => {
-            // 移除正在输入指示器
-            document.querySelector('.typing-indicator')?.remove();
+        try {
+            // 调用后端 API 获取智能体回复
+            const response = await fetch(`http://117.72.40.188:8091/ai-agent-station/api/v1/ai/agent/chat_agent?chatId=${chatId}&aiAgentId=${currentAgent.id}&message=${encodeURIComponent(message)}`);
 
-            // 添加AI回复
-            addMessage('agent', generateResponse(message));
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-            // 滚动到底部
-            messageArea.scrollTop = messageArea.scrollHeight;
-        }, 1500);
+            const data = await response.json();
+
+            if (data.code === "0000") {
+                // 添加智能体回复
+                addMessage('agent', data.data);
+            } else {
+                // 显示错误信息
+                addMessage('agent', `请求失败：${data.info || '未知错误'}`);
+            }
+        } catch (error) {
+            console.error('请求失败:', error);
+            addMessage('agent', `请求失败：${error.message}`);
+        } finally {
+            // 隐藏加载状态
+            hideLoadingIndicator();
+        }
     }
+
+    // 显示加载状态
+    function showLoadingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.innerHTML = `
+        <span></span>
+        <span></span>
+        <span></span>
+    `;
+        messageArea.appendChild(typingDiv);
+        messageArea.scrollTop = messageArea.scrollHeight;
+    }
+
+    // 隐藏加载状态
+    function hideLoadingIndicator() {
+        document.querySelector('.typing-indicator')?.remove();
+    }
+
 
     // 添加消息到对话区域
     function addMessage(sender, content) {

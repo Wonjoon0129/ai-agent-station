@@ -69,8 +69,6 @@ public class AiAdminAgentTaskScheduleController {
     @RequestMapping(value = "addTaskSchedule", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addTaskSchedule(@RequestBody AiAgentTaskSchedule aiAgentTaskSchedule) {
         try {
-            aiAgentTaskSchedule.setCreateTime(new Date());
-            aiAgentTaskSchedule.setUpdateTime(new Date());
             int count = aiAgentTaskScheduleDao.insert(aiAgentTaskSchedule);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
@@ -88,7 +86,6 @@ public class AiAdminAgentTaskScheduleController {
     @RequestMapping(value = "updateTaskSchedule", method = RequestMethod.POST)
     public ResponseEntity<Boolean> updateTaskSchedule(@RequestBody AiAgentTaskSchedule aiAgentTaskSchedule) {
         try {
-            aiAgentTaskSchedule.setUpdateTime(new Date());
             int count = aiAgentTaskScheduleDao.update(aiAgentTaskSchedule);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

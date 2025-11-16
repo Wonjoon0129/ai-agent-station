@@ -80,8 +80,6 @@ public class AiAdminRagOrderController {
     @RequestMapping(value = "addRagOrder", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addRagOrder(@RequestBody AiRagOrder aiRagOrder) {
         try {
-            aiRagOrder.setCreateTime(new Date());
-            aiRagOrder.setUpdateTime(new Date());
             int count = aiRagOrderDao.insert(aiRagOrder);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
@@ -99,7 +97,6 @@ public class AiAdminRagOrderController {
     @RequestMapping(value = "updateRagOrder", method = RequestMethod.POST)
     public ResponseEntity<Boolean> updateRagOrder(@RequestBody AiRagOrder aiRagOrder) {
         try {
-            aiRagOrder.setUpdateTime(new Date());
             int count = aiRagOrderDao.update(aiRagOrder);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {

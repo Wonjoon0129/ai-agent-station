@@ -101,7 +101,6 @@ public class AiAdminClientModelConfigController {
     @RequestMapping(value = "addClientModelConfig", method = RequestMethod.POST)
     public ResponseEntity<Boolean> addClientModelConfig(@RequestBody AiClientModelConfig aiClientModelConfig) {
         try {
-            aiClientModelConfig.setCreateTime(new Date());
             int count = aiClientModelConfigDao.insert(aiClientModelConfig);
             return ResponseEntity.ok(count > 0);
         } catch (Exception e) {
